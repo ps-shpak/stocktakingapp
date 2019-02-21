@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  ldap.example.org:
+  ldap-server:
     image: osixia/openldap:1.2.3
     environment:
       - LDAP_ORGANISATION=FakeCompany
