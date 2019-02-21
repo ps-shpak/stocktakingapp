@@ -1,0 +1,22 @@
+version: '2'
+
+tasks:
+  up:
+    dir: docker
+    cmds:
+      - docker-compose up -d
+
+  down:
+    dir: docker
+    cmds:
+      - docker-compose down
+
+  ps:
+    dir: docker
+    cmds:
+      - docker-compose ps
+
+  logs:
+    dir: docker
+    cmds:
+      - docker-compose logs

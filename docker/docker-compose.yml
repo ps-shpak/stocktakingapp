@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  ldap.example.org:
+    image: osixia/openldap:1.2.3
+    environment:
+      - LDAP_ORGANISATION=FakeCompany
+      - LDAP_DOMAIN=example.com
+      - LDAP_ADMIN_PASSWORD=Jedi
+      - LDAP_READONLY_USER=true
+    volumes:
+      - openldap-data:/var/lib/ldap
+      - openldap-config:/etc/ldap/slapd.d
+    ports:
+      - 389:389
+      - 636:636
+  ldap-admin:
+    image: osixia/phpldapadmin:0.7.2
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=ldap-server
+    ports:
+      - "6443:443"
+
+volumes:
+  openldap-data:
+  openldap-config:
