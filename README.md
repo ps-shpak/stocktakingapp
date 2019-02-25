@@ -5,10 +5,11 @@ Educational project for intuitive stocktaking and inventory service.
 ## Структура проекта
 
 * android - android приложение для проверки наличия по инвентарным номерам
-* backend - бекенд сервиса, который реализует бизнес-логику инвентаризации и предоставляет API
 * bin - скрипты
 * docker - используется для поддержки работы в Docker
 * docs - документы и макеты
+* stocktakingapi - описание API на языке protobuf
+* stocktakingbackend - бекенд сервиса, реализует бизнес-логику инвентаризации и предоставляет API
 * webpanel - фронтенд + бекенд веб-панели, реализует панель управления
 
 ## Настройка окружения
@@ -20,6 +21,13 @@ Educational project for intuitive stocktaking and inventory service.
 * [docker-compose](https://docs.docker.com/compose/install/) - для запуска всех контейнеров вместе
 
 Для разработки каждого компонентов потребуются специфичные шаги, которые здесь не описаны.
+
+### Бекенд
+
+Нужно установить:
+
+* [go](https://github.com/golang/go/wiki/Ubuntu)
+* [grpc](https://grpc.io/docs/quickstart/go.html)
 
 ## Работа с сервисами
 

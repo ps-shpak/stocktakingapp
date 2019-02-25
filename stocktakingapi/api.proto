@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stocktakingapi;
+
+service Backend {
+    rpc AddModel(AddModelRequest) returns (OkResponse) {}
+}
+
+// The request message containing the user's name.
+message AddModelRequest {
+  string name = 1;
+  double price = 2;
+}
+
+message OkResponse {
+}
+
+message Error {
+    string message = 1;
+    int32 code = 2;
+}

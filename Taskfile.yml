@@ -20,3 +20,13 @@ tasks:
     dir: docker
     cmds:
       - docker-compose logs
+
+  build-backend:
+    cmds:
+      - docker build --tag psshpak/stocktakingbackend -f stocktakingbackend/Dockerfile .
+
+  push:
+    cmds:
+      - docker push psshpak/stocktakingbackend
+    vars:
+      PROJECT: psshpak
