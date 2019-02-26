@@ -10,43 +10,26 @@ type ItemStatus struct {
 	Disposed bool
 }
 
-// Model - inventory category: software, device model or furniture model
-type Model struct {
-	ID    uuid.UUID
-	Name  string
-	Price float64
-	Photo *Attachment
-}
-
 // Item - inventory item: software license, device or furniture
 type Item struct {
-	ID        uuid.UUID
-	Model     *Model
-	Marker    string
-	Custodian *Custodian
-	Status    ItemStatus
+	ID     uuid.UUID
+	Model  *Model
+	Marker string
+	Owner  *Owner
+	Status ItemStatus
 }
 
-func NewModel(name string, price float64, photo *Attachment) *Model {
-	return &Model{
-		ID:    uuid.NewV1(),
-		Name:  name,
-		Price: price,
-		Photo: photo,
-	}
-}
-
-func NewItem(model *Model, marker string, owner *Custodian) *Item {
+func NewItem(model *Model, marker string, owner *Owner) *Item {
 	return &Item{
-		ID:        uuid.NewV1(),
-		Model:     model,
-		Marker:    marker,
-		Custodian: owner,
+		ID:     uuid.NewV1(),
+		Model:  model,
+		Marker: marker,
+		Owner:  owner,
 	}
 }
 
-func (item *Item) TransferOwnership(newOwner *Custodian) {
-	item.Custodian = newOwner
+func (item *Item) TransferOwnership(newOwner *Owner) {
+	item.Owner = newOwner
 }
 
 func (item *Item) Annotate() *Annotation {
@@ -54,7 +37,7 @@ func (item *Item) Annotate() *Annotation {
 		ItemID:    item.ID,
 		ModelName: item.Model.Name,
 		Marker:    item.Marker,
-		Custodian: item.Custodian.Name,
+		Owner:     item.Owner.Name,
 	}
 }
 

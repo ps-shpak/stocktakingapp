@@ -9,5 +9,5 @@ type Annotation struct {
 	ItemID    uuid.UUID
 	ModelName string
 	Marker    string
-	Custodian string
+	Owner string
 }

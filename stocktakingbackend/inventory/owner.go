@@ -2,7 +2,7 @@ package inventory
 
 import uuid "github.com/satori/go.uuid"
 
-type Custodian struct {
+type Owner struct {
 	UserID uuid.UUID
 	Name   string
 }
