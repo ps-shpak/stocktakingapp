@@ -3,46 +3,18 @@ syntax = "proto3";
 package stocktakingapi;
 
 service Backend {
-    rpc AddModel(AddModelRequest) returns (AddModelResponse) {}
-    rpc ListModels(ListModelsRequest) returns (ListModelsResponse) {}
-
     rpc AddItem(AddItemRequest) returns (AddItemResponse) {}
     rpc ListItems(ListItemsRequest) returns (ListItemsResponse) {}
 
     rpc ListOwners(ListOwnersRequest) returns (ListOwnersResponse) {}
 }
 
-message AddModelRequest {
-  string name = 1;
-  double price = 2;
-  bytes photo = 3; // model photo picture bytes
-}
-
-message AddModelResponse {
-  Error error = 1;
-  string id = 2;
-}
-
-message ListModelsRequest {
-  // nothing here.
-}
-
-message ListModelsResponse {
-  message Result {
-    string id = 1;
-    string name = 2;
-    double price = 3;
-    string photo_url = 4;
-  }
-
-  Error error = 1;
-  repeated Result results = 2;
-}
-
 message AddItemRequest {
-  string model_id = 1;
-  string owner_id = 2;
-  string marker = 3;
+  required string name = 1;
+  required string category = 2;
+  required string owner_id = 3;
+  double price = 4;
+  string description = 5;
 }
 
 message AddItemResponse {
@@ -51,16 +23,16 @@ message AddItemResponse {
 }
 
 message ListItemsRequest {
-  repeated string models = 1; // visible model IDs (can be empty to show all)
+  repeated string categories = 1; // visible categories (can be empty to show all)
   repeated string owners = 2; // visible owner IDs (can be empty to show all)
 }
 
 message ListItemsResponse {
   message Result {
-    string id = 1;
-    string model_name = 2; // item model human-readable name
+    required string id = 1;
+    required string model_name = 2; // item model human-readable name
     double model_price = 3; // item model price
-    string photo_url = 4; // item model photo URL
+    string description = 4; // item description
     string item_marker = 5; // item marker (e.g. license info)
   }
 
@@ -83,7 +55,12 @@ message ListOwnersResponse {
   repeated Result results = 2;
 }
 
+enum ErrorCode {
+  InternalError = 0;
+  UnknownId = 1;
+}
+
 message Error {
-  string message = 1;
-  int32 code = 2;
+  required string message = 1;
+  ErrorCode code = 2;
 }
