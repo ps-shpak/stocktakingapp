@@ -25,8 +25,14 @@ tasks:
     cmds:
       - docker build --tag psshpak/stocktakingbackend -f stocktakingbackend/Dockerfile .
 
+  build-docs:
+    cmds:
+      - bin/docker-run {{.IMAGE}} plantuml -v -tsvg docs/diagrams/containers.puml
+    vars:
+      IMAGE: wanix/plantuml
+
   push:
     cmds:
-      - docker push psshpak/stocktakingbackend
+      - docker push {{.PROJECT}}/stocktakingbackend
     vars:
       PROJECT: psshpak

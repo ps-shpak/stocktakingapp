@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="247px" preserveAspectRatio="none" style="width:463px;height:247px;" version="1.1" viewBox="0 0 463 247" width="463px" zoomAndPan="magnify"><defs><filter height="300%" id="f15t7n8tknn22o" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity mobileapp--><rect fill="#90EE90" filter="url(#f15t7n8tknn22o)" height="36.2969" style="stroke: #000000; stroke-width: 1.5;" width="225" x="6" y="8"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="205" x="16" y="30.9951">Приложение stocktakingapp</text><!--entity backend--><rect fill="#FFC0CB" filter="url(#f15t7n8tknn22o)" height="36.2969" style="stroke: #000000; stroke-width: 1.5;" width="217" x="22" y="104"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="197" x="32" y="126.9951">Сервис stocktakingbackend</text><!--entity webpanel--><rect fill="#90EE90" filter="url(#f15t7n8tknn22o)" height="36.2969" style="stroke: #000000; stroke-width: 1.5;" width="186" x="266.5" y="8"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="166" x="276.5" y="30.9951">Сервис stocktakingweb</text><!--entity backenddb--><rect fill="#ADD8E6" filter="url(#f15t7n8tknn22o)" height="36.2969" style="stroke: #000000; stroke-width: 1.5;" width="190" x="35.5" y="200"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="170" x="45.5" y="222.9951">Хранилище PostgreSQL</text><!--entity redis--><rect fill="#ADD8E6" filter="url(#f15t7n8tknn22o)" height="36.2969" style="stroke: #000000; stroke-width: 1.5;" width="148" x="285.5" y="104"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="128" x="295.5" y="126.9951">Хранилище Redis</text><!--link mobileapp to backend--><path d="M120.7571,44.0569 C122.6891,59.5126 125.4831,81.8647 127.5841,98.6731 " fill="none" id="mobileapp-backend" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="128.2122,103.6977,131.0648,94.271,127.5919,98.7363,123.1266,95.2635,128.2122,103.6977" style="stroke: #A80036; stroke-width: 1.0;"/><!--link webpanel to backend--><path d="M316.4269,44.0569 C277.2091,60.4975 219.3775,84.7413 178.6485,101.8155 " fill="none" id="webpanel-backend" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="173.7687,103.8612,183.6153,104.0705,178.3799,101.928,180.5223,96.6926,173.7687,103.8612" style="stroke: #A80036; stroke-width: 1.0;"/><!--link backend to backenddb--><path d="M130.5,140.0569 C130.5,155.5126 130.5,177.8647 130.5,194.6731 " fill="none" id="backend-backenddb" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="130.5,199.6977,134.5,190.6977,130.5,194.6977,126.5,190.6977,130.5,199.6977" style="stroke: #A80036; stroke-width: 1.0;"/><!--link webpanel to redis--><path d="M359.5,44.0569 C359.5,59.5126 359.5,81.8647 359.5,98.6731 " fill="none" id="webpanel-redis" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="359.5,103.6977,363.5,94.6977,359.5,98.6977,355.5,94.6977,359.5,103.6977" style="stroke: #A80036; stroke-width: 1.0;"/><!--
+@startuml
+rectangle "Приложение stocktakingapp" as mobileapp #lightgreen
+rectangle "Сервис stocktakingbackend" as backend #pink
+rectangle "Сервис stocktakingweb" as webpanel #lightgreen
+rectangle "Хранилище PostgreSQL" as backenddb #lightblue
+rectangle "Хранилище Redis" as redis #lightblue
+mobileapp - -> backend
+webpanel - -> backend
+backend - -> backenddb
+webpanel - -> redis
+@enduml
+
+PlantUML version 1.2018.04(Tue May 01 16:18:19 GMT 2018)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 1.8.0_151-b12
+Operating System: Linux
+OS Version: 4.15.0-45-generic
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

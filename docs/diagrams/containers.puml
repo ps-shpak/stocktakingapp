@@ -1,0 +1,11 @@
+@startuml
+rectangle "Приложение stocktakingapp" as mobileapp #lightgreen
+rectangle "Сервис stocktakingbackend" as backend #pink
+rectangle "Сервис stocktakingweb" as webpanel #lightgreen
+rectangle "Хранилище PostgreSQL" as backenddb #lightblue
+rectangle "Хранилище Redis" as redis #lightblue
+mobileapp --> backend
+webpanel --> backend
+backend --> backenddb
+webpanel --> redis
+@enduml

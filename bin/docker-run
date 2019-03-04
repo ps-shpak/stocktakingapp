@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Runs command in docker with current user and working directory
+USER_ID=$(id -u)
+GROUP_ID=$(id -g)
+docker run --rm \
+    --volume /etc/passwd:/etc/passwd \
+    --volume /etc/group:/etc/group \
+    --volume "$PWD:$PWD" \
+    --workdir "$PWD" \
+    --user "$USER_ID:$GROUP_ID" \
+    "$@"
