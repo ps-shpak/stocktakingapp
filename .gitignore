@@ -1,0 +1,10 @@
+
+# Backend ignores
+stocktakingbackend/vendor/
+stocktakingbackend/stocktakingbackend
+
+# WebPanel ignores
+
+# Android app ignores
+
+# Docs ignores
