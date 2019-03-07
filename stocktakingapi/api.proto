@@ -12,8 +12,10 @@ service Backend {
     // Lists items tree grouped by category or owner
     rpc ListItems(ListItemsRequest) returns (ListItemsResponse) {}
 
-    // Deletes items with given IDs
-    rpc DeleteItems(DeleteItemsRequest) returns (DeleteItemsResponse) {};
+    // Disposes items with given IDs
+    // Disposed item never appears in any listing,
+    //  but remains accessible by ID
+    rpc DisposeItems(DisposeItemsRequest) returns (DisposeItemsResponse) {};
 
     // Transfers ownership to given user for items with given IDs
     rpc TransferItems(TransferItemsRequest) returns (TransferItemsResponse) {};
@@ -26,14 +28,23 @@ service Backend {
 
     // Saves existing owner with given ID.
     rpc SaveOwner(SaveOwnerRequest) returns (SaveOwnerResponse) {};
+
+    // Attempts to authorize user in this service
+    // Authorization uses only email - caller must validate email
+    //  before calling this method (e.g. sign in with Google).
+    // Errors:
+    //  - UnknownId - no such email registered in service
+    //  - AuthForbidden - email belongs to owner which cannot service itself
+    rpc Authorize(AuthorizeRequest) returns (AuthorizeResponse) {};
 }
 
 message ItemInfo {
   required string category = 2; // item category (e.g. "Стол")
   required string place = 3; // item placement (e.g. room name or number)
-  string owner_id = 4; // owner ID
-  double price = 5; // item price
-  string description = 6; // item description
+  string owner_id = 4;
+  string owner_name = 5;
+  double price = 6; // item price
+  string description = 7; // item description
 }
 
 message SaveItemRequest {
@@ -52,14 +63,15 @@ message LoadItemRequest {
 
 message LoadItemResponse {
   Error error = 1;
-  required string display_name = 2; // formatted combination of category, placement and owner
-  required ItemInfo info = 3;
+  required string display_name = 2; // formatted combination of category and placement
+  required ItemInfo info = 4;
 }
 
 // Node in items tree
 message ItemTreeNode {
   required string id = 1;
-  required string display_name = 2; // formatted combination of category, placement and owner
+  required string display_name = 2; // formatted combination of category and placement
+  required string owner_name = 3; // item owner name
 }
 
 // Group of item nodes
@@ -82,13 +94,12 @@ message ListItemsResponse {
   repeated ItemTreeGroup results = 2;
 }
 
-message AddOneOwnerRequest {
-  required string name = 1;
-  required string email = 2;
-}
-
 message AddOwnersRequest {
-  repeated AddOneOwnerRequest owners = 1;
+  message Owner {
+    required string name = 1;
+    required string email = 2;
+  }
+  repeated Owner owners = 1;
 }
 
 message SaveOwnerRequest {
@@ -102,6 +113,15 @@ message SaveOwnerResponse {
   Error error = 1;
 }
 
+message AuthorizeRequest {
+  required string email = 1;
+}
+
+message AuthorizeResponse {
+  Error error = 1;
+  string id = 2; // user ID
+}
+
 message AddOneOwnerInfo {
   Error error = 1;
   string id = 2;
@@ -111,11 +131,11 @@ message AddOwnersResponse {
   repeated AddOneOwnerInfo owners = 1;
 }
 
-message DeleteItemsRequest {
+message DisposeItemsRequest {
   repeated string ids = 1; // item ids
 }
 
-message DeleteItemsResponse {
+message DisposeItemsResponse {
   Error error = 1;
 }
 
@@ -146,6 +166,7 @@ message ListOwnersResponse {
 enum ErrorCode {
   InternalError = 0;
   UnknownId = 1;
+  AuthForbidden = 2;
 }
 
 message Error {
