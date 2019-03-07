@@ -39,8 +39,8 @@ service Backend {
 }
 
 message ItemInfo {
-  required string category = 2; // item category (e.g. "Стол")
-  required string place = 3; // item placement (e.g. room name or number)
+  string category = 2; // item category (e.g. "Стол")
+  string place = 3; // item placement (e.g. room name or number)
   string owner_id = 4;
   string owner_name = 5;
   double price = 6; // item price
@@ -49,7 +49,7 @@ message ItemInfo {
 
 message SaveItemRequest {
   string id = 1; // optional, auto-generated when missed
-  required ItemInfo info = 2;
+  ItemInfo info = 2;
 }
 
 message SaveItemResponse {
@@ -58,20 +58,20 @@ message SaveItemResponse {
 }
 
 message LoadItemRequest {
-  required string id = 1;
+  string id = 1;
 }
 
 message LoadItemResponse {
   Error error = 1;
-  required string display_name = 2; // formatted combination of category and placement
-  required ItemInfo info = 4;
+  string display_name = 2; // formatted combination of category and placement
+  ItemInfo info = 4;
 }
 
 // Node in items tree
 message ItemTreeNode {
-  required string id = 1;
-  required string display_name = 2; // formatted combination of category and placement
-  required string owner_name = 3; // item owner name
+  string id = 1;
+  string display_name = 2; // formatted combination of category and placement
+  string owner_name = 3; // item owner name
 }
 
 // Group of item nodes
@@ -86,7 +86,7 @@ enum ItemGroupingMethod {
 }
 
 message ListItemsRequest {
-  required ItemGroupingMethod grouping_method = 1;
+  ItemGroupingMethod grouping_method = 1;
 }
 
 message ListItemsResponse {
@@ -96,17 +96,17 @@ message ListItemsResponse {
 
 message AddOwnersRequest {
   message Owner {
-    required string name = 1;
-    required string email = 2;
+    string name = 1;
+    string email = 2;
   }
   repeated Owner owners = 1;
 }
 
 message SaveOwnerRequest {
-  required string id = 1;
-  required string name = 2;
-  required string email = 3;
-  required bool may_login = 4; // true if user may login this service (note: everyone is admin)
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  bool may_login = 4; // true if user may login this service (note: everyone is admin)
 }
 
 message SaveOwnerResponse {
@@ -114,7 +114,7 @@ message SaveOwnerResponse {
 }
 
 message AuthorizeRequest {
-  required string email = 1;
+  string email = 1;
 }
 
 message AuthorizeResponse {
@@ -153,9 +153,9 @@ message ListOwnersRequest {
 
 message ListOwnersResponse {
   message Result {
-    required string user_id = 1;
-    required string name = 2; // full user name (e.g. Ivan Cukic)
-    required bool may_login = 3;  // true if user may login this service (note: everyone is admin)
+    string user_id = 1;
+    string name = 2; // full user name (e.g. Ivan Cukic)
+    bool may_login = 3;  // true if user may login this service (note: everyone is admin)
     repeated string items_count = 4; // count of items owned by this user
   }
 
@@ -170,6 +170,6 @@ enum ErrorCode {
 }
 
 message Error {
-  required string message = 1;
+  string message = 1;
   ErrorCode code = 2;
 }
