@@ -1,0 +1,5 @@
+# Golang packages
+vendor/
+
+# Built executable file
+stocktakingbackend
