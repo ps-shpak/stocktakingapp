@@ -4,12 +4,12 @@ Educational project for intuitive stocktaking and inventory service.
 
 ## Структура проекта
 
-* android - android приложение для проверки наличия по инвентарным номерам
 * bin - скрипты
 * docker - используется для поддержки работы в Docker
 * docs - документы и макеты
 * stocktakingapi - описание API на языке protobuf
 * stocktakingbackend - бекенд сервиса, реализует бизнес-логику инвентаризации и предоставляет API
+* stocktakingmobile - мобильное приложение под Android и iOS для сканирование QR-кодов
 * webpanel - фронтенд + бекенд веб-панели, реализует панель управления
 
 ## Настройка окружения
