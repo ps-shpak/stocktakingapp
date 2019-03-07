@@ -3,52 +3,140 @@ syntax = "proto3";
 package stocktakingapi;
 
 service Backend {
-    rpc AddItem(AddItemRequest) returns (AddItemResponse) {}
+    // Creates new or saves existing item
+    rpc SaveItem(SaveItemRequest) returns (SaveItemResponse) {}
+
+    // Returns full information for item with given ID
+    rpc LoadItem(LoadItemRequest) returns (LoadItemResponse) {};
+
+    // Lists items tree grouped by category or owner
     rpc ListItems(ListItemsRequest) returns (ListItemsResponse) {}
 
+    // Deletes items with given IDs
+    rpc DeleteItems(DeleteItemsRequest) returns (DeleteItemsResponse) {};
+
+    // Transfers ownership to given user for items with given IDs
+    rpc TransferItems(TransferItemsRequest) returns (TransferItemsResponse) {};
+
+    // Lists all available owners
     rpc ListOwners(ListOwnersRequest) returns (ListOwnersResponse) {}
+
+    // Adds new owners and returns list of results/errors
+    rpc AddOwners(AddOwnersRequest) returns (AddOwnersResponse) {};
+
+    // Saves existing owner with given ID.
+    rpc SaveOwner(SaveOwnerRequest) returns (SaveOwnerResponse) {};
 }
 
-message AddItemRequest {
-  required string name = 1;
-  required string category = 2;
-  required string owner_id = 3;
-  double price = 4;
-  string description = 5;
+message ItemInfo {
+  required string category = 2; // item category (e.g. "Стол")
+  required string place = 3; // item placement (e.g. room name or number)
+  string owner_id = 4; // owner ID
+  double price = 5; // item price
+  string description = 6; // item description
 }
 
-message AddItemResponse {
+message SaveItemRequest {
+  string id = 1; // optional, auto-generated when missed
+  required ItemInfo info = 2;
+}
+
+message SaveItemResponse {
   Error error = 1;
   string id = 2;
 }
 
+message LoadItemRequest {
+  required string id = 1;
+}
+
+message LoadItemResponse {
+  Error error = 1;
+  required string display_name = 2; // formatted combination of category, placement and owner
+  required ItemInfo info = 3;
+}
+
+// Node in items tree
+message ItemTreeNode {
+  required string id = 1;
+  required string display_name = 2; // formatted combination of category, placement and owner
+}
+
+// Group of item nodes
+message ItemTreeGroup {
+  repeated ItemTreeNode items = 1;
+}
+
+// Item tree grouping method
+enum ItemGroupingMethod {
+  ByCategory = 0;
+  ByOwner = 1;
+}
+
 message ListItemsRequest {
-  repeated string categories = 1; // visible categories (can be empty to show all)
-  repeated string owners = 2; // visible owner IDs (can be empty to show all)
+  required ItemGroupingMethod grouping_method = 1;
 }
 
 message ListItemsResponse {
-  message Result {
-    required string id = 1;
-    required string model_name = 2; // item model human-readable name
-    double model_price = 3; // item model price
-    string description = 4; // item description
-    string item_marker = 5; // item marker (e.g. license info)
-  }
-
   Error error = 1;
-  repeated Result results = 2;
+  repeated ItemTreeGroup results = 2;
+}
+
+message AddOneOwnerRequest {
+  required string name = 1;
+  required string email = 2;
+}
+
+message AddOwnersRequest {
+  repeated AddOneOwnerRequest owners = 1;
+}
+
+message SaveOwnerRequest {
+  required string id = 1;
+  required string name = 2;
+  required string email = 3;
+  required bool may_login = 4; // true if user may login this service (note: everyone is admin)
+}
+
+message SaveOwnerResponse {
+  Error error = 1;
+}
+
+message AddOneOwnerInfo {
+  Error error = 1;
+  string id = 2;
+}
+
+message AddOwnersResponse {
+  repeated AddOneOwnerInfo owners = 1;
+}
+
+message DeleteItemsRequest {
+  repeated string ids = 1; // item ids
+}
+
+message DeleteItemsResponse {
+  Error error = 1;
+}
+
+message TransferItemsRequest {
+  repeated string ids = 1;
+  string owner_id = 2; // new owner ID
+}
+
+message TransferItemsResponse {
+  Error error = 1;
 }
 
 message ListOwnersRequest {
-  bool show_potential = 1; // when true, results also include users without items
 }
 
 message ListOwnersResponse {
   message Result {
     required string user_id = 1;
     required string name = 2; // full user name (e.g. Ivan Cukic)
-    repeated string items = 3; // IDs of items owned by this user
+    required bool may_login = 3;  // true if user may login this service (note: everyone is admin)
+    repeated string items_count = 4; // count of items owned by this user
   }
 
   Error error = 1;
