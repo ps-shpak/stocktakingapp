@@ -52,8 +52,7 @@ message SaveItemRequest {
 }
 
 message SaveItemResponse {
-  Error error = 1;
-  string id = 2;
+  string id = 1;
 }
 
 message LoadItemRequest {
@@ -61,10 +60,9 @@ message LoadItemRequest {
 }
 
 message LoadItemResponse {
-  Error error = 1;
-  string display_name = 2; // formatted combination of category and placement
-  string owner_name = 3;
-  ItemSpec spec = 4;
+  string display_name = 1; // formatted combination of category and placement
+  string owner_name = 2;
+  ItemSpec spec = 3;
 }
 
 // Node in items tree
@@ -91,8 +89,7 @@ message ListItemsRequest {
 }
 
 message ListItemsResponse {
-  Error error = 1;
-  repeated ItemTreeGroup results = 2;
+  repeated ItemTreeGroup results = 1;
 }
 
 message DisposeItemsRequest {
@@ -100,7 +97,6 @@ message DisposeItemsRequest {
 }
 
 message DisposeItemsResponse {
-  Error error = 1;
 }
 
 message TransferItemsRequest {
@@ -109,7 +105,6 @@ message TransferItemsRequest {
 }
 
 message TransferItemsResponse {
-  Error error = 1;
 }
 
 message ListOwnersRequest {
@@ -123,8 +118,7 @@ message ListOwnersResponse {
     bool may_login = 4;  // true if user may login this service (note: everyone is admin)
   }
 
-  Error error = 1;
-  repeated Result results = 2;
+  repeated Result results = 1;
 }
 
 message AddOwnersRequest {
@@ -137,8 +131,7 @@ message AddOwnersRequest {
 
 message AddOwnersResponse {
   message Owner {
-    Error error = 1;
-    string id = 2;
+    string id = 1;
   }
 
   repeated Owner owners = 1;
@@ -152,7 +145,6 @@ message SaveOwnerRequest {
 }
 
 message SaveOwnerResponse {
-  Error error = 1;
 }
 
 message AuthorizeRequest {
@@ -160,17 +152,5 @@ message AuthorizeRequest {
 }
 
 message AuthorizeResponse {
-  Error error = 1;
-  string id = 2; // user ID
-}
-
-enum ErrorCode {
-  InternalError = 0;
-  UnknownId = 1;
-  AuthForbidden = 2;
-}
-
-message Error {
-  string message = 1;
-  ErrorCode code = 2;
+  string id = 1; // user ID
 }

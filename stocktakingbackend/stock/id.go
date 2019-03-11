@@ -14,3 +14,13 @@ var NilID = ID{}
 func GenerateID() ID {
 	return ID(uuid.NewV1())
 }
+
+// IDFromString - parses ID from string
+func IDFromString(input string) (ID, error) {
+	id, err := uuid.FromString(input)
+	return ID(id), err
+}
+
+func (id ID) String() string {
+	return uuid.UUID(id).String()
+}
