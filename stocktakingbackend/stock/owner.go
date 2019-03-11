@@ -14,12 +14,22 @@ type Owner struct {
 	MayLogin bool
 }
 
-// CreateOwner - creates new item with unique ID
+// CreateOwner - creates new ownertem with unique ID
 func CreateOwner(spec OwnerSpec) *Owner {
 	return &Owner{
 		ID:       GenerateID(),
 		Name:     spec.Name,
 		Email:    spec.Email,
 		MayLogin: false,
+	}
+}
+
+// BuildOwner - builds owner with known values
+func BuildOwner(id ID, spec OwnerSpec, mayLogin bool) *Owner {
+	return &Owner{
+		ID:       id,
+		Name:     spec.Name,
+		Email:    spec.Email,
+		MayLogin: mayLogin,
 	}
 }

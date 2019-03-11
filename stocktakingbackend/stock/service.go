@@ -28,11 +28,11 @@ type ItemGroupView struct {
 type Service interface {
 	SaveItem(id ID, ownerID ID, spec ItemSpec) (ID, error)
 	LoadItem(id ID) (*Item, error)
-	ListItems(method GroupingMethod) ([]ItemGroupView, error)
+	ListItems(method GroupingMethod) ([]*ItemGroupView, error)
 	DisposeItems(ids []ID) error
 	TransferItems(ids []ID, ownerID ID) error
 
-	ListOwners() ([]Owner, error)
+	ListOwners() ([]*Owner, error)
 	AddOwner(spec OwnerSpec) (ID, error)
 	SaveOwner(id ID, spec OwnerSpec, mayLogin bool) error
 	Authorize(email string) (ID, error)
@@ -97,9 +97,9 @@ func (s *service) LoadItem(id ID) (*Item, error) {
 	return items[0], nil
 }
 
-func (s *service) ListItems(method GroupingMethod) ([]ItemGroupView, error) {
+func (s *service) ListItems(method GroupingMethod) ([]*ItemGroupView, error) {
 	mapping := map[string]*ItemGroupView{}
-	var views []ItemGroupView
+	var views []*ItemGroupView
 	items, err := s.repo.FindItems(FindItemsSpec{})
 	if err != nil {
 		return views, err
@@ -119,8 +119,9 @@ func (s *service) ListItems(method GroupingMethod) ([]ItemGroupView, error) {
 		})
 		mapping[category] = view
 	}
+	// TODO: maybe sort groups and items in group?
 	for _, view := range mapping {
-		views = append(views, *view)
+		views = append(views, view)
 	}
 	return views, nil
 }
@@ -151,20 +152,54 @@ func (s *service) TransferItems(ids []ID, ownerID ID) error {
 	return s.repo.SaveItems(items)
 }
 
-func (s *service) ListOwners() ([]Owner, error) {
-	// TODO: implement me
+func (s *service) ListOwners() ([]*Owner, error) {
+	return s.repo.FindOwners(FindOwnersSpec{})
 }
 
 func (s *service) AddOwner(spec OwnerSpec) (ID, error) {
-	// TODO: implement me
+	owners, err := s.repo.FindOwners(FindOwnersSpec{
+		Limit:      1,
+		OwnerEmail: spec.Email,
+	})
+	if err != nil {
+		return NilID, err
+	}
+	var owner *Owner
+	if len(owners) == 0 {
+		owner = CreateOwner(spec)
+	} else {
+		// Re-use owner, only update name
+		owner = owners[0]
+		owner.Name = spec.Name
+	}
+	err = s.repo.SaveOwner(owner)
+	if err != nil {
+		return NilID, err
+	}
+	return owner.ID, nil
 }
 
 func (s *service) SaveOwner(id ID, spec OwnerSpec, mayLogin bool) error {
-	// TODO: implement me
+	owner := BuildOwner(id, spec, mayLogin)
+	return s.repo.SaveOwner(owner)
 }
 
 func (s *service) Authorize(email string) (ID, error) {
-	// TODO: implement me
+	owners, err := s.repo.FindOwners(FindOwnersSpec{
+		Limit:      1,
+		OwnerEmail: email,
+	})
+	if err != nil {
+		return NilID, err
+	}
+	if len(owners) == 0 {
+		return NilID, ErrUnknownID
+	}
+	owner := owners[0]
+	if !owner.MayLogin {
+		return NilID, ErrAuthForbidden
+	}
+	return owner.ID, nil
 }
 
 func (s *service) findItemsWithIDs(ids []ID) ([]*Item, error) {
