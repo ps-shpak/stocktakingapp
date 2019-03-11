@@ -1,23 +1,25 @@
 package stock
 
-import (
-	uuid "github.com/satori/go.uuid"
-)
+// OwnerSpec - owner specification
+type OwnerSpec struct {
+	Name  string
+	Email string
+}
 
 // Owner - anyone who can own item
 type Owner struct {
-	ID       uuid.UUID
+	ID       ID
 	Name     string
 	Email    string
 	MayLogin bool
 }
 
 // CreateOwner - creates new item with unique ID
-func CreateOwner(name string, email string) *Owner {
+func CreateOwner(spec OwnerSpec) *Owner {
 	return &Owner{
-		ID:       uuid.NewV1(),
-		Name:     name,
-		Email:    email,
+		ID:       GenerateID(),
+		Name:     spec.Name,
+		Email:    spec.Email,
 		MayLogin: false,
 	}
 }

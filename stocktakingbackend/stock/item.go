@@ -1,52 +1,78 @@
 package stock
 
-import (
-	uuid "github.com/satori/go.uuid"
-)
-
-// ItemSpec - inventory item specification
+// ItemSpec - stock item specification
 type ItemSpec struct {
-	Owner       *Owner
 	Category    string
 	Place       string
 	Price       float64
 	Description string
 }
 
-// Item - inventory item: software license or property
+// Item - stock item: software license or material object
 type Item struct {
-	ID       uuid.UUID
-	Spec     ItemSpec
-	Disposed bool
+	id       ID
+	spec     ItemSpec
+	owner    *Owner
+	disposed bool
 }
 
 // CreateItem - creates new item with unique ID
 func CreateItem(spec ItemSpec) *Item {
 	return &Item{
-		ID:       uuid.NewV1(),
-		Spec:     spec,
-		Disposed: false,
+		id:       GenerateID(),
+		spec:     spec,
+		disposed: false,
+	}
+}
+
+// BuildItem - creates item with given properties
+func BuildItem(id ID, spec ItemSpec, owner *Owner, disposed bool) *Item {
+	return &Item{
+		id:       id,
+		spec:     spec,
+		owner:    owner,
+		disposed: false,
 	}
 }
 
 // Transfer - re-assigns item owner
 func (i *Item) Transfer(owner *Owner) {
-	i.Spec.Owner = owner
-}
-
-// Format - prints display name of the item
-func (i *Item) Format() string {
-	var result string
-	result = i.Spec.Category
-	if len(i.Spec.Place) > 0 {
-		result += " "
-		result += i.Spec.Place
-	}
-	return result
+	i.owner = owner
 }
 
 // Dispose - disposes inventory item
 func (i *Item) Dispose() {
-	i.Disposed = true
-	i.Spec.Owner = nil
+	i.disposed = true
+	i.owner = nil
+}
+
+// Spec - returns ItemSpec for this item
+func (i *Item) Spec() ItemSpec {
+	return i.spec
+}
+
+// OwnerID - returns ID of the item owner
+func (i *Item) OwnerID() ID {
+	return i.owner.ID
+}
+
+// OwnerName - returns
+func (i *Item) OwnerName() string {
+	return i.owner.Name
+}
+
+// DisplayName - prints display name of the item
+func (i *Item) DisplayName() string {
+	var result string
+	result = i.spec.Category
+	if len(i.spec.Place) > 0 {
+		result += " "
+		result += i.spec.Place
+	}
+	return result
+}
+
+// Disposed - returns true if item disposed (deleted from stock)
+func (i *Item) Disposed() bool {
+	return i.disposed
 }

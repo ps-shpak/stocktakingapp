@@ -38,18 +38,17 @@ service Backend {
     rpc Authorize(AuthorizeRequest) returns (AuthorizeResponse) {};
 }
 
-message ItemInfo {
+message ItemSpec {
   string category = 2; // item category (e.g. "Стол")
   string place = 3; // item placement (e.g. room name or number)
   string owner_id = 4;
-  string owner_name = 5;
-  double price = 6; // item price
-  string description = 7; // item description
+  double price = 5; // item price
+  string description = 6; // item description
 }
 
 message SaveItemRequest {
   string id = 1; // optional, auto-generated when missed
-  ItemInfo info = 2;
+  ItemSpec spec = 2;
 }
 
 message SaveItemResponse {
@@ -64,7 +63,8 @@ message LoadItemRequest {
 message LoadItemResponse {
   Error error = 1;
   string display_name = 2; // formatted combination of category and placement
-  ItemInfo info = 4;
+  string owner_name = 3;
+  ItemSpec spec = 4;
 }
 
 // Node in items tree
@@ -76,7 +76,8 @@ message ItemTreeNode {
 
 // Group of item nodes
 message ItemTreeGroup {
-  repeated ItemTreeNode items = 1;
+  string name = 1;
+  repeated ItemTreeNode items = 2;
 }
 
 // Item tree grouping method
@@ -92,43 +93,6 @@ message ListItemsRequest {
 message ListItemsResponse {
   Error error = 1;
   repeated ItemTreeGroup results = 2;
-}
-
-message AddOwnersRequest {
-  message Owner {
-    string name = 1;
-    string email = 2;
-  }
-  repeated Owner owners = 1;
-}
-
-message SaveOwnerRequest {
-  string id = 1;
-  string name = 2;
-  string email = 3;
-  bool may_login = 4; // true if user may login this service (note: everyone is admin)
-}
-
-message SaveOwnerResponse {
-  Error error = 1;
-}
-
-message AuthorizeRequest {
-  string email = 1;
-}
-
-message AuthorizeResponse {
-  Error error = 1;
-  string id = 2; // user ID
-}
-
-message AddOneOwnerInfo {
-  Error error = 1;
-  string id = 2;
-}
-
-message AddOwnersResponse {
-  repeated AddOneOwnerInfo owners = 1;
 }
 
 message DisposeItemsRequest {
@@ -155,12 +119,49 @@ message ListOwnersResponse {
   message Result {
     string user_id = 1;
     string name = 2; // full user name (e.g. Ivan Cukic)
-    bool may_login = 3;  // true if user may login this service (note: everyone is admin)
-    repeated string items_count = 4; // count of items owned by this user
+    string email = 3;
+    bool may_login = 4;  // true if user may login this service (note: everyone is admin)
   }
 
   Error error = 1;
   repeated Result results = 2;
+}
+
+message AddOwnersRequest {
+  message Owner {
+    string name = 1;
+    string email = 2;
+  }
+  repeated Owner owners = 1;
+}
+
+message AddOwnersResponse {
+  message Owner {
+    Error error = 1;
+    string id = 2;
+  }
+
+  repeated Owner owners = 1;
+}
+
+message SaveOwnerRequest {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  bool may_login = 4; // true if user may login this service (note: everyone is admin)
+}
+
+message SaveOwnerResponse {
+  Error error = 1;
+}
+
+message AuthorizeRequest {
+  string email = 1;
+}
+
+message AuthorizeResponse {
+  Error error = 1;
+  string id = 2; // user ID
 }
 
 enum ErrorCode {
