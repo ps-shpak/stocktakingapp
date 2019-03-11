@@ -64,6 +64,13 @@ type service struct {
 	repo Repository
 }
 
+// NewService - creates stock management service
+func NewService(repo Repository) Service {
+	return &service{
+		repo: repo,
+	}
+}
+
 func (s *service) SaveItem(id ID, ownerID ID, spec ItemSpec) (ID, error) {
 	owner, err := s.findOwnerWithID(ownerID)
 	if err != nil {
@@ -217,8 +224,11 @@ func (s *service) findOwnerWithID(ownerID ID) (*Owner, error) {
 	owners, err := s.repo.FindOwners(FindOwnersSpec{
 		OwnerIDs: []ID{ownerID},
 	})
-	if err == nil && len(owners) == 0 {
-		err = ErrUnknownID
+	if err != nil {
+		return nil, err
+	}
+	if len(owners) == 0 {
+		return nil, ErrUnknownID
 	}
 	return owners[0], err
 }
