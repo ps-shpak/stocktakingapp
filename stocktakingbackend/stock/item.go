@@ -16,7 +16,7 @@ type Item struct {
 	disposed bool
 }
 
-// CreateItem - creates new item with unique ID
+// CreateItem - creates item with unique ID
 func CreateItem(spec ItemSpec) *Item {
 	return &Item{
 		id:       GenerateID(),
@@ -31,7 +31,7 @@ func BuildItem(id ID, spec ItemSpec, owner *Owner, disposed bool) *Item {
 		id:       id,
 		spec:     spec,
 		owner:    owner,
-		disposed: false,
+		disposed: disposed,
 	}
 }
 
@@ -44,6 +44,10 @@ func (i *Item) Transfer(owner *Owner) {
 func (i *Item) Dispose() {
 	i.disposed = true
 	i.owner = nil
+}
+
+func (i *Item) ID() ID {
+	return i.id
 }
 
 // Spec - returns ItemSpec for this item
