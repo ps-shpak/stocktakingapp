@@ -5,11 +5,9 @@ import 'package:stocktakingmobile/ui/pages/settings_page.dart';
 
 class SettingsPageState extends State<SettingsPage> {
   SettingsPageState({service: SettingsPageService}) : super();
-  BuildContext _context;
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
     return Scaffold(
       body: ConstrainedBox(
         constraints: const BoxConstraints.expand(),
@@ -18,5 +16,9 @@ class SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildBody() {}
+  Widget _buildBody() {
+    return Center(
+      child: Text('Settings'),
+    );
+  }
 }

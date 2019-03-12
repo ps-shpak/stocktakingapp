@@ -3,7 +3,8 @@ import 'package:stocktakingmobile/state/scanning_page_state.dart';
 
 class ScanningPage extends StatefulWidget {
   ScanningPage({initialState: ScanningPageState})
-      : _state = initialState,
+      : assert(initialState != null),
+        _state = initialState,
         super();
 
   final ScanningPageState _state;

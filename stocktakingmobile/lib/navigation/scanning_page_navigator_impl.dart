@@ -5,12 +5,18 @@ import 'package:stocktakingmobile/ui/pages/settings_page.dart';
 
 class ScanningPageNavigatorImpl implements ScanningPageNavigator {
   @override
-  void openSettings(BuildContext context) {
+  openSettings(BuildContext context) {
     final route = new MaterialPageRoute(
       builder: (context) => SettingsPage(
             initialState: SettingsPageState(),
           ),
     );
-    Navigator.pushReplacement(context, route);
+    Navigator.push(context, route);
+  }
+
+  @override
+  Future<String> openScan() {
+    // TODO: implement openScan
+    return null;
   }
 }
