@@ -11,19 +11,12 @@ class GoogleAuthService implements AuthPageService {
 
   @override
   Future<bool> isUserAuthenticated() async {
-    Future.delayed(Duration(seconds: 3));
     return _googleSignIn.currentUser != null;
   }
 
   @override
   Future<bool> signIn() async {
-    try {
-      Future.delayed(Duration(seconds: 3));
-      await _googleSignIn.signIn();
-      return _googleSignIn.currentUser != null;
-    } catch (error) {
-      print(error);
-      return false;
-    }
+    await _googleSignIn.signIn();
+    return _googleSignIn.currentUser != null;
   }
 }

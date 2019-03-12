@@ -16,6 +16,7 @@ class AuthPageState extends State<AuthPage> {
   final AuthPageService _service;
   final AuthPageNavigator _navigator;
 
+  BuildContext _context;
   _AuthState _state = _AuthState.WaitSync;
 
   @override
@@ -24,7 +25,7 @@ class AuthPageState extends State<AuthPage> {
 
     _service.isUserAuthenticated().then((isAuthenticated) {
       if (isAuthenticated) {
-        _navigator.onAuthCompleted();
+        _navigator.onAuthCompleted(_context);
       }
     }).whenComplete(() {
       _state = _AuthState.Idle;
@@ -36,9 +37,12 @@ class AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints.expand(),
-      child: _buildBody(),
+    _context = context;
+    return Scaffold(
+      body: ConstrainedBox(
+        constraints: const BoxConstraints.expand(),
+        child: _buildBody(),
+      ),
     );
   }
 
@@ -81,13 +85,13 @@ class AuthPageState extends State<AuthPage> {
   void _handleSignIn() {
     _service.signIn().then((isSignedIn) {
       if (isSignedIn) {
-        _navigator.onAuthCompleted();
+        _navigator.onAuthCompleted(_context);
       }
     }).whenComplete(() {
       _state = _AuthState.Idle;
       setState(() {});
     }).catchError((error) {
-      setState(() {});
+      _navigator.onAuthCompleted(_context);
     });
   }
 
