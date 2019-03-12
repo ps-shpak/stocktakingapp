@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:stocktakingmobile/domain/service/google_auth_page_service.dart';
-import 'package:stocktakingmobile/navigation/flutter_auth_page_navigator.dart';
+import 'package:stocktakingmobile/domain/service/auth_page_service_impl.dart';
+import 'package:stocktakingmobile/navigation/auth_page_navigator_impl.dart';
 import 'package:stocktakingmobile/ui/pages/auth_page.dart';
-import 'package:stocktakingmobile/ui/pages/auth_page_state.dart';
+import 'package:stocktakingmobile/state/auth_page_state.dart';
 import 'package:stocktakingmobile/ui/theme/MaterialTheme.dart';
 
 class StocktakingApp extends StatelessWidget {
@@ -13,8 +13,8 @@ class StocktakingApp extends StatelessWidget {
       theme: materialTheme,
       home: AuthPage(
         initialState: AuthPageState(
-          navigator: FlutterAuthPageNavigator(),
-          service: GoogleAuthService(),
+          navigator: AuthPageNavigatorImpl(),
+          service: AuthServiceImpl(),
         ),
       ),
     );

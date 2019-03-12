@@ -2,9 +2,14 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:stocktakingmobile/navigation/scanning_page_navigator.dart';
 import 'package:stocktakingmobile/ui/pages/scanning_page.dart';
 
 class ScanningPageState extends State<ScanningPage> {
+  ScanningPageState({navigator: ScanningPageNavigator, service: ScanningPageService}) : super();
+
+  ScanningPageService _service;
+  ScanningPageNavigator _navigator;
   String _result = "";
 
   @override
@@ -25,7 +30,7 @@ class ScanningPageState extends State<ScanningPage> {
         RaisedButton(
           child: const Text('SCAN'),
           onPressed: _startScan,
-        )
+        ),
       ],
     );
   }

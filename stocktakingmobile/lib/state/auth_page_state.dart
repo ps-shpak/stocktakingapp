@@ -25,7 +25,7 @@ class AuthPageState extends State<AuthPage> {
 
     _service.isUserAuthenticated().then((isAuthenticated) {
       if (isAuthenticated) {
-        _navigator.onAuthCompleted(_context);
+        _navigator.openScanning(_context);
       }
     }).whenComplete(() {
       _state = _AuthState.Idle;
@@ -85,13 +85,13 @@ class AuthPageState extends State<AuthPage> {
   void _handleSignIn() {
     _service.signIn().then((isSignedIn) {
       if (isSignedIn) {
-        _navigator.onAuthCompleted(_context);
+        _navigator.openScanning(_context);
       }
     }).whenComplete(() {
       _state = _AuthState.Idle;
       setState(() {});
     }).catchError((error) {
-      _navigator.onAuthCompleted(_context);
+      _navigator.openScanning(_context);
     });
   }
 

@@ -1,7 +1,7 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stocktakingmobile/domain/service/auth_page_service.dart';
 
-class GoogleAuthService implements AuthPageService {
+class AuthServiceImpl implements AuthPageService {
   GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: <String>[
       'email',
