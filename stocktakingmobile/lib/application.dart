@@ -17,7 +17,7 @@ class StocktakingApp extends StatelessWidget {
         body: AuthPage(
           initialState: AuthPageState(
             navigator: FlutterAuthPageNavigator(),
-            service: GoogleAuthPageService(),
+            service: GoogleAuthService(),
           ),
         ),
       ),

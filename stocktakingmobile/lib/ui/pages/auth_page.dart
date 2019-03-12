@@ -10,7 +10,5 @@ class AuthPage extends StatefulWidget {
   final AuthPageState _state;
 
   @override
-  AuthPageState createState() {
-    return _state;
-  }
+  AuthPageState createState() => _state;
 }

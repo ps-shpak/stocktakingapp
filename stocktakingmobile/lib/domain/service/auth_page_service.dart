@@ -1,1 +1,5 @@
-abstract class AuthPageService {}
+abstract class AuthPageService {
+  Future<bool> isUserAuthenticated();
+
+  Future<bool> signIn();
+}
