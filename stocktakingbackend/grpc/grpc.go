@@ -47,7 +47,7 @@ func (g *grpcServer) SaveItem(ctx context.Context, req *api.SaveItemRequest) (*a
 func (g *grpcServer) LoadItem(ctx context.Context, req *api.LoadItemRequest) (*api.LoadItemResponse, error) {
 	itemID, err := stock.IDFromString(req.Id)
 	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "invalid item ID")
+		return nil, status.Errorf(codes.InvalidArgument, "invalid item ID "+req.Id)
 	}
 	item, err := g.service.LoadItem(itemID)
 	if err != nil {
@@ -68,24 +68,135 @@ func (g *grpcServer) LoadItem(ctx context.Context, req *api.LoadItemRequest) (*a
 }
 
 func (g *grpcServer) ListItems(ctx context.Context, req *api.ListItemsRequest) (*api.ListItemsResponse, error) {
+	var groupingMethod stock.GroupingMethod
+	switch req.GroupingMethod {
+	case api.ItemGroupingMethod_ByCategory:
+		groupingMethod = stock.GroupByCategory
+	case api.ItemGroupingMethod_ByOwner:
+		groupingMethod = stock.GroupByOwner
+	}
+	views, err := g.service.ListItems(groupingMethod)
+	if err != nil {
+		return nil, translateError(err)
+	}
+
+	var groups []*api.ItemTreeGroup
+	for _, groupView := range views {
+		var items []*api.ItemTreeNode
+		for _, itemView := range groupView.Items {
+			items = append(items, &api.ItemTreeNode{
+				DisplayName: itemView.DisplayName,
+				Id:          itemView.ID.String(),
+				OwnerName:   itemView.OwnerName,
+			})
+		}
+		groups = append(groups, &api.ItemTreeGroup{
+			Name:  groupView.Name,
+			Items: items,
+		})
+	}
+	return &api.ListItemsResponse{
+		Results: groups,
+	}, nil
 }
 
 func (g *grpcServer) DisposeItems(ctx context.Context, req *api.DisposeItemsRequest) (*api.DisposeItemsResponse, error) {
+	var ids []stock.ID
+	var err error
+	for _, idStr := range req.Ids {
+		id, err := stock.IDFromString(idStr)
+		if err != nil {
+			return nil, status.Errorf(codes.InvalidArgument, "invalid item ID "+idStr)
+		}
+		ids = append(ids, id)
+	}
+	err = g.service.DisposeItems(ids)
+	if err != nil {
+		return nil, translateError(err)
+	}
+	return &api.DisposeItemsResponse{}, nil
 }
 
 func (g *grpcServer) TransferItems(ctx context.Context, req *api.TransferItemsRequest) (*api.TransferItemsResponse, error) {
+	ownerID, err := stock.IDFromString(req.OwnerId)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid owner ID")
+	}
+	var ids []stock.ID
+	for _, idStr := range req.Ids {
+		id, err := stock.IDFromString(idStr)
+		if err != nil {
+			return nil, status.Errorf(codes.InvalidArgument, "invalid item ID "+idStr)
+		}
+		ids = append(ids, id)
+	}
+	err = g.service.TransferItems(ids, ownerID)
+	if err != nil {
+		return nil, translateError(err)
+	}
+	return &api.TransferItemsResponse{}, nil
 }
 
 func (g *grpcServer) ListOwners(ctx context.Context, req *api.ListOwnersRequest) (*api.ListOwnersResponse, error) {
+	owners, err := g.service.ListOwners()
+	if err != nil {
+		return nil, translateError(err)
+	}
+	var results []*api.ListOwnersResponse_Result
+	for _, owner := range owners {
+		result := api.ListOwnersResponse_Result{
+			UserId:   owner.ID.String(),
+			Email:    owner.Email,
+			Name:     owner.Name,
+			MayLogin: owner.MayLogin,
+		}
+	}
+	return &api.ListOwnersResponse{
+		Results: results,
+	}, nil
 }
 
 func (g *grpcServer) AddOwners(ctx context.Context, req *api.AddOwnersRequest) (*api.AddOwnersResponse, error) {
+	var results []*api.AddOwnersResponse_Owner
+	for _, owner := range req.Owners {
+		spec := stock.OwnerSpec{
+			Email: owner.Email,
+			Name:  owner.Name,
+		}
+		id, err := g.service.AddOwner(spec)
+		if err != nil {
+			return nil, translateError(err)
+		}
+	}
+	return &api.AddOwnersResponse{
+		Owners: results,
+	}, nil
 }
 
 func (g *grpcServer) SaveOwner(ctx context.Context, req *api.SaveOwnerRequest) (*api.SaveOwnerResponse, error) {
+	id, err := stock.IDFromString(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid owner id"+req.Id)
+	}
+	spec := stock.OwnerSpec{
+		Email: req.Email,
+		Name:  req.Name,
+	}
+	err = g.service.SaveOwner(id, spec, req.MayLogin)
+	if err != nil {
+		return nil, translateError(err)
+	}
+	return &api.SaveOwnerResponse{}, nil
 }
 
 func (g *grpcServer) Authorize(ctx context.Context, req *api.AuthorizeRequest) (*api.AuthorizeResponse, error) {
+	id, err := g.service.Authorize(req.Email)
+	if err != nil {
+		return nil, translateError(err)
+	}
+	return &api.AuthorizeResponse{
+		Id: id.String(),
+	}, nil
 }
 
 func translateError(err error) error {
