@@ -144,12 +144,13 @@ func (g *grpcServer) ListOwners(ctx context.Context, req *api.ListOwnersRequest)
 	}
 	var results []*api.ListOwnersResponse_Result
 	for _, owner := range owners {
-		result := api.ListOwnersResponse_Result{
+		result := &api.ListOwnersResponse_Result{
 			UserId:   owner.ID.String(),
 			Email:    owner.Email,
 			Name:     owner.Name,
 			MayLogin: owner.MayLogin,
 		}
+		results = append(results, result)
 	}
 	return &api.ListOwnersResponse{
 		Results: results,
@@ -167,6 +168,9 @@ func (g *grpcServer) AddOwners(ctx context.Context, req *api.AddOwnersRequest) (
 		if err != nil {
 			return nil, translateError(err)
 		}
+		results = append(results, &api.AddOwnersResponse_Owner{
+			Id: id.String(),
+		})
 	}
 	return &api.AddOwnersResponse{
 		Owners: results,
