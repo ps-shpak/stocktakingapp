@@ -5,6 +5,7 @@ import { Component, ReactNode } from "react";
 import { ISidebarProps } from "./ISidebarProps";
 import { Logo } from "../../components/logo";
 import { Avatar } from "../../components/avatar";
+import { Menu } from "../menu";
 
 export const Sidebar = withStyles(styles)(
     class extends Component<ISidebarProps> {
@@ -13,6 +14,7 @@ export const Sidebar = withStyles(styles)(
                 <div className={this.props.classes.sidebar}>
                     <Logo className={this.props.classes.sidebarItem} />
                     <Avatar name={"Maxim"} className={this.props.classes.sidebarItem} />
+                    <Menu />
                 </div>
             );
         }
