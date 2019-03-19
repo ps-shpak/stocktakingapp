@@ -1,26 +1,25 @@
 version: "3"
 
 services:
-  ldap-server:
-    image: osixia/openldap:1.2.3
-    environment:
-      - LDAP_ORGANISATION=FakeCompany
-      - LDAP_DOMAIN=example.com
-      - LDAP_ADMIN_PASSWORD=Jedi
-      - LDAP_READONLY_USER=true
+  stock-db:
+    image: "postgres:11-alpine"
+    container_name: "stock-db"
     volumes:
-      - openldap-data:/var/lib/ldap
-      - openldap-config:/etc/ldap/slapd.d
+      - "postgres-data:/var/lib/postgresql/data"
     ports:
-      - 389:389
-      - 636:636
-  ldap-admin:
-    image: osixia/phpldapadmin:0.7.2
+      - "5432:5432"
     environment:
-      - PHPLDAPADMIN_LDAP_HOSTS=ldap-server
+      - POSTGRES_USER=stock
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=stock
+
+  stocktakingbackend:
+    image: "psshpak/stocktakingbackend"
+    container_name: "stocktakingbackend"
     ports:
-      - "6443:443"
+      - "8081:8081"
+    depends_on:
+      - stock-db
 
 volumes:
-  openldap-data:
-  openldap-config:
+  postgres-data:

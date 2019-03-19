@@ -31,12 +31,16 @@ func (c *DSN) String() string {
 	if len(c.User) != 0 {
 		params = append(params, fmt.Sprintf("user=%s", c.User))
 	}
-	if len(c.Password) != 0 {
-		params = append(params, fmt.Sprintf("password=%s", c.Password))
-	}
 	if len(c.Database) != 0 {
 		params = append(params, fmt.Sprintf("dbname=%s", c.Database))
 	}
+	if len(c.Password) != 0 {
+		params = append(params, fmt.Sprintf("password=%s", c.Password))
+	}
+
+	// Do not use ssl connection with database (otherwise SSL must be enabled in PostgreSQL).
+	params = append(params, "sslmode=disable")
+
 	return strings.Join(params, " ")
 }
 

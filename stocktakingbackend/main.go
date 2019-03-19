@@ -15,6 +15,9 @@ import (
 	"stocktakingbackend/stocktakingapi"
 )
 
+// ServedPort - port for GRPC API
+const ServedPort = "8081"
+
 type richJSONFormatter struct {
 	jsonFormatter log.JSONFormatter
 }
@@ -32,6 +35,7 @@ func main() {
 		Host:     "stock-db",
 		User:     "stock",
 		Password: "1234",
+		Database: "stock",
 	})
 	if err != nil {
 		logger.WithError(err).Fatal("failed to connect database")
@@ -43,12 +47,11 @@ func main() {
 	grpcServer := stocktakinggrpc.NewGRPCServer(service)
 	grpcServer = stocktakinggrpc.NewLoggingMiddleware(grpcServer, logger)
 
-	grpcPort := "8080"
-	grpcListener, err := net.Listen("tcp", ":"+grpcPort)
+	grpcListener, err := net.Listen("tcp", ":"+ServedPort)
 	if err != nil {
 		logger.WithError(err).Fatal("failed to listen socket")
 	}
-	logger.Info("listening GRPC requests on port " + grpcPort)
+	logger.Info("listening GRPC requests on port " + ServedPort)
 	baseServer := grpc.NewServer()
 	stocktakingapi.RegisterBackendServer(baseServer, grpcServer)
 
