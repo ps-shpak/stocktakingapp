@@ -4,6 +4,8 @@ all: build
 
 .PHONY: build
 build:
+	go mod tidy
+	go mod vendor
 	go generate
 	go build -mod vendor
 

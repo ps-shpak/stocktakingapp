@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc"
 
 	stocktakinggrpc "stocktakingbackend/grpc"
+	"stocktakingbackend/postgres"
 	"stocktakingbackend/stock"
 	"stocktakingbackend/stocktakingapi"
 )
@@ -27,7 +28,18 @@ func main() {
 		Level: log.InfoLevel,
 	}
 
-	service := stock.NewService(nil)
+	db, err := postgres.NewClient(postgres.DSN{
+		Host:     "stock-db",
+		User:     "stock",
+		Password: "1234",
+	})
+	if err != nil {
+		logger.WithError(err).Fatal("failed to connect database")
+	}
+	defer db.Close()
+
+	repository := postgres.NewStockRepository(db)
+	service := stock.NewService(repository)
 	grpcServer := stocktakinggrpc.NewGRPCServer(service)
 	grpcServer = stocktakinggrpc.NewLoggingMiddleware(grpcServer, logger)
 
