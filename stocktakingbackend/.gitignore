@@ -2,4 +2,4 @@
 vendor/
 
 # Built executable file
-stocktakingbackend
+/stocktakingbackend

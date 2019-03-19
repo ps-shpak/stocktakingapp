@@ -2,15 +2,16 @@
 .PHONY: all
 all: build
 
-.PHONY: install
-install:
+.PHONY: vendor
+vendor:
 	go mod tidy
 	go mod vendor
 
 .PHONY: build
-build: install
-	go generate
-	go build -mod vendor
+build: vendor
+	go generate cmd/stocktakingbackend/main.go
+	go build -mod vendor -o build/stocktakingbackend cmd/stocktakingbackend/main.go
+	go build -mod vendor -o build/stocktakingtests cmd/stocktakingtests/main.go
 
 .PHONY: test
 test:
