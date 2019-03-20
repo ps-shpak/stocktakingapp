@@ -20,7 +20,7 @@ type DSN struct {
 	Database string
 }
 
-func (c *DSN) String() string {
+func (c *DSN) Format() string {
 	var params []string
 	if len(c.Host) != 0 {
 		params = append(params, fmt.Sprintf("host=%s", c.Host))
@@ -46,7 +46,7 @@ func (c *DSN) String() string {
 
 // NewClient - creates new PostgreSQL database client
 func NewClient(dsn DSN) (db *gorm.DB, err error) {
-	db, err = gorm.Open("postgres", dsn.String())
+	db, err = gorm.Open("postgres", dsn.Format())
 	if err != nil {
 		return nil, err
 	}

@@ -18,10 +18,6 @@ import (
 // ServedPort - port for GRPC API
 const ServedPort = "8081"
 
-type richJSONFormatter struct {
-	jsonFormatter log.JSONFormatter
-}
-
 func main() {
 	logger := &log.Logger{
 		Out: os.Stderr,

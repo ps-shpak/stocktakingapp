@@ -1,5 +1,7 @@
 package stock
 
+import "sort"
+
 // GroupingMethod - method used to make parent nodes in item tree
 type GroupingMethod int
 
@@ -119,7 +121,7 @@ func (s *service) ListItems(method GroupingMethod) ([]*ItemGroupView, error) {
 				Name: category,
 			}
 		}
-		view.Items = append(view.Items, ItemView{
+		view.Items = insertSortItemViews(view.Items, ItemView{
 			ID:          item.ID(),
 			DisplayName: item.DisplayName(),
 			OwnerName:   item.OwnerName(),
@@ -130,6 +132,9 @@ func (s *service) ListItems(method GroupingMethod) ([]*ItemGroupView, error) {
 	for _, view := range mapping {
 		views = append(views, view)
 	}
+	sort.Slice(views, func(i, j int) bool {
+		return views[i].Name < views[j].Name
+	})
 	return views, nil
 }
 
@@ -231,4 +236,12 @@ func (s *service) findOwnerWithID(ownerID ID) (*Owner, error) {
 		return nil, ErrUnknownID
 	}
 	return owners[0], err
+}
+
+func insertSortItemViews(data []ItemView, el ItemView) []ItemView {
+	index := sort.Search(len(data), func(i int) bool { return data[i].DisplayName > el.DisplayName })
+	data = append(data, ItemView{})
+	copy(data[index+1:], data[index:])
+	data[index] = el
+	return data
 }

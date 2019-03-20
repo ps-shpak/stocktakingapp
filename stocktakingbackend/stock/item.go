@@ -67,8 +67,7 @@ func (i *Item) OwnerName() string {
 
 // DisplayName - prints display name of the item
 func (i *Item) DisplayName() string {
-	var result string
-	result = i.spec.Category
+	result := i.spec.Category
 	if len(i.spec.Place) > 0 {
 		result += " "
 		result += i.spec.Place

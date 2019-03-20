@@ -1,6 +1,6 @@
 
 .PHONY: all
-all: build
+all: build test lint
 
 .PHONY: vendor
 vendor:
@@ -10,10 +10,13 @@ vendor:
 .PHONY: build
 build: vendor
 	go generate cmd/stocktakingbackend/main.go
-	go build -mod vendor -o build/stocktakingbackend cmd/stocktakingbackend/main.go
-	go build -mod vendor -o build/stocktakingtests cmd/stocktakingtests/main.go
+	go build -mod vendor -o build/stocktakingbackend cmd/stocktakingbackend/*.go
 
 .PHONY: test
 test:
 	go test ./...
 	go vet ./...
+
+.PHONY: lint
+lint:
+	$(shell go env GOPATH)/bin/golangci-lint run

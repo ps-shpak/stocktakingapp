@@ -127,6 +127,7 @@ func (sr *stockRepository) findOwners(spec stock.FindOwnersSpec) ([]Owner, error
 	if len(spec.OwnerEmail) != 0 {
 		query = query.Where("email=?", spec.OwnerEmail)
 	}
+	query = query.Order("name DESC")
 	queryErrors := query.Find(&owners).GetErrors()
 	return owners, mergeErrors(queryErrors)
 }
