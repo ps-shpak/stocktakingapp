@@ -17,7 +17,6 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.0
 	github.com/stretchr/testify v1.3.0
-	github.com/thoas/go-funk v0.0.0-20181020164546-fbae87fb5b5c
 	golang.org/x/net v0.0.0-20190225153610-fe579d43d832
 	google.golang.org/grpc v1.18.0
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect

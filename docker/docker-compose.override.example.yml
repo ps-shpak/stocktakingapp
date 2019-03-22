@@ -1,0 +1,14 @@
+version: "3"
+
+# How to use this file:
+# - copy it to 'docker-compose.override.yml'
+# - read the comments below
+# - uncomment everything that you need
+
+services:
+  stock-db:
+  stocktakingbackend:
+  ## Uncomment if you want to develop and test backend quickly
+  ## Mounts 'stocktakingbackend' binary (built locally) into container
+  #  volumes:
+    #  - "$PWD/stocktakingbackend/build/stocktakingbackend:/usr/bin/stocktakingbackend:ro"

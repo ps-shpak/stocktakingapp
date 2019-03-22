@@ -22,6 +22,11 @@ tasks:
       - docker-compose logs
 
   build-backend:
+    dir: stocktakingbackend
+    cmds:
+      - make
+
+  docker-build:
     cmds:
       - docker build --tag psshpak/stocktakingbackend -f stocktakingbackend/Dockerfile .
 
@@ -36,3 +41,9 @@ tasks:
       - docker push {{.PROJECT}}/stocktakingbackend
     vars:
       PROJECT: psshpak
+
+  # Runs backend API tests, assumes that docker-compose containers are running now
+  test-api:
+    dir: apitests
+    cmds:
+      - mocha --require ts-node/register test/*.ts

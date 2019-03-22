@@ -22,6 +22,9 @@ func NewGRPCServer(service stock.Service) api.BackendServer {
 }
 
 func (g *grpcServer) SaveItem(ctx context.Context, req *api.SaveItemRequest) (*api.SaveItemResponse, error) {
+	if req.Spec == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "missing item spec")
+	}
 	itemID, err := stock.IDFromString(req.Id)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid item ID")

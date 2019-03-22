@@ -2,17 +2,22 @@
   "name": "apitests",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "test/test_backend.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
     "@types/node": "^11.11.4",
+    "chai": "^4.2.0",
     "google-protobuf": "^3.7.0",
     "grpc": "^1.19.0",
     "grpc_tools_node_protoc_ts": "^2.5.0",
+    "mocha": "^6.0.2",
+    "trolling": "^1.0.2",
     "ts-protoc-gen": "^0.9.0"
   }
 }

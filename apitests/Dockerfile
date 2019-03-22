@@ -14,4 +14,5 @@ RUN apt-get -qq update && \
 RUN npm install -g typescript && \
     npm install -g node-gyp && \
     npm install -g node-pre-gyp --unsafe-perm && \
-    npm install -g grpc-tools
+    npm install -g grpc-tools && \
+    npm install -g ts-node
