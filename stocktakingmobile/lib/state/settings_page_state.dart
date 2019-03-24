@@ -17,8 +17,42 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildBody() {
-    return Center(
-      child: Text('Settings'),
+    return ListView(
+      children: <Widget>[
+        _buildUserProfile(),
+        _buildServerUrlInput(),
+        _buildLogoutButton(),
+      ],
+    );
+  }
+
+  Widget _buildUserProfile() {
+    return ConstrainedBox(
+      constraints: const BoxConstraints.expand(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Center(
+            child: Image.network(
+                "http://sovitpoudel.com.np/wp-content/uploads/2019/01/flutter.png"),
+          ),
+          Center(
+            child: Text("Ivan Andreyshev"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildServerUrlInput() {
+    return Card(
+      child: Text("Url input"),
+    );
+  }
+
+  Widget _buildLogoutButton() {
+    return Card(
+      child: IconButton(icon: Icon(Icons.arrow_back), onPressed: () {}),
     );
   }
 }
