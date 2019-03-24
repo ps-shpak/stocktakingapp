@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1056277156752-iliar60m98futq6mvrsdnd77t1ttccmu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shpak.stocktakingmobile",
+            "certificate_hash": "d9ff56b7aae0687d1b56dc89344216c68a3574d6"
+          }
+        },
+        {
           "client_id": "1056277156752-b8dpgbpdjnqhb8bbs54195gedvdgs2or.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056277156752-b8dpgbpdjnqhb8bbs54195gedvdgs2or.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
