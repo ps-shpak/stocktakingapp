@@ -27,14 +27,23 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildUserProfile() {
-    return ConstrainedBox(
-      constraints: const BoxConstraints.expand(),
+    return Container(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Center(
-            child: Image.network(
-                "http://sovitpoudel.com.np/wp-content/uploads/2019/01/flutter.png"),
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: NetworkImage(
+                    "https://cdn-images-1.medium.com/max/1600/1*D5afxg0H9xyxfqRq_bfTgQ.png"),
+              ),
+            ),
           ),
           Center(
             child: Text("Ivan Andreyshev"),
@@ -45,14 +54,24 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildServerUrlInput() {
-    return Card(
-      child: Text("Url input"),
+    return TextField(
+      decoration: InputDecoration(
+        border: null,
+        hintText: "Server url"
+      ),
     );
   }
 
   Widget _buildLogoutButton() {
-    return Card(
-      child: IconButton(icon: Icon(Icons.arrow_back), onPressed: () {}),
+    return FlatButton(
+      child: Text(
+        "Sign out",
+        textAlign: TextAlign.start,
+        style: TextStyle(
+          color: Colors.red,
+        ),
+      ),
+      onPressed: () {},
     );
   }
 }

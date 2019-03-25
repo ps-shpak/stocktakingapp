@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:stocktakingmobile/domain/model/sign_in_result.dart';
 import 'package:stocktakingmobile/domain/service/auth_page_service.dart';
 import 'package:stocktakingmobile/navigation/auth_page_navigator.dart';
 import 'package:stocktakingmobile/ui/pages/auth_page.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
 enum _AuthState { WaitSync, WaitSignIn, Idle }
 
@@ -23,15 +25,13 @@ class AuthPageState extends State<AuthPage> {
   void initState() {
     super.initState();
 
-    _service.isUserAuthenticated().then((isAuthenticated) {
+    _service.isUserSignedIn().then((isAuthenticated) {
       if (isAuthenticated) {
         _navigator.openScanning(_context);
+      } else {
+        _state = _AuthState.Idle;
+        setState(() {});
       }
-    }).whenComplete(() {
-      _state = _AuthState.Idle;
-      setState(() {});
-    }).catchError((error) {
-      _showError();
     });
   }
 
@@ -54,12 +54,14 @@ class AuthPageState extends State<AuthPage> {
         return _buildWaitSignInBody();
       case _AuthState.Idle:
         return _buildIdleBody();
+      default:
+        return _buildIdleBody();
     }
   }
 
   Widget _buildWaitSyncBody() {
     return Center(
-      child: Text(_state.toString()),
+      child: CircularProgressIndicator(),
     );
   }
 
@@ -74,22 +76,27 @@ class AuthPageState extends State<AuthPage> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         const Text("Authentication"),
-        RaisedButton(
-          child: const Text('SIGN IN'),
+        GoogleSignInButton(
           onPressed: _handleSignIn,
-        ),
+          darkMode: true,
+        )
       ],
     );
   }
 
   void _handleSignIn() {
-    _service.signIn().then((isSignedIn) {
-      if (isSignedIn) {
-        _navigator.openScanning(_context);
+    _service.signIn().then((result) {
+      switch (result) {
+        case SignInResult.Success:
+          _navigator.openScanning(_context);
+          break;
+        case SignInResult.Error:
+          break;
       }
     }).whenComplete(() {
-      _state = _AuthState.Idle;
-      setState(() {});
+      setState(() {
+        _state = _AuthState.Idle;
+      });
     }).catchError((error) {
       _navigator.openScanning(_context);
     });

@@ -1,0 +1,4 @@
+enum SignInResult {
+  Success,
+  Error
+}

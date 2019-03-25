@@ -1,22 +1,28 @@
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:stocktakingmobile/domain/model/authentication_manager.dart';
+import 'package:stocktakingmobile/domain/model/SignOutResult.dart';
+import 'package:stocktakingmobile/domain/model/sign_in_result.dart';
 import 'package:stocktakingmobile/domain/service/auth_page_service.dart';
 
-class AuthServiceImpl implements AuthPageService {
-  GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: <String>[
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
+class AuthPageServiceImpl implements AuthPageService {
+  AuthPageServiceImpl({authManager: AuthenticationManager})
+      : assert(authManager != null),
+        _authenticationManager = authManager,
+        super();
+
+  final AuthenticationManager _authenticationManager;
 
   @override
-  Future<bool> isUserAuthenticated() async {
-    return _googleSignIn.currentUser != null;
+  Future<bool> isUserSignedIn() async {
+    return await _authenticationManager.isUserSignedIn();
   }
 
   @override
-  Future<bool> signIn() async {
-    await _googleSignIn.signIn();
-    return _googleSignIn.currentUser != null;
+  Future<SignInResult> signIn() async {
+    return await _authenticationManager.signIn();
+  }
+
+  @override
+  Future<SignOutResult> signOut() async {
+    return await _authenticationManager.signOut();
   }
 }
