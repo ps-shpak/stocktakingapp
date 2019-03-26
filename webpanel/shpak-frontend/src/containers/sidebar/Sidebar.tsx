@@ -9,6 +9,7 @@ import { Menu } from "../menu";
 
 export const Sidebar = withStyles(styles)(
     class extends Component<ISidebarProps> {
+
         render(): ReactNode {
             return (
                 <div className={this.props.classes.sidebar}>

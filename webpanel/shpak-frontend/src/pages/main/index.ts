@@ -1,2 +1,2 @@
 export { Main } from "./Main";
-export { IMenuItem } from "./IMenuItem";
+export { IMenuItem } from "../../containers/menu/IMenuItem";
