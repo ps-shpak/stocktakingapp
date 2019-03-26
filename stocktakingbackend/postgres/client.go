@@ -51,12 +51,16 @@ func NewClient(dsn DSN) (db *gorm.DB, err error) {
 		return nil, err
 	}
 
+	// We don't use GORM builtin logger since we have centralized logging.
+	db.LogMode(false)
+
 	defer func() {
 		if err != nil {
 			db.Close()
 		}
 	}()
 
+	// Apply database schema migrations
 	db.AutoMigrate(&Owner{}, &Item{})
 	if db.Error != nil {
 		err = db.Error

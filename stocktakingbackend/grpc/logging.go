@@ -6,6 +6,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"stocktakingbackend/errors"
 	api "stocktakingbackend/stocktakingapi"
 )
 
@@ -105,7 +106,11 @@ func (g *loggingMiddleware) Authorize(ctx context.Context, req *api.AuthorizeReq
 func (g *loggingMiddleware) logCall(start time.Time, err error, method string, fields log.Fields) {
 	duration := time.Since(start)
 	entry := g.logger.WithFields(fields).WithField("duration", duration).WithField("method", method)
+
 	if err != nil {
+		stack := errors.GetStacktrace(err)
+		entry = entry.WithField("stack", stack)
+
 		entry.WithError(err).Error("call failed")
 	} else {
 		entry.Info("call finished")
