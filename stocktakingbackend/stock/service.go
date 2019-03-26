@@ -49,8 +49,9 @@ type FindOwnersSpec struct {
 
 // FindItemsSpec - requirements used to select items list
 type FindItemsSpec struct {
-	Limit   uint // 0 means "no limit"
-	ItemIDs []ID // empty means "find all"
+	ShowDisposed bool
+	Limit        uint // 0 means "no limit"
+	ItemIDs      []ID // empty means "find all"
 }
 
 // Repository - represents stock as persistent collection
@@ -94,8 +95,9 @@ func (s *service) SaveItem(id ID, ownerID ID, spec ItemSpec) (ID, error) {
 
 func (s *service) LoadItem(id ID) (*Item, error) {
 	items, err := s.repo.FindItems(FindItemsSpec{
-		Limit:   1,
-		ItemIDs: []ID{id},
+		ShowDisposed: true,
+		Limit:        1,
+		ItemIDs:      []ID{id},
 	})
 	if err != nil {
 		return nil, err
