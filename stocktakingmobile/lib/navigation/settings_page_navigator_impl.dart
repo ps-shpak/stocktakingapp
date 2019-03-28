@@ -37,4 +37,9 @@ class SettingsPageNavigatorImpl implements SettingsPageNavigator {
       ),
     );
   }
+
+  @override
+  back(BuildContext context) {
+    Navigator.pop(context);
+  }
 }

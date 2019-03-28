@@ -5,18 +5,15 @@ import 'package:stocktakingmobile/domain/service/settings_page_service.dart';
 
 class SettingsPageServiceImpl implements SettingsPageService {
   SettingsPageServiceImpl({authManager: AuthenticationManager})
-    : assert(authManager != null),
-      _authenticationManager = authManager,
-      super();
+      : assert(authManager != null),
+        _authenticationManager = authManager,
+        super();
 
   AuthenticationManager _authenticationManager;
 
   @override
-  Future<User> getUser() async {
-    return User(
-      name: await _authenticationManager.getUserName(),
-      email: await _authenticationManager.getUserEmail()
-    );
+  User getUser() {
+    return _authenticationManager.getUser();
   }
 
   @override

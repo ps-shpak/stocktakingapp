@@ -32,7 +32,7 @@ class ScanningPageState extends State<ScanningPage> {
 
   Widget _buildAppBar(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 40.0, right: 16.0),
+      margin: const EdgeInsets.only(top: 40.0, right: 14.0),
       child: Align(
         alignment: Alignment.topRight,
         child: IconButton(

@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stocktakingmobile/domain/model/sign_out_result.dart';
 import 'package:stocktakingmobile/domain/model/sign_in_result.dart';
+import 'package:stocktakingmobile/domain/model/user.dart';
 
 class AuthenticationManager {
   GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -23,10 +24,16 @@ class AuthenticationManager {
     try {
       await _googleSignIn.signIn();
 
-      if (_googleSignIn.currentUser != null) {
+      var currentUser = _googleSignIn.currentUser;
+
+      if (currentUser != null) {
         return SignInResult.Success;
       }
-    } on PlatformException catch (ex) {} catch (ex) {}
+    } on PlatformException catch (ex) {
+      if (ex.code == GoogleSignIn.kSignInCanceledError) {
+        return SignInResult.Canceled;
+      }
+    } catch (ex) {}
 
     return SignInResult.Error;
   }
@@ -43,18 +50,15 @@ class AuthenticationManager {
     return SignOutResult.Error;
   }
 
-  Future<String> getUserName() async {
+  User getUser() {
     try {
-      return _googleSignIn.currentUser.displayName;
-    } catch (ex) {}
-
-    return null;
-  }
-
-  Future<String> getUserEmail() async {
-    try {
-      return _googleSignIn.currentUser.email;
-    } catch (ex) {}
+      return User(
+        name: _googleSignIn.currentUser.displayName,
+        email: _googleSignIn.currentUser.email,
+      );
+    } catch (ex) {
+      var a = 0;
+    }
 
     return null;
   }

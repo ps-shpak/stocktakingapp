@@ -90,6 +90,8 @@ class AuthPageState extends State<AuthPage> {
         case SignInResult.Success:
           _navigator.openScanning(_context);
           break;
+        case SignInResult.Canceled:
+          break;
         case SignInResult.Error:
           _showError();
           break;
@@ -109,7 +111,7 @@ class AuthPageState extends State<AuthPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: new Text("Ошибка авторизации"),
-          content: new Text("Во время авторизации произошла неизвестная ошибка. Попробуйте войти позже..."),
+          content: new Text("Во время авторизации произошла ошибка. Попробуйте войти позже..."),
           actions: <Widget>[
             new FlatButton(
               child: new Text("Закрыть"),
