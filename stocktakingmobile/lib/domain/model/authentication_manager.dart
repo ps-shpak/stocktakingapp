@@ -1,5 +1,6 @@
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:stocktakingmobile/domain/model/SignOutResult.dart';
+import 'package:stocktakingmobile/domain/model/sign_out_result.dart';
 import 'package:stocktakingmobile/domain/model/sign_in_result.dart';
 
 class AuthenticationManager {
@@ -25,7 +26,7 @@ class AuthenticationManager {
       if (_googleSignIn.currentUser != null) {
         return SignInResult.Success;
       }
-    } catch (ex) {}
+    } on PlatformException catch (ex) {} catch (ex) {}
 
     return SignInResult.Error;
   }
@@ -34,11 +35,27 @@ class AuthenticationManager {
     try {
       await _googleSignIn.signOut();
 
-      if (_googleSignIn.currentUser != null) {
+      if (_googleSignIn.currentUser == null) {
         return SignOutResult.Success;
       }
     } catch (ex) {}
 
     return SignOutResult.Error;
+  }
+
+  Future<String> getUserName() async {
+    try {
+      return _googleSignIn.currentUser.displayName;
+    } catch (ex) {}
+
+    return null;
+  }
+
+  Future<String> getUserEmail() async {
+    try {
+      return _googleSignIn.currentUser.email;
+    } catch (ex) {}
+
+    return null;
   }
 }

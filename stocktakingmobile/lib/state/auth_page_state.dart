@@ -91,6 +91,7 @@ class AuthPageState extends State<AuthPage> {
           _navigator.openScanning(_context);
           break;
         case SignInResult.Error:
+          _showError();
           break;
       }
     }).whenComplete(() {
@@ -106,14 +107,12 @@ class AuthPageState extends State<AuthPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
         return AlertDialog(
-          title: new Text("Sign in error"),
-          content: new Text("Alert Dialog body"),
+          title: new Text("Ошибка авторизации"),
+          content: new Text("Во время авторизации произошла неизвестная ошибка. Попробуйте войти позже..."),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
             new FlatButton(
-              child: new Text("Close"),
+              child: new Text("Закрыть"),
               onPressed: () {
                 Navigator.of(context).pop();
               },

@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:stocktakingmobile/domain/model/user.dart';
 import 'package:stocktakingmobile/domain/service/settings_page_service.dart';
+import 'package:stocktakingmobile/navigation/settings_page_navigator.dart';
 import 'package:stocktakingmobile/ui/pages/settings_page.dart';
 
 class SettingsPageState extends State<SettingsPage> {
-  SettingsPageState({service: SettingsPageService}) : super();
+  SettingsPageState(
+    {service: SettingsPageService, navigator: SettingsPageNavigator})
+    : assert(service != null),
+      assert(navigator != null),
+      _settingsPageService = service,
+      _navigator = navigator,
+      super();
+
+  SettingsPageService _settingsPageService;
+  SettingsPageNavigator _navigator;
+  User _user = User(name: "Username", email: "");
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,20 +50,11 @@ class SettingsPageState extends State<SettingsPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: NetworkImage(
-                    "https://cdn-images-1.medium.com/max/1600/1*D5afxg0H9xyxfqRq_bfTgQ.png"),
-              ),
-            ),
-          ),
           Center(
-            child: Text("Ivan Andreyshev"),
+            child: Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Text("Ivan Andreyshev"),
+            ),
           ),
         ],
       ),
@@ -55,10 +63,7 @@ class SettingsPageState extends State<SettingsPage> {
 
   Widget _buildServerUrlInput() {
     return TextField(
-      decoration: InputDecoration(
-        border: null,
-        hintText: "Server url"
-      ),
+      decoration: InputDecoration(border: null, hintText: "Server url"),
     );
   }
 
@@ -71,7 +76,11 @@ class SettingsPageState extends State<SettingsPage> {
           color: Colors.red,
         ),
       ),
-      onPressed: () {},
+      onPressed: () {
+        _settingsPageService.signOut().then((isSignedOut) {
+          if (isSignedOut) _navigator.openAuthenticationPage(context);
+        });
+      },
     );
   }
 }

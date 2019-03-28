@@ -1,4 +1,6 @@
+import 'package:stocktakingmobile/domain/model/user.dart';
+
 abstract class SettingsPageService {
-  Future<String> getUserName();
+  Future<User> getUser();
   Future<bool> signOut();
 }
