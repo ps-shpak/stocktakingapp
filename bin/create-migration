@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# This script creates new migration for stock-db,
+# PostgreSQL database used by stocktakingbackend
+
+set -e
+
+SCRIPT_DIR=$(dirname $(readlink -f $0))
+OUTPUT_DIR=$(realpath "$SCRIPT_DIR/../stocktakingbackend/postgres/migrations")
+
+if [ -z "$1" ]; then
+    echo "error: missing migration name" 1>&2
+    exit 1
+fi
+
+pushd "$OUTPUT_DIR"
+migrate create -ext sql "$1"
+popd

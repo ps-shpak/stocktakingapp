@@ -43,7 +43,7 @@ tasks:
       PROJECT: psshpak
 
   # Runs backend API tests, assumes that docker-compose containers are running now
-  test-api:
+  apitests:
     dir: apitests
     cmds:
       - mocha --require ts-node/register test/*.ts

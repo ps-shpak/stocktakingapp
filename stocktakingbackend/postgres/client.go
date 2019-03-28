@@ -2,13 +2,21 @@ package postgres
 
 import (
 	"fmt"
-	"strings"
 
-	"github.com/jinzhu/gorm"
+	"database/sql"
+
+	migrate "github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	bindata "github.com/golang-migrate/migrate/v4/source/go_bindata"
 	"github.com/pkg/errors"
 
-	// We use PostgreSQL, so we need driver
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"stocktakingbackend/postgres/data"
+
+	// We use PostgreSQL, so we need a driver
+	_ "github.com/lib/pq"
+
+	// We read migrations from filesystem
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 // DSN - data source name components
@@ -20,52 +28,46 @@ type DSN struct {
 	Database string
 }
 
+// Format - formats DSN as URL
 func (c *DSN) Format() string {
-	var params []string
-	if len(c.Host) != 0 {
-		params = append(params, fmt.Sprintf("host=%s", c.Host))
-	}
+	var host = c.Host
 	if c.Port != 0 {
-		params = append(params, fmt.Sprintf("port=%d", c.Port))
+		host = fmt.Sprintf("%s:%d", host, c.Port)
 	}
-	if len(c.User) != 0 {
-		params = append(params, fmt.Sprintf("user=%s", c.User))
-	}
-	if len(c.Database) != 0 {
-		params = append(params, fmt.Sprintf("dbname=%s", c.Database))
-	}
-	if len(c.Password) != 0 {
-		params = append(params, fmt.Sprintf("password=%s", c.Password))
-	}
-
-	// Do not use ssl connection with database (otherwise SSL must be enabled in PostgreSQL).
-	params = append(params, "sslmode=disable")
-
-	return strings.Join(params, " ")
+	return fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", c.User, c.Password, host, c.Database)
 }
 
 // NewClient - creates new PostgreSQL database client
-func NewClient(dsn DSN) (db *gorm.DB, err error) {
-	db, err = gorm.Open("postgres", dsn.Format())
+func NewClient(dsn DSN) (db *sql.DB, err error) {
+	db, err = sql.Open("postgres", dsn.Format())
 	if err != nil {
+		return nil, errors.Wrapf(err, "failed to connect database: %s", dsn.Format())
+	}
+	err = applyMigrations(db)
+	if err != nil {
+		db.Close()
 		return nil, err
 	}
-
-	// We don't use GORM builtin logger since we have centralized logging.
-	db.LogMode(false)
-
-	defer func() {
-		if err != nil {
-			db.Close()
-		}
-	}()
-
-	// Apply database schema migrations
-	db.AutoMigrate(&Owner{}, &Item{})
-	if db.Error != nil {
-		err = db.Error
-		return nil, errors.Wrap(err, "failed to apply migrations")
-	}
-
 	return db, nil
+}
+
+func applyMigrations(db *sql.DB) error {
+	dbDriver, err := postgres.WithInstance(db, &postgres.Config{})
+	if err != nil {
+		return errors.Wrap(err, "failed to adapt database for migrations")
+	}
+	assets := bindata.Resource(data.AssetNames(), data.Asset)
+	assetsDriver, err := bindata.WithInstance(assets)
+	if err != nil {
+		return errors.Wrap(err, "failed to load migrations")
+	}
+	migrator, err := migrate.NewWithInstance("go-bindata", assetsDriver, "postgres", dbDriver)
+	if err != nil {
+		return errors.Wrap(err, "failed to start migrations")
+	}
+	err = migrator.Up()
+	if err != migrate.ErrNoChange && err != nil {
+		return errors.Wrap(err, "failed to apply migrations")
+	}
+	return nil
 }

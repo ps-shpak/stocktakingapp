@@ -18,6 +18,11 @@ services:
     container_name: "stocktakingbackend"
     ports:
       - "8081:8081"
+    environment:
+      - STOCK_DB_HOST=stock-db
+      - STOCK_DB_USERNAME=stock
+      - STOCK_DB_PASSWORD=1234
+      - STOCK_DB_NAME=stock
     depends_on:
       - stock-db
 

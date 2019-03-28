@@ -28,3 +28,5 @@ Educational project for intuitive stocktaking and inventory service.
 
 * [go](https://github.com/golang/go/wiki/Ubuntu)
 * [grpc](https://grpc.io/docs/quickstart/go.html)
+* [golang-migrate](https://github.com/golang-migrate/migrate)
+* [go-bindata](https://github.com/jteeuwen/go-bindata): `go get -u github.com/go-bindata/go-bindata/...`

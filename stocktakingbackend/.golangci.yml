@@ -4,4 +4,4 @@ linters:
     - lll
     - gochecknoglobals
     - prealloc
-
+    - gosec

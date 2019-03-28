@@ -5,6 +5,7 @@ package main
 import (
 	"net"
 	"os"
+	"strconv"
 
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -27,14 +28,9 @@ func main() {
 		Level: log.InfoLevel,
 	}
 
-	db, err := postgres.NewClient(postgres.DSN{
-		Host:     "stock-db",
-		User:     "stock",
-		Password: "1234",
-		Database: "stock",
-	})
+	db, err := postgres.NewClient(getDSN())
 	if err != nil {
-		logger.WithError(err).Fatal("failed to connect database")
+		logger.WithError(err).Fatal("failed database setup")
 	}
 	defer db.Close()
 
@@ -54,5 +50,30 @@ func main() {
 	err = baseServer.Serve(grpcListener)
 	if err != nil {
 		logger.WithError(err).Fatal("failed to serve")
+	}
+}
+
+func getDSN() postgres.DSN {
+	host, ok := os.LookupEnv("STOCK_DB_HOST")
+	if !ok {
+		host = "localhost"
+	}
+	port := 5432
+	if portStr, ok := os.LookupEnv("STOCK_DB_PORT"); ok {
+		portNo, err := strconv.Atoi(portStr)
+		if err == nil {
+			port = portNo
+		}
+	}
+
+	user := os.Getenv("STOCK_DB_USERNAME")
+	password := os.Getenv("STOCK_DB_PASSWORD")
+	database := os.Getenv("STOCK_DB_NAME")
+	return postgres.DSN{
+		Host:     host,
+		Port:     uint64(port),
+		User:     user,
+		Password: password,
+		Database: database,
 	}
 }
