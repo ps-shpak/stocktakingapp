@@ -31,7 +31,7 @@ func formatStacktrace(trace errors.StackTrace, depth int) []string {
 	}
 
 	valued := fmt.Sprintf("%+v", trace[0:depth])
-	valued = strings.Replace(valued, "\t", "", -1)
+	valued = strings.ReplaceAll(valued, "\t", "")
 	stack := strings.Split(valued, "\n")
 
 	return stack

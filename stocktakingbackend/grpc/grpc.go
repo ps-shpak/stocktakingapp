@@ -107,7 +107,8 @@ func (g *grpcServer) DisposeItems(ctx context.Context, req *api.DisposeItemsRequ
 	var ids []stock.ID
 	var err error
 	for _, idStr := range req.Ids {
-		id, err := stock.IDFromString(idStr)
+		var id stock.ID
+		id, err = stock.IDFromString(idStr)
 		if err != nil {
 			return nil, status.Errorf(codes.InvalidArgument, "invalid item ID "+idStr)
 		}
@@ -127,7 +128,8 @@ func (g *grpcServer) TransferItems(ctx context.Context, req *api.TransferItemsRe
 	}
 	var ids []stock.ID
 	for _, idStr := range req.Ids {
-		id, err := stock.IDFromString(idStr)
+		var id stock.ID
+		id, err = stock.IDFromString(idStr)
 		if err != nil {
 			return nil, status.Errorf(codes.InvalidArgument, "invalid item ID "+idStr)
 		}

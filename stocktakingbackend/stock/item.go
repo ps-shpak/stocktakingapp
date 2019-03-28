@@ -69,7 +69,7 @@ func (i *Item) OwnerName() string {
 func (i *Item) DisplayName() string {
 	result := i.spec.Category
 	if len(i.spec.Place) > 0 {
-		result += " "
+		result += ", "
 		result += i.spec.Place
 	}
 	return result

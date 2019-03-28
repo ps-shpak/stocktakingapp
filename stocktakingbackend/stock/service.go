@@ -74,7 +74,7 @@ func NewService(repo Repository) Service {
 	}
 }
 
-func (s *service) SaveItem(id ID, ownerID ID, spec ItemSpec) (ID, error) {
+func (s *service) SaveItem(id, ownerID ID, spec ItemSpec) (ID, error) {
 	owner, err := s.findOwnerWithID(ownerID)
 	if err != nil {
 		return NilID, err

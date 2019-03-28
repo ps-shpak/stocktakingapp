@@ -5,3 +5,14 @@ linters:
     - gochecknoglobals
     - prealloc
     - gosec
+
+linters-settings:
+  govet:
+    # report about shadowed variables
+    check-shadowing: true
+  gocyclo:
+    min-complexity: 10
+  gocritic:
+    enabled-tags:
+      - experimental
+      - opinionated

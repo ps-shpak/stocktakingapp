@@ -39,7 +39,8 @@ func (f *itemsFactory) buildItem(data ItemData) (*stock.Item, error) {
 func (f *itemsFactory) cacheOwner(data OwnerData) (*stock.Owner, error) {
 	owner, ok := f.owners[data.ID]
 	if !ok {
-		owner, err := f.buildOwner(data)
+		var err error
+		owner, err = f.buildOwner(data)
 		if err != nil {
 			return nil, err
 		}

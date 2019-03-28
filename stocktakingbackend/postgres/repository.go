@@ -24,7 +24,7 @@ func NewStockRepository(db *sql.DB) stock.Repository {
 func (sr *stockRepository) FindItems(spec stock.FindItemsSpec) ([]*stock.Item, error) {
 	query := `
 		SELECT
-			"item","id",
+			"item"."id",
 			"item"."category",
 			"item"."place",
 			"item"."price",
@@ -125,7 +125,7 @@ func (sr *stockRepository) FindOwners(spec stock.FindOwnersSpec) ([]*stock.Owner
 		bindings := binder.bindIDs(spec.OwnerIDs)
 		conditions = append(conditions, fmt.Sprintf(`"id" in (%s)`, strings.Join(bindings, ",")))
 	}
-	if len(spec.OwnerEmail) != 0 {
+	if spec.OwnerEmail != "" {
 		conditions = append(conditions, `"email"=`+binder.bind(spec.OwnerEmail))
 	}
 	if len(conditions) > 0 {
