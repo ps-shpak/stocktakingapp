@@ -43,7 +43,7 @@ func (sr *stockRepository) FindItems(spec stock.FindItemsSpec) ([]*stock.Item, e
 		query += fmt.Sprintf(` AND "item"."id" in (%s)`, strings.Join(bindings, ","))
 	}
 	if !spec.ShowDisposed {
-		query += ` AND "item"."disposed" != 0`
+		query += ` AND "item"."disposed"`
 	}
 	if spec.Limit != 0 {
 		query += fmt.Sprintf(" LIMIT %d", spec.Limit)

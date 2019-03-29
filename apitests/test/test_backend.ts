@@ -25,6 +25,10 @@ class Client {
         return this.invoke(request, this.backend.addOwners);
     }
 
+    public transferItems(request: pb.TransferItemsRequest): Promise<pb.TransferItemsResponse> {
+        return this.invoke(request, this.backend.transferItems);
+    }
+
     public listOwners(request: pb.ListOwnersRequest): Promise<pb.ListOwnersResponse> {
         return this.invoke(request, this.backend.listOwners)
     }
@@ -63,9 +67,7 @@ describe("stocktaking backend", () => {
 
     it("can save and load item with owner", rollout(async (rollback: RollbackFunction) => {
         const itemId = '72c3ffbb-5f12-4791-ae36-335fe8ff45bd';
-
         const client = new Client();
-
         let ownerId = '';
         {
             const owner = new pb.AddOwnersRequest.Owner();
@@ -102,8 +104,64 @@ describe("stocktaking backend", () => {
             const resSpec = res.getSpec();
             assert.equal(resSpec && resSpec.getCategory(), spec.getCategory());
             assert.equal(resSpec && resSpec.getDescription(), spec.getDescription());
+            assert.equal(resSpec && resSpec.getPlace(), spec.getPlace());
+            assert.equal(resSpec && resSpec.getPrice(), spec.getPrice());
+            assert.equal(resSpec && resSpec.getOwnerId(), spec.getOwnerId());
             assert.equal(res.getOwnerName(), 'Donald Ronald');
             assert.equal(res.getDisplayName(), "Table, Royal Palace");
+        }
+    }));
+
+    it("can transfer ownership", rollout(async (rollback: RollbackFunction) => {
+        const itemId = 'f2adb4c2-8c51-4f16-b83e-813a2eed7dcc';
+        const client = new Client();
+        let ownerIdA = '';
+        {
+            const owner = new pb.AddOwnersRequest.Owner();
+            owner.setName('Donald Ronald');
+            owner.setEmail('donald@example.com');
+            const req = new pb.AddOwnersRequest();
+            req.addOwners(owner);
+            const res = await client.addOwners(req);
+            const owners = res.getOwnersList();
+            assert.equal(owners.length, 1);
+            ownerIdA = owners[0].getId();
+        }
+        let ownerIdB = '';
+        {
+            const owner = new pb.AddOwnersRequest.Owner();
+            owner.setName('Anna Bananova');
+            owner.setEmail('anna@example.com');
+            const req = new pb.AddOwnersRequest();
+            req.addOwners(owner);
+            const res = await client.addOwners(req);
+            const owners = res.getOwnersList();
+            assert.equal(owners.length, 1);
+            ownerIdB = owners[0].getId();
+        }
+        const spec = new pb.ItemSpec();
+        {
+            spec.setOwnerId(ownerIdA);
+    
+            const req = new pb.SaveItemRequest();
+            req.setId(itemId);
+            req.setSpec(spec);
+
+            const res = await client.saveItem(req);
+            assert.equal(res.getId(), itemId);
+        }
+        {
+            const req = new pb.TransferItemsRequest();
+            req.setIdsList([itemId]);
+            req.setOwnerId(ownerIdB);
+            await client.transferItems(req);
+        }
+        {
+            const req = new pb.LoadItemRequest();
+            req.setId(itemId);
+            const res = await client.loadItem(req);
+            const resSpec = res.getSpec();
+            assert.equal(resSpec && resSpec.getOwnerId(), ownerIdB);
         }
     }));
 });
