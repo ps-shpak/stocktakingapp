@@ -210,7 +210,9 @@ func (g *grpcServer) Authorize(ctx context.Context, req *api.AuthorizeRequest) (
 
 func translateError(err error) error {
 	switch err {
-	case stock.ErrUnknownID:
+	case stock.ErrUnknownItemID:
+		return status.Error(codes.NotFound, err.Error())
+	case stock.ErrUnknownOwnerID:
 		return status.Error(codes.NotFound, err.Error())
 	case stock.ErrAuthForbidden:
 		return status.Error(codes.PermissionDenied, err.Error())

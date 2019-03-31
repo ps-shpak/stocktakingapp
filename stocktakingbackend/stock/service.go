@@ -103,7 +103,7 @@ func (s *service) LoadItem(id ID) (*Item, error) {
 		return nil, err
 	}
 	if len(items) == 0 {
-		return nil, ErrUnknownID
+		return nil, ErrUnknownItemID
 	}
 	return items[0], nil
 }
@@ -207,7 +207,7 @@ func (s *service) Authorize(email string) (ID, error) {
 		return NilID, err
 	}
 	if len(owners) == 0 {
-		return NilID, ErrUnknownID
+		return NilID, ErrUnknownOwnerID
 	}
 	owner := owners[0]
 	if !owner.MayLogin {
@@ -222,7 +222,7 @@ func (s *service) findItemsWithIDs(ids []ID) ([]*Item, error) {
 	})
 	if (err == nil) && (len(items) != len(ids)) {
 		// one of items missed
-		err = ErrUnknownID
+		err = ErrUnknownItemID
 	}
 	return items, err
 }
@@ -235,7 +235,7 @@ func (s *service) findOwnerWithID(ownerID ID) (*Owner, error) {
 		return nil, err
 	}
 	if len(owners) == 0 {
-		return nil, ErrUnknownID
+		return nil, ErrUnknownOwnerID
 	}
 	return owners[0], err
 }
