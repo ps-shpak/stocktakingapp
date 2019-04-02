@@ -31,7 +31,12 @@ Educational project for intuitive stocktaking and inventory service.
 * [golang-migrate](https://github.com/golang-migrate/migrate)
 * [go-bindata](https://github.com/jteeuwen/go-bindata): `go get -u github.com/go-bindata/go-bindata/...`
 
-### Веб-панель - фронтенд
+### Веб-панель
+
+Потребуется установить:
+
+* компилятор protoc: [github.com/protocolbuffers/protobuf/releases](https://github.com/protocolbuffers/protobuf/releases)
+* плагин protoc для grpc-web: [github.com/grpc/grpc-web/releases](https://github.com/grpc/grpc-web/releases)
 
 Для начала разработки достаточно сделать то, что обычно требуется в TypeScript проектах:
 

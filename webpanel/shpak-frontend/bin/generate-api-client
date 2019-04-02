@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+OUT_DIR="./src/api"
+
+mkdir -p "$OUT_DIR"
+
+# Generate d.ts
+protoc \
+    --grpc-web_out=import_style=typescript,mode=grpcwebtext:$OUT_DIR \
+    --proto_path=../../stocktakingapi \
+    api.proto
