@@ -8,13 +8,13 @@ RUN apt-get -qq update && \
     mv protoc/bin/protoc /usr/bin/ && \
     rm -rf protoc protoc.zip
 
-# install typescript compiler and GRPC tools
-# the --unsafe-perm option allows to install native modules from root user
-# see also https://github.com/grpc/grpc-node/issues/652
+# Install build environment
 RUN npm install -g typescript && \
     npm install -g node-gyp && \
     npm install -g node-pre-gyp --unsafe-perm && \
     npm install -g grpc-tools && \
     npm install -g ts-node
 
-# TODO: copy and build tests
+COPY "shpak-frontend" /app
+
+# TODO: copy and build project

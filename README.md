@@ -30,3 +30,23 @@ Educational project for intuitive stocktaking and inventory service.
 * [grpc](https://grpc.io/docs/quickstart/go.html)
 * [golang-migrate](https://github.com/golang-migrate/migrate)
 * [go-bindata](https://github.com/jteeuwen/go-bindata): `go get -u github.com/go-bindata/go-bindata/...`
+
+### Веб-панель - фронтенд
+
+Для начала разработки достаточно сделать то, что обычно требуется в TypeScript проектах:
+
+```bash
+cd webpanel/shpak-frontend
+npm install
+npm run build
+```
+
+После этого собранный фронтенд находится в каталоге `webpanel/shpak-frontend/build`
+
+На 2 апреля фронтенд ещё не связан с бекендом. Чтобы его запустить, используйте:
+
+```bash
+npm install -g serve
+cd webpanel/shpak-frontend/build
+serve -s .
+```

@@ -47,3 +47,8 @@ tasks:
     dir: apitests
     cmds:
       - mocha --require ts-node/register test/*.ts
+
+  run-web:
+    dir: webpanel
+    cmds:
+      - npm run start
