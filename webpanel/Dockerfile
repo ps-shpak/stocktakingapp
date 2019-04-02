@@ -1,4 +1,4 @@
-FROM node:11-stretch
+FROM node:11-stretch as builder
 
 # install protoc (protobuf compiler) and grpc-web plugin
 RUN apt-get -qq update && \
@@ -17,9 +17,14 @@ RUN npm install -g typescript && \
     npm install -g grpc-tools && \
     npm install -g ts-node
 
-COPY "shpak-frontend" /app/frontend
+COPY "shpak-frontend" /stocktakingweb
 
-WORKDIR /app/frontend
+WORKDIR /stocktakingweb
 RUN npm install
 
 # TODO: copy and build project
+
+FROM nginx:1.15
+
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder --chown=www-data:www-data /stocktakingweb/build /stocktakingweb
