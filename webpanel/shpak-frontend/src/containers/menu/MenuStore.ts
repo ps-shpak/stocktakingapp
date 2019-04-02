@@ -1,6 +1,6 @@
 import { autobind } from "core-decorators";
 import { observable } from "mobx";
-import { IMenuItem } from "../../pages/main";
+import { IMenuItem } from "./IMenuItem";
 
 @autobind
 export class MenuStore {
@@ -10,7 +10,7 @@ export class MenuStore {
             isActive: true,
             options: [
                 {
-                    title: "по сотрудникам",
+                    title: "по категориям",
                     isActive: false
                 },
                 {
@@ -24,7 +24,7 @@ export class MenuStore {
             isActive: true,
             options: [
                 {
-                    title: "по сотрудникам",
+                    title: "по категориям",
                     isActive: false
                 },
                 {
