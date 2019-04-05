@@ -28,6 +28,7 @@ dependencies:
   http: ^0.12.0+1
   barcode_scan: ^0.0.4
   flutter_auth_buttons: ^0.3.1
+  flutter_svg: ^0.12.3
 
 dev_dependencies:
   flutter_test:
@@ -39,6 +40,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  assets:
+    - assets/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

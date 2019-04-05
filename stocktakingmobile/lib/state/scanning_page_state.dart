@@ -24,7 +24,10 @@ class ScanningPageState extends State<ScanningPage> {
     return Scaffold(
       body: Container(
         child: Stack(
-          children: <Widget>[_buildPickerBody(), _buildAppBar(context)],
+          children: <Widget>[
+            _buildPickerBody(),
+            _buildAppBar(context),
+          ],
         ),
       ),
     );
@@ -52,11 +55,14 @@ class ScanningPageState extends State<ScanningPage> {
     return ConstrainedBox(
       constraints: const BoxConstraints.expand(),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(_result),
           RaisedButton(
-            child: const Text('SCAN'),
+            padding: EdgeInsets.only(top: 10, bottom: 10),
+            color: Colors.redAccent,
+            shape: CircleBorder(),
+            child: Text('Click to scan'),
             onPressed: _startScan,
           ),
         ],

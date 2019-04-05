@@ -14,6 +14,7 @@ class AuthenticationManager {
 
   Future<bool> isUserSignedIn() async {
     try {
+      await _googleSignIn.signInSilently();
       return await _googleSignIn.isSignedIn();
     } catch (ex) {
       return false;
@@ -56,9 +57,7 @@ class AuthenticationManager {
         name: _googleSignIn.currentUser.displayName,
         email: _googleSignIn.currentUser.email,
       );
-    } catch (ex) {
-      var a = 0;
-    }
+    } catch (ex) {}
 
     return null;
   }

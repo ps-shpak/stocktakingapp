@@ -38,7 +38,6 @@ class SettingsPageState extends State<SettingsPage> {
     return ListView(
       children: <Widget>[
         _buildToolbar(),
-        _buildUserProfile(),
         _buildServerUrlInput(),
         _buildLogoutButton(),
       ],
@@ -46,6 +45,24 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildToolbar() {
+    return Card(
+      margin: EdgeInsets.only(),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _buildToolbarIcons(),
+            _buildUserProfile(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildToolbarIcons() {
     return Container(
       margin: const EdgeInsets.only(top: 10.0, left: 14.0),
       child: Align(
@@ -64,57 +81,81 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildUserProfile() {
-    return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(left: 14, top: 10),
-            child: Text(
-              _user.name,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10),
+      child: Container(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: 14, top: 10),
+              child: Text(
+                _user.name,
+                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 14, top: 10),
-            child: Text(
-              _user.email,
-              style: TextStyle(fontSize: 18),
+            Padding(
+              padding: EdgeInsets.only(left: 14, top: 2),
+              child: Text(
+                _user.email,
+                style: TextStyle(fontSize: 16),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildServerUrlInput() {
     return Padding(
-      padding: EdgeInsets.only(top: 16, left: 14, right: 14, bottom: 16,),
-      child: TextField(
-        decoration: InputDecoration(border: null, hintText: "Server url"),
+      padding: EdgeInsets.only(top: 2),
+      child: Card(
+        child: Padding(
+          padding: EdgeInsets.only(top: 16, left: 14, right: 14, bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Сервер инвентаризации',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              TextField(
+                decoration:
+                    InputDecoration(border: null, hintText: "Не указан"),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildLogoutButton() {
-    return FlatButton(
-      child: Padding(
-        padding: EdgeInsets.only(top: 16),
-        child: Text(
-          "Выйти",
-          textAlign: TextAlign.start,
-          style: TextStyle(
-            color: Colors.red,
+    return Card(
+      child: FlatButton(
+        child: Padding(
+          padding: EdgeInsets.only(top: 16, bottom: 16),
+          child: Text(
+            "Выйти",
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              color: Colors.red,
+            ),
           ),
         ),
+        onPressed: () {
+          _settingsPageService.signOut().then((isSignedOut) {
+            if (isSignedOut) _navigator.openAuthenticationPage(context);
+          });
+        },
       ),
-      onPressed: () {
-        _settingsPageService.signOut().then((isSignedOut) {
-          if (isSignedOut) _navigator.openAuthenticationPage(context);
-        });
-      },
     );
   }
 }
