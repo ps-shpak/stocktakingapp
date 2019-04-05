@@ -26,7 +26,7 @@ class AuthPageNavigatorImpl extends AuthPageNavigator {
             initialState: ScanningPageState(
               navigator: ScanningPageNavigatorImpl(
                 authManager: _authenticationManager,
-                storageManage: _storageManager,
+                storageManager: _storageManager,
               ),
               service: ScanningPageServiceImpl(),
             ),

@@ -22,10 +22,16 @@ class SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     _user = _settingsPageService.getUser();
+
+    if (_user == null) {
+      _navigator.openAuthenticationPage(context);
+    }
+
     _settingsPageService.getServerUrl().then((url) {
       _serverUrl = url;
       setState(() {});
     });
+
     super.initState();
   }
 
@@ -68,19 +74,25 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildToolbarIcons() {
-    return Container(
-      margin: const EdgeInsets.only(top: 10.0, left: 14.0),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black54,
-          ),
-          onPressed: () {
-            _navigator.back(context);
-          },
+    return AppBar(
+      centerTitle: true,
+      elevation: 0,
+      backgroundColor: Colors.white,
+      title: Text(
+        'Настройки',
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
         ),
+      ),
+      leading: IconButton(
+        icon: Icon(
+          Icons.arrow_back,
+          color: Colors.black54,
+        ),
+        onPressed: () {
+          _navigator.back(context);
+        },
       ),
     );
   }

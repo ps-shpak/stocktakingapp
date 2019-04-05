@@ -10,11 +10,11 @@ import 'package:stocktakingmobile/ui/pages/settings_page.dart';
 
 class ScanningPageNavigatorImpl implements ScanningPageNavigator {
   ScanningPageNavigatorImpl(
-      {authManager: AuthenticationManager, storageManage: StorageManager})
+      {authManager: AuthenticationManager, storageManager: StorageManager})
       : assert(authManager != null),
-        assert(storageManage != null),
+        assert(storageManager != null),
         _authenticationManager = authManager,
-        _storageManager = storageManage,
+        _storageManager = storageManager,
         super();
 
   AuthenticationManager _authenticationManager;
