@@ -26,11 +26,12 @@ class ScanningPageState extends State<ScanningPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _buildAppBar(context),
       body: Container(
         child: Stack(
           children: <Widget>[
             ScanPickerBody(state: _pickerBodyState),
-            _buildAppBar(context),
           ],
         ),
       ),
@@ -38,11 +39,19 @@ class ScanningPageState extends State<ScanningPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 40.0, right: 14.0),
-      child: Align(
-        alignment: Alignment.topRight,
-        child: IconButton(
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Colors.white,
+      centerTitle: true,
+      title: Text(
+        'Сканнер',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+      actions: <Widget>[
+        IconButton(
           icon: Icon(
             Icons.settings,
             color: Colors.black54,
@@ -51,7 +60,7 @@ class ScanningPageState extends State<ScanningPage> {
             _navigator.openSettings(context);
           },
         ),
-      ),
+      ],
     );
   }
 
