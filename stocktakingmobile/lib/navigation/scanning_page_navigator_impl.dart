@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stocktakingmobile/domain/model/authentication_manager.dart';
+import 'package:stocktakingmobile/domain/model/item.dart';
 import 'package:stocktakingmobile/domain/model/storage_manager.dart';
 import 'package:stocktakingmobile/domain/service/settings_page_service_impl.dart';
 import 'package:stocktakingmobile/navigation/scanning_page_navigator.dart';
@@ -41,8 +42,8 @@ class ScanningPageNavigatorImpl implements ScanningPageNavigator {
   }
 
   @override
-  Future<String> openScan() {
-    // TODO: implement openScan
+  openItem(BuildContext context, Item item) {
+    // TODO: implement openItem
     return null;
   }
 }
