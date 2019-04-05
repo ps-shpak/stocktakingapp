@@ -1,5 +1,9 @@
-abstract class AuthPageService {
-  Future<bool> isUserAuthenticated();
+import 'package:stocktakingmobile/domain/model/sign_out_result.dart';
+import 'package:stocktakingmobile/domain/model/sign_in_result.dart';
 
-  Future<bool> signIn();
+abstract class AuthPageService {
+  Future<bool> isUserSignedIn();
+
+  Future<SignInResult> signIn();
+  Future<SignOutResult> signOut();
 }
