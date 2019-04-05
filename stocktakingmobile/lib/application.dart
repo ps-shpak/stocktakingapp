@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stocktakingmobile/domain/model/authentication_manager.dart';
+import 'package:stocktakingmobile/domain/model/storage_manager.dart';
 import 'package:stocktakingmobile/domain/service/auth_page_service_impl.dart';
 import 'package:stocktakingmobile/navigation/auth_page_navigator_impl.dart';
 import 'package:stocktakingmobile/ui/pages/auth_page.dart';
@@ -8,6 +9,7 @@ import 'package:stocktakingmobile/ui/theme/MaterialTheme.dart';
 
 class StocktakingApp extends StatelessWidget {
   AuthenticationManager _authenticationManager = AuthenticationManager();
+  StorageManager _storageManager = StorageManager();
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,7 @@ class StocktakingApp extends StatelessWidget {
         initialState: AuthPageState(
           navigator: AuthPageNavigatorImpl(
             authManager: _authenticationManager,
+            storageManager: _storageManager,
           ),
           service: AuthPageServiceImpl(
             authManager: _authenticationManager,

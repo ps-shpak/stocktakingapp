@@ -17,10 +17,15 @@ class SettingsPageState extends State<SettingsPage> {
   SettingsPageService _settingsPageService;
   SettingsPageNavigator _navigator;
   User _user = User(name: "Username", email: "username@email.com");
+  String _serverUrl = '';
 
   @override
   void initState() {
     _user = _settingsPageService.getUser();
+    _settingsPageService.getServerUrl().then((url) {
+      _serverUrl = url;
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -127,8 +132,13 @@ class SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               TextField(
-                decoration:
-                    InputDecoration(border: null, hintText: "Не указан"),
+                controller: TextEditingController(text: _serverUrl),
+                keyboardType: TextInputType.url,
+                onChanged: (input) {
+                  _serverUrl = input;
+                  _settingsPageService.saveServerUrl(input);
+                },
+                decoration: InputDecoration(hintText: "Не указан"),
               ),
             ],
           ),
@@ -139,6 +149,7 @@ class SettingsPageState extends State<SettingsPage> {
 
   Widget _buildLogoutButton() {
     return Card(
+      color: Colors.white,
       child: FlatButton(
         child: Padding(
           padding: EdgeInsets.only(top: 16, bottom: 16),
