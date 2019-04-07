@@ -21,6 +21,12 @@ tasks:
     cmds:
       - docker-compose logs
 
+  build-frontend:
+    dir: stocktakingweb
+    cmds:
+      - npm install
+      - npx build
+
   build-backend:
     dir: stocktakingbackend
     cmds:
