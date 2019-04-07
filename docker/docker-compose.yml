@@ -13,12 +13,6 @@ services:
       - POSTGRES_PASSWORD=1234
       - POSTGRES_DB=stock
 
-  stocktakingweb:
-    image: "psshpak/stocktakingweb"
-    container_name: "stocktakingweb"
-    ports:
-      - "80:80"
-
   stocktakingbackend:
     image: "psshpak/stocktakingbackend"
     container_name: "stocktakingbackend"
@@ -31,6 +25,14 @@ services:
       - STOCK_DB_NAME=stock
     depends_on:
       - stock-db
+
+  stocktakingweb:
+    image: "psshpak/stocktakingweb"
+    container_name: "stocktakingweb"
+    ports:
+      - "80:80"
+    depends_on:
+      - stocktakingbackend
 
 volumes:
   postgres-data:

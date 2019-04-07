@@ -32,6 +32,11 @@ tasks:
     cmds:
       - make
 
+  build:
+    cmds:
+      - task: build-frontend
+      - task: build-backend
+
   docker-build-frontend:
     cmds:
       - docker build --tag psshpak/stocktakingweb -f stocktakingweb/Dockerfile .
