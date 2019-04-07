@@ -1,4 +1,4 @@
-FROM golang:1.11-stretch AS builder
+FROM golang:1.12-stretch AS builder
 
 # install protoc (protobuf compiler)
 RUN apt-get -qq update && \
@@ -16,12 +16,19 @@ RUN go get -d -u github.com/golang/protobuf/protoc-gen-go && \
 # install golangci-lint
 RUN go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 
-# copy source code
-ADD stocktakingapi /usr/src/github.com/ps-shpak/stocktakingapp/stocktakingapi
-ADD stocktakingbackend /usr/src/github.com/ps-shpak/stocktakingapp/stocktakingbackend
+# install go-bindata
+RUN go get -u github.com/go-bindata/go-bindata/...
+
+# set working directory
 WORKDIR /usr/src/github.com/ps-shpak/stocktakingapp/stocktakingbackend
 
-# build
+# install dependencies first
+COPY "stocktakingbackend/Makefile" "stocktakingbackend/go.mod" "stocktakingbackend/go.sum" /usr/src/github.com/ps-shpak/stocktakingapp/stocktakingbackend/
+RUN make vendor
+
+# copy source code and build
+ADD stocktakingapi /usr/src/github.com/ps-shpak/stocktakingapp/stocktakingapi
+ADD stocktakingbackend /usr/src/github.com/ps-shpak/stocktakingapp/stocktakingbackend
 RUN make
 
 FROM debian:stretch

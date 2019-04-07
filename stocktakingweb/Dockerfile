@@ -24,14 +24,18 @@ RUN npm install -g node-gyp
 RUN npm install -g node-pre-gyp@0.12.0 --unsafe-perm
 RUN yarn global add grpc-tools@1.7.2
 
-COPY "shpak-frontend" /stocktakingweb
-
+# Set working directory
 WORKDIR /stocktakingweb
+
+# Install dependencies first
+COPY "stocktakingweb/package.json" "stocktakingweb/package-lock.json" /stocktakingweb/
 RUN npm install
 
-# TODO: copy and build project
+# Copy project and build
+COPY stocktakingweb/ /stocktakingweb/
+RUN npm run build
 
+# Build runtime container
 FROM nginx:1.15
-
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY stocktakingweb/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder --chown=www-data:www-data /stocktakingweb/build /stocktakingweb

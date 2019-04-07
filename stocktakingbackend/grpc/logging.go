@@ -1,4 +1,4 @@
-package stocktaking
+package grpc
 
 import (
 	"context"
