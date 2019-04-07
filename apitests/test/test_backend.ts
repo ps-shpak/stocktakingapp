@@ -9,8 +9,8 @@ class Client {
     private backend: api.BackendClient;
 
     constructor() {
-        const BACKEND_HOST = process.env['BACKEND_HOST'] || "localhost:8081";
-        this.backend = new api.BackendClient(BACKEND_HOST, grpc.credentials.createInsecure());
+        const backendEndpoint = process.env['BACKEND_HOST'] || "localhost:8081";
+        this.backend = new api.BackendClient(backendEndpoint, grpc.credentials.createInsecure());
     }
 
     public saveItem(request: pb.SaveItemRequest): Promise<pb.SaveItemResponse> {

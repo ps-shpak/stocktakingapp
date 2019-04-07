@@ -31,6 +31,9 @@ services:
     container_name: "stocktakingweb"
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - "./ssl:/etc/ssl/extra"
     depends_on:
       - stocktakingbackend
 
