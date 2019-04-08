@@ -47,8 +47,8 @@ tasks:
 
   docker-build:
     cmds:
-      - task: dockerize-frontend
-      - task: dockerize-backend
+      - task: docker-build-frontend
+      - task: docker-build-backend
 
   docker-push:
     cmds:

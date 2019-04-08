@@ -34,6 +34,8 @@ services:
       - "443:443"
     volumes:
       - "./ssl:/etc/ssl/extra"
+    environment:
+        - STOCK_DOMAIN=localhost
     depends_on:
       - stocktakingbackend
 

@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+# exit on any error
+set -e
+
+setup_nginx_config() {
+    local SRC=/etc/nginx/nginx.template.conf
+    local DEST=/etc/nginx/nginx.conf
+
+    if [ -z "$STOCK_DOMAIN" ]; then
+        echo "error: missing evn variable STOCK_DOMAIN" 1>&2
+        exit 1
+    fi
+
+    envsubst '${STOCK_DOMAIN}' <$SRC >$DEST
+}
+
+setup_nginx_config
+
+echo "running $@"
+exec "$@"
