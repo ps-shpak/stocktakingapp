@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: stock-db
+  name: stock-db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: stock-db
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          value: stock
+        - name: POSTGRES_PASSWORD
+          value: "1234"
+        - name: POSTGRES_USER
+          value: stock
+        image: postgres:11-alpine
+        name: stock-db
+        ports:
+        - containerPort: 5432
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-data
+      restartPolicy: Always
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: postgres-data
+status: {}

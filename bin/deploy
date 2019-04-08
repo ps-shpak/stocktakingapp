@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+# This script implements stocktakingapp web services deployment
+
+import subprocess
+import os
+import argparse
+
+
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
+OVERLAYS_DIR = os.path.join(PROJECT_DIR, 'k8s', 'overlays')
+
+
+class DeployOptions:
+    def __init__(self, environment: str, overlay_dir: str, dry_run: bool):
+        self.environment = environment
+        self.overlay_dir = overlay_dir
+        self.dry_run = dry_run
+
+
+def main():
+    opts = parse_options()
+    decrypt_secrets(opts.overlay_dir)
+    #kubectl_apply(opts.overlay_dir, opts.dry_run)
+
+
+def parse_options() -> DeployOptions:
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dry-run', action="store_true", default=False)
+    parser.add_argument('-e', '--environment', required=True)
+    args = parser.parse_args()
+
+    environment = args.environment
+    overlay_dir = os.path.join(OVERLAYS_DIR, environment)
+    if not os.path.isdir(overlay_dir):
+        valid_envs = ', '.join(os.listdir(OVERLAYS_DIR))
+        raise RuntimeError('unknown environment {}, possible values: {}'.format(environment, valid_envs))
+    return DeployOptions(environment, overlay_dir, args.dry_run)
+
+
+def decrypt_secrets(overlay_dir):
+    encrypted_dir = os.path.join(overlay_dir, 'secrets', 'encrypted')
+    decrypted_dir = os.path.join(overlay_dir, 'secrets', 'decrypted')
+    for filename in os.listdir(encrypted_dir):
+        src_path = os.path.join(encrypted_dir, filename)
+        dest_path = os.path.join(decrypted_dir, filename)
+        decrypted = subprocess.check_output(['sops', '-d', src_path], cwd=PROJECT_DIR)
+        with open(dest_path, 'wb') as f:
+            f.write(decrypted)
+
+
+def kubectl_apply(overlay, dry_run=False):
+    cmd = ['kubectl', 'apply', '--kustomize=' + overlay]
+    if dry_run:
+        cmd.append('--dry-run')
+    subprocess.check_call(cmd, cwd=PROJECT_DIR)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: stocktaking-ingress
+spec:
+  tls:
+  - hosts:
+    - example.com
+  rules:
+  - host: example.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: stocktakingweb
+          servicePort: 80

@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: stocktakingbackend
+  name: stocktakingbackend
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: stocktakingbackend
+    spec:
+      containers:
+      - env:
+        - name: STOCK_DB_HOST
+          value: stock-db
+        - name: STOCK_DB_NAME
+          value: stock
+        - name: STOCK_DB_PASSWORD
+          value: "1234"
+        - name: STOCK_DB_USERNAME
+          value: stock
+        image: psshpak/stocktakingbackend
+        name: stocktakingbackend
+        ports:
+        - containerPort: 8081
+        resources: {}
+      restartPolicy: Always
+status: {}

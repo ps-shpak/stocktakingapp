@@ -55,3 +55,16 @@ npm install -g serve
 cd webpanel/shpak-frontend/build
 serve -s .
 ```
+
+### Деплой в Kubernetes кластер
+
+Нужно установить kubectl и python3:
+
+```bash
+sudo snap install kubectl --classic
+sudo apt-get install -y python3
+```
+
+Также нужно установить sops со страницы [github.com/mozilla/sops/releases](https://github.com/mozilla/sops/releases), а также получить PGP ключ расшифровки конфигурации существующего окружения, либо создать новое окружение в каталоге `k8s/overlays`.
+
+После этого можно запустить скрипт `bin/deploy -e <имя-окружения> --dry-run`, где `<имя-окружения>` - это имя каталога в `k8s/overlays`. Если всё прошло удачно, то можно убрать флаг `--dry-run` и выполнить настоящий деплой.
