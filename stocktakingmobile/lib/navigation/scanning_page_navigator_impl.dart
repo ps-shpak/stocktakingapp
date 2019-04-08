@@ -3,9 +3,12 @@ import 'package:stocktakingmobile/domain/model/authentication_manager.dart';
 import 'package:stocktakingmobile/domain/model/item.dart';
 import 'package:stocktakingmobile/domain/model/storage_manager.dart';
 import 'package:stocktakingmobile/domain/service/settings_page_service_impl.dart';
+import 'package:stocktakingmobile/navigation/item_page_navigator_impl.dart';
 import 'package:stocktakingmobile/navigation/scanning_page_navigator.dart';
 import 'package:stocktakingmobile/navigation/settings_page_navigator_impl.dart';
+import 'package:stocktakingmobile/state/item_page_state.dart';
 import 'package:stocktakingmobile/state/settings_page_state.dart';
+import 'package:stocktakingmobile/ui/pages/item_page.dart';
 import 'package:stocktakingmobile/ui/pages/settings_page.dart';
 
 class ScanningPageNavigatorImpl implements ScanningPageNavigator {
@@ -43,7 +46,15 @@ class ScanningPageNavigatorImpl implements ScanningPageNavigator {
 
   @override
   openItem(BuildContext context, Item item) {
-    // TODO: implement openItem
-    return null;
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+        builder: (context) => ItemPage(
+              initialState: ItemPageState(
+                navigator: ItemPageNavigatorImpl(),
+              ),
+            ),
+      ),
+    );
   }
 }
