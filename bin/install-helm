@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+kubectl -n kube-system create serviceaccount tiller
+helm init --service-account=tiller

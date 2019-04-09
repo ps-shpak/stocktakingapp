@@ -1,6 +1,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: stocktaking
+bases:
+- ../../base
+resources:
+- namespace-stocktaking.yaml
+- certmanager/cert-issuer.yaml
+
+patchesStrategicMerge:
+- ingress/ingress.yaml
+- ingress/ingress-api.yaml
+
 secretGenerator:
 - name: stocktaking-secret
   env: secrets/decrypted/secret.env
@@ -9,13 +20,3 @@ configMapGenerator:
 - name: stocktaking-config
   literals:
   - STOCK_DOMAIN=localhost
-
-resources:
-- namespace-stocktaking.yaml
-bases:
-- ../../base
-namespace: stocktaking
-
-patchesStrategicMerge:
-- ingress/ingress.yaml
-- ingress/ingress-api.yaml
