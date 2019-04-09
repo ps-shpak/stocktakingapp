@@ -44,6 +44,7 @@ class AuthPageState extends State<AuthPage> {
         constraints: const BoxConstraints.expand(),
         child: _buildBody(),
       ),
+      backgroundColor: Colors.orangeAccent,
     );
   }
 
@@ -79,7 +80,6 @@ class AuthPageState extends State<AuthPage> {
         _buildAppIcon(),
         GoogleSignInButton(
           onPressed: _handleSignIn,
-          darkMode: true,
         )
       ],
     );
