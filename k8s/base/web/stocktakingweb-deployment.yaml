@@ -19,6 +19,7 @@ spec:
               name: stocktaking-config
               key: STOCK_DOMAIN
         image: psshpak/stocktakingweb
+        imagePullPolicy: Always
         name: stocktakingweb
         ports:
         - containerPort: 80

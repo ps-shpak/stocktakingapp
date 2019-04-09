@@ -25,6 +25,7 @@ spec:
         - name: STOCK_DB_USERNAME
           value: stock
         image: psshpak/stocktakingbackend
+        imagePullPolicy: Always
         name: stocktakingbackend
         ports:
         - containerPort: 8081
