@@ -4,4 +4,4 @@ PROJECT_DIR=`dirname $(dirname $(readlink -f $0))`
 OUTPUT_DIR=$PROJECT_DIR/docker/ssl
 
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout "$OUTPUT_DIR/stocktaking.key" -out "$OUTPUT_DIR/stocktaking.crt"
+    -keyout "$OUTPUT_DIR/main.key" -out "$OUTPUT_DIR/main.crt"

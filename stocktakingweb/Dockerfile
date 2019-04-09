@@ -38,7 +38,7 @@ RUN npm run build
 # Build runtime container
 FROM nginx:1.15
 RUN apt-get -qq update && apt-get install -y --no-install-recommends gettext-base
-COPY stocktakingweb/nginx/nginx.template.conf /etc/nginx/nginx.template.conf
+COPY stocktakingweb/nginx/ /stocktakingweb/nginx/
 COPY stocktakingweb/bin/docker-entrypoint /usr/local/bin/docker-entrypoint
 COPY --from=builder --chown=www-data:www-data /stocktakingweb/build /stocktakingweb
 

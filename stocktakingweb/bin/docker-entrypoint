@@ -3,20 +3,33 @@
 # exit on any error
 set -e
 
+
+
+generate_listen_config() {
+    if [ -z "$STOCK_SSL_DIR" ]; then
+        local SRC=/stocktakingweb/nginx/listen.no-ssl.conf
+        local DEST=/etc/nginx/conf.d/listen.conf
+        cp "$SRC" "$DEST"
+    else
+        local SRC=/stocktakingweb/nginx/listen.ssl.conf
+        local DEST=/etc/nginx/conf.d/listen.conf
+        envsubst '${STOCK_SSL_DIR}' <$SRC >$DEST
+    fi
+}
+
 setup_nginx_config() {
     if [ -z "$STOCK_DOMAIN" ]; then
         echo "error: missing env variable STOCK_DOMAIN" 1>&2
         exit 1
     fi
-    STOCK_ENABLE_SSL=${STOCK_ENABLE_SSL:-0}
 
     local SRC=/stocktakingweb/nginx/nginx.template.conf
     local DEST=/etc/nginx/nginx.conf
-
     envsubst '${STOCK_DOMAIN}' <$SRC >$DEST
 }
 
+generate_listen_config
 setup_nginx_config
 
-echo "running $@"
+echo "[info] starting $@"
 exec "$@"

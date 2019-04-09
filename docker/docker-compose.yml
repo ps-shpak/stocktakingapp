@@ -5,39 +5,40 @@ services:
     image: "postgres:11-alpine"
     container_name: "stock-db"
     volumes:
-      - "postgres-data:/var/lib/postgresql/data"
+    - "postgres-data:/var/lib/postgresql/data"
     ports:
-      - "5432:5432"
+    - "5432:5432"
     environment:
-      - POSTGRES_USER=stock
-      - POSTGRES_PASSWORD=1234
-      - POSTGRES_DB=stock
+    - POSTGRES_USER=stock
+    - POSTGRES_PASSWORD=1234
+    - POSTGRES_DB=stock
 
   stocktakingbackend:
     image: "psshpak/stocktakingbackend"
     container_name: "stocktakingbackend"
     ports:
-      - "8081:8081"
+    - "8081:8081"
     environment:
-      - STOCK_DB_HOST=stock-db
-      - STOCK_DB_USERNAME=stock
-      - STOCK_DB_PASSWORD=1234
-      - STOCK_DB_NAME=stock
+    - STOCK_DB_HOST=stock-db
+    - STOCK_DB_USERNAME=stock
+    - STOCK_DB_PASSWORD=1234
+    - STOCK_DB_NAME=stock
     depends_on:
-      - stock-db
+    - stock-db
 
   stocktakingweb:
     image: "psshpak/stocktakingweb"
     container_name: "stocktakingweb"
     ports:
-      - "80:80"
-      - "443:443"
+    - "80:80"
+    - "443:443"
     volumes:
-      - "./ssl:/etc/ssl/extra"
+    - "./ssl:/etc/ssl/extra"
     environment:
-        - STOCK_DOMAIN=localhost
+    - STOCK_SSL_DIR=/etc/ssl/extra
+    - STOCK_DOMAIN=localhost
     depends_on:
-      - stocktakingbackend
+    - stocktakingbackend
 
 volumes:
   postgres-data:
