@@ -41,18 +41,18 @@ Educational project for intuitive stocktaking and inventory service.
 Для начала разработки достаточно сделать то, что обычно требуется в TypeScript проектах:
 
 ```bash
-cd webpanel/shpak-frontend
+cd stocktakingweb
 npm install
 npm run build
 ```
 
-После этого собранный фронтенд находится в каталоге `webpanel/shpak-frontend/build`
+После этого собранный фронтенд находится в каталоге `stocktakingweb/build`
 
 На 2 апреля фронтенд ещё не связан с бекендом. Чтобы его запустить, используйте:
 
 ```bash
 npm install -g serve
-cd webpanel/shpak-frontend/build
+cd stocktakingweb/build
 serve -s .
 ```
 
