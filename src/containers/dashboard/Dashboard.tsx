@@ -21,7 +21,11 @@ export class Dashboard extends React.Component {
         return (
             <>
                 <Popup title={"123"} />
-                <Tree data={toJS(this.store.treeData)} onChangeActive={this.controller.onChangeActive} />
+                <Tree
+                    data={toJS(this.store.treeData)}
+                    onChangeActive={this.controller.onChangeActive}
+                    onOpen={this.controller.onOpenTree}
+                />
             </>
         );
     }

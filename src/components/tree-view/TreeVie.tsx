@@ -19,7 +19,18 @@ export const TreeView = withStyles(styles)(
         private getList(): ReactNode {
             return (
                 this.props.data.map((item: ITreeItem) => {
-                    return <TreeLine data={item} onChangeActive={this.props.onChangeActive} key={item.id} />;
+                    if (!item.parent) {
+                        return (
+                            <TreeLine
+                                item={item}
+                                list={this.props.data}
+                                onChangeActive={this.props.onChangeActive}
+                                onOpen={this.props.onOpen}
+                                key={item.id}
+                            />
+                        );
+                    }
+                    return <></>;
                 })
             );
         }

@@ -5,5 +5,7 @@ import { ITreeItem } from "../tree";
 export interface ITreeViewProps extends WithStyles<typeof styles> {
     data: ITreeItem[];
 
-    onChangeActive(item: ITreeItem): void;
+    onChangeActive(id: string): void;
+
+    onOpen(id: string): void;
 }

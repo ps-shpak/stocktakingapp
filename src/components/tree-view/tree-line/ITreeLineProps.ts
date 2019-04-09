@@ -3,7 +3,10 @@ import { styles } from "./styles";
 import { ITreeItem } from "../../tree";
 
 export interface ITreeLineProps extends WithStyles<typeof styles> {
-    data: ITreeItem;
+    list: ITreeItem[];
+    item: ITreeItem;
 
-    onChangeActive(item: ITreeItem): void;
+    onChangeActive(id: string): void;
+
+    onOpen(id: string): void;
 }
