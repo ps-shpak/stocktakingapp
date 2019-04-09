@@ -4,13 +4,14 @@
 set -e
 
 setup_nginx_config() {
-    local SRC=/etc/nginx/nginx.template.conf
-    local DEST=/etc/nginx/nginx.conf
-
     if [ -z "$STOCK_DOMAIN" ]; then
-        echo "error: missing evn variable STOCK_DOMAIN" 1>&2
+        echo "error: missing env variable STOCK_DOMAIN" 1>&2
         exit 1
     fi
+    STOCK_ENABLE_SSL=${STOCK_ENABLE_SSL:-0}
+
+    local SRC=/stocktakingweb/nginx/nginx.template.conf
+    local DEST=/etc/nginx/nginx.conf
 
     envsubst '${STOCK_DOMAIN}' <$SRC >$DEST
 }
