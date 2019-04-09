@@ -40,7 +40,7 @@ class ScanningPageState extends State<ScanningPage> {
 
   Widget _buildAppBar(BuildContext context) {
     return AppBar(
-      elevation: 0,
+      elevation: 1,
       backgroundColor: Colors.white,
       centerTitle: true,
       title: Text(

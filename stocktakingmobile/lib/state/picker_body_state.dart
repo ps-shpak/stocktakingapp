@@ -32,24 +32,59 @@ class ScanPickerBodyState extends State<ScanPickerBody> {
 
   Widget _buildStartButton() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        _buildGuide(),
+        _buildButton(),
+      ],
+    );
+  }
+
+  Widget _buildGuide() {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(bottom: 16),
-          child: SvgPicture.asset(
-            _iconClickToScan,
-            width: 120,
-            height: 120,
-          ),
+        SvgPicture.asset(
+          "assets/ic_scan_example_0.svg",
+          width: 64,
+          height: 64,
         ),
-        RaisedButton(
-          color: Colors.orange,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: Text('Сканировать'),
-          onPressed: _startScan,
-        )
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child: Icon(Icons.arrow_forward_ios, color: Colors.black38,),
+        ),
+        SvgPicture.asset(
+          "assets/ic_scan_example_1.svg",
+          width: 64,
+          height: 64,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child: Icon(Icons.arrow_forward_ios, color: Colors.black38,),
+        ),
+        SvgPicture.asset(
+          "assets/ic_scan_example_2.svg",
+          width: 64,
+          height: 64,
+        ),
       ],
+    );
+  }
+
+  Widget _buildButton() {
+    return RaisedButton(
+      color: Colors.orange,
+      shape: CircleBorder(),
+      child: Padding(
+        padding: EdgeInsets.all(32),
+        child: SvgPicture.asset(
+          _iconClickToScan,
+          width: 72,
+          height: 72,
+        ),
+      ),
+      onPressed: _startScan,
     );
   }
 
