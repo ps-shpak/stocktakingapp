@@ -25,7 +25,6 @@ export const TreeView = withStyles(styles)(
                                 item={item}
                                 list={this.props.data}
                                 onChangeActive={this.props.onChangeActive}
-                                onOpen={this.props.onOpen}
                                 key={item.id}
                             />
                         );

@@ -24,7 +24,6 @@ export class Dashboard extends React.Component {
                 <Tree
                     data={toJS(this.store.treeData)}
                     onChangeActive={this.controller.onChangeActive}
-                    onOpen={this.controller.onOpenTree}
                 />
             </>
         );

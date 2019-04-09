@@ -4,6 +4,7 @@ export const styles = createStyles({
     wrapper: {
        padding: 10,
        background: "#fff",
-       border: "1px solid #ccc"
+       border: "1px solid #ccc",
+        width: 400
     },
 });

@@ -36,7 +36,7 @@ export const TreeLine = withStyles(styles)(
                     </div>
                 );
             }
-
+            
             private readonly onChangeCheckbox = (): void => {
                 const id = this.props.item.id;
                 this.props.onChangeActive(id);
@@ -53,7 +53,6 @@ export const TreeLine = withStyles(styles)(
                             item={child}
                             list={this.props.list}
                             onChangeActive={this.props.onChangeActive}
-                            onOpen={this.props.onOpen}
                             key={child.id}
                         />
                     );

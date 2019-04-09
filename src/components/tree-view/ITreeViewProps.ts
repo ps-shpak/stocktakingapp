@@ -6,6 +6,4 @@ export interface ITreeViewProps extends WithStyles<typeof styles> {
     data: ITreeItem[];
 
     onChangeActive(id: string): void;
-
-    onOpen(id: string): void;
 }

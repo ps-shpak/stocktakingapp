@@ -2,7 +2,8 @@ import createStyles from "@material-ui/core/styles/createStyles";
 
 export const styles = createStyles({
     line: {
-        minWidth: 150
+        minWidth: 150,
+        marginBottom: 20
     },
     inner: {
         display: "flex"
@@ -24,6 +25,9 @@ export const styles = createStyles({
 
     },
     children: {
-        marginLeft: 30
+        "marginLeft": 30,
+        "& $line": {
+            marginBottom: 10
+        }
     }
 });
