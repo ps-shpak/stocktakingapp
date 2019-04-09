@@ -1,12 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-vars:
-  - name: STOCK_DOMAIN
-    objref:
-      kind: ConfigMap
-      name: stocktaking-configmap
-      apiVersion: v1
 resources:
+  - ingress/ingress.yaml
+  - ingress/ingress-api.yaml
   - backend/stocktakingbackend-deployment.yaml
   - backend/stocktakingbackend-service.yaml
   - web/stocktakingweb-deployment.yaml
@@ -14,4 +10,3 @@ resources:
   - db/postgres-data-persistentvolumeclaim.yaml
   - db/stock-db-service.yaml
   - db/stock-db-deployment.yaml
-  - ingress/ingress.yml

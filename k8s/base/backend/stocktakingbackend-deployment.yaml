@@ -6,10 +6,8 @@ metadata:
   name: stocktakingbackend
 spec:
   replicas: 1
-  strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         io.kompose.service: stocktakingbackend
     spec:
@@ -20,7 +18,10 @@ spec:
         - name: STOCK_DB_NAME
           value: stock
         - name: STOCK_DB_PASSWORD
-          value: "1234"
+          valueFrom:
+            secretKeyRef:
+              name: stocktaking-secret
+              key: STOCK_DB_PASSWORD
         - name: STOCK_DB_USERNAME
           value: stock
         image: psshpak/stocktakingbackend
@@ -29,4 +30,3 @@ spec:
         - containerPort: 8081
         resources: {}
       restartPolicy: Always
-status: {}

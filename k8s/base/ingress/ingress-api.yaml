@@ -10,7 +10,7 @@ spec:
   tls:
   - hosts:
     - api.example.com
-    secretName: stocktaking-tls
+    secretName: stocktaking-api-tls
   rules:
   - host: api.example.com
     http:

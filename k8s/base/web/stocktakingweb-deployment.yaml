@@ -6,26 +6,22 @@ metadata:
   name: stocktakingweb
 spec:
   replicas: 1
-  strategy:
-    type: Recreate
   template:
+    metadata:
+      labels:
+        io.kompose.service: stocktakingbackend
     spec:
       containers:
       - env:
         - name: STOCK_DOMAIN
-          value: localhost
+          valueFrom:
+            configMapKeyRef:
+              name: stocktaking-config
+              key: STOCK_DOMAIN
         image: psshpak/stocktakingweb
         name: stocktakingweb
         ports:
         - containerPort: 80
         - containerPort: 443
         resources: {}
-        volumeMounts:
-        - mountPath: /etc/ssl/extra
-          name: stocktakingweb-claim0
       restartPolicy: Always
-      volumes:
-      - name: stocktakingweb-claim0
-        persistentVolumeClaim:
-          claimName: stocktakingweb-claim0
-status: {}

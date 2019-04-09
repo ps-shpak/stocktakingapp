@@ -14,5 +14,3 @@ spec:
     targetPort: 443
   selector:
     io.kompose.service: stocktakingweb
-status:
-  loadBalancer: {}

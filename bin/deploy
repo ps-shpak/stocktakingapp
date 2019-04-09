@@ -21,7 +21,7 @@ class DeployOptions:
 def main():
     opts = parse_options()
     decrypt_secrets(opts.overlay_dir)
-    #kubectl_apply(opts.overlay_dir, opts.dry_run)
+    kubectl_apply(opts.overlay_dir, opts.dry_run)
 
 
 def parse_options() -> DeployOptions:
@@ -50,7 +50,7 @@ def decrypt_secrets(overlay_dir):
 
 
 def kubectl_apply(overlay, dry_run=False):
-    cmd = ['kubectl', 'apply', '--kustomize=' + overlay]
+    cmd = ['kubectl', 'apply', '--validate=true', '--kustomize={}'.format(overlay)]
     if dry_run:
         cmd.append('--dry-run')
     subprocess.check_call(cmd, cwd=PROJECT_DIR)
