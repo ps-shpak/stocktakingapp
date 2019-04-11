@@ -7,10 +7,12 @@ bases:
 resources:
 - namespace-stocktaking.yaml
 - certmanager/cert-issuer.yaml
+- volumes/postgres-data-persistentvolume.yaml
 
 patchesStrategicMerge:
 - ingress/ingress.yaml
 - ingress/ingress-api.yaml
+- volumes/postgres-data-persistentvolumeclaim.yaml
 
 secretGenerator:
 - name: stocktaking-secret
@@ -19,4 +21,4 @@ secretGenerator:
 configMapGenerator:
 - name: stocktaking-config
   literals:
-  - STOCK_DOMAIN=localhost
+  - STOCK_DOMAIN=shambir.site

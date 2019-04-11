@@ -17,10 +17,13 @@ spec:
       - env:
         - name: POSTGRES_DB
           value: stock
-        - name: POSTGRES_PASSWORD
-          value: "1234"
         - name: POSTGRES_USER
           value: stock
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: stocktaking-secret
+              key: STOCK_DB_PASSWORD
         image: postgres:11-alpine
         name: stock-db
         ports:

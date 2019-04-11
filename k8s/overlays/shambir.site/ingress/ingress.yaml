@@ -5,9 +5,9 @@ metadata:
 spec:
   tls:
   - hosts:
-    - example.com
+    - shambir.site
   rules:
-  - host: example.com
+  - host: shambir.site
     http:
       paths:
       - path: /
