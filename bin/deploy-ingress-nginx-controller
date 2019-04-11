@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# This script deploys ingress-nginx to the Kubernetes cluster (using current kubectl context)
+# See also
+# 1) installation guide: https://kubernetes.github.io/ingress-nginx/deploy/
+# 2) notes about 'hostNetwork': https://kubernetes.github.io/ingress-nginx/deploy/baremetal/
+
+PROJECT_DIR=`dirname $(dirname $(readlink -f $0))`
+CONFIG_DIR=$PROJECT_DIR/k8s/cluster-setup/ingress-nginx
+
+set -e
+kubectl apply -f "$CONFIG_DIR/mandatory.yaml"
+kubectl apply -f "$CONFIG_DIR/service-nodeport.yaml"

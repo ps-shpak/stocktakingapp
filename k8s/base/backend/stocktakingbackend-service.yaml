@@ -11,5 +11,3 @@ spec:
     targetPort: 8081
   selector:
     io.kompose.service: stocktakingbackend
-status:
-  loadBalancer: {}

@@ -18,7 +18,19 @@ sudo snap install kubectl --classic
 * Перед инициализацией стоит загрузить образы через `kubeadm config images pull`
 * Команда инициализации `kubeadm init --pod-network-cidr=192.168.0.0/16`
 * После шага `kubeadm init` прочитайте внимательно вывод последней команды и используйте его для генерации kubeconfig на своём компьютере
-* Шаг настройки Ingress из данной инструкции можно пропустить и заменить на Ingress-Nginx, также нужно настроить Cert-Manager, чтобы автоматически обновлять SSL-сертификаты - см. [Quick-Start using Cert-Manager with NGINX Ingress](https://github.com/jetstack/cert-manager/blob/master/docs/tutorials/acme/quick-start/index.rst)
+
+## Настройка Ingress
+
+Для установки ingress в кластере написан скрипт `deploy-ingress-nginx-controller`
+
+https://kubernetes.github.io/ingress-nginx/deploy/
+
+Чтобы Ingress-Nginx был повешен на порты 80 и 443 всех нод кластера, 
+
+```bash
+```
+
+Также нужно настроить Cert-Manager, чтобы автоматически обновлять SSL-сертификаты - см. [Quick-Start using Cert-Manager with NGINX Ingress](https://github.com/jetstack/cert-manager/blob/master/docs/tutorials/acme/quick-start/index.rst)
 
 ## Заселение кластера
 

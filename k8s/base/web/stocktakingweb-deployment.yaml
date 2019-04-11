@@ -9,7 +9,7 @@ spec:
   template:
     metadata:
       labels:
-        io.kompose.service: stocktakingbackend
+        io.kompose.service: stocktakingweb
     spec:
       containers:
       - env:

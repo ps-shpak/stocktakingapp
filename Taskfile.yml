@@ -25,7 +25,7 @@ tasks:
     dir: stocktakingweb
     cmds:
       - npm install
-      - npx build
+      - npm run build
 
   build-backend:
     dir: stocktakingbackend
