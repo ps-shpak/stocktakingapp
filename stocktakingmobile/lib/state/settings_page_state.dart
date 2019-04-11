@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stocktakingmobile/domain/model/user.dart';
 import 'package:stocktakingmobile/domain/service/settings_page_service.dart';
 import 'package:stocktakingmobile/navigation/settings_page_navigator.dart';
@@ -17,16 +18,28 @@ class SettingsPageState extends State<SettingsPage> {
   SettingsPageService _settingsPageService;
   SettingsPageNavigator _navigator;
   User _user = User(name: "Username", email: "username@email.com");
+  String _serverUrl = '';
 
   @override
   void initState() {
     _user = _settingsPageService.getUser();
+
+    if (_user == null) {
+      _navigator.openAuthenticationPage(context);
+    }
+
+    _settingsPageService.getServerUrl().then((url) {
+      _serverUrl = url;
+      setState(() {});
+    });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: _buildAppBar(),
       body: ConstrainedBox(
         constraints: const BoxConstraints.expand(),
         child: _buildBody(),
@@ -54,7 +67,6 @@ class SettingsPageState extends State<SettingsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            _buildToolbarIcons(),
             _buildUserProfile(),
           ],
         ),
@@ -62,49 +74,72 @@ class SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildToolbarIcons() {
-    return Container(
-      margin: const EdgeInsets.only(top: 10.0, left: 14.0),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black54,
-          ),
-          onPressed: () {
-            _navigator.back(context);
-          },
+  Widget _buildAppBar() {
+    return AppBar(
+      centerTitle: true,
+      elevation: 1,
+      backgroundColor: Colors.white,
+      title: Text(
+        'Настройки',
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
         ),
+      ),
+      leading: IconButton(
+        icon: Icon(
+          Icons.arrow_back,
+          color: Colors.black54,
+        ),
+        onPressed: () {
+          _navigator.back(context);
+        },
       ),
     );
   }
 
   Widget _buildUserProfile() {
     return Padding(
-      padding: EdgeInsets.only(bottom: 10),
-      child: Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 14, top: 10),
-              child: Text(
-                _user.name,
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-              ),
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 14),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 0,
+            child: SvgPicture.asset(
+              "assets/ic_account_user.svg",
+              width: 52,
+              height: 52,
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 14, top: 2),
-              child: Text(
-                _user.email,
-                style: TextStyle(fontSize: 16),
-              ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 14),
+                  child: Text(
+                    _user.name,
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 14, top: 4),
+                  child: Text(
+                    _user.email,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -122,13 +157,19 @@ class SettingsPageState extends State<SettingsPage> {
                 'Сервер инвентаризации',
                 textAlign: TextAlign.start,
                 style: TextStyle(
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
               TextField(
-                decoration:
-                    InputDecoration(border: null, hintText: "Не указан"),
+                controller: TextEditingController(text: _serverUrl),
+                keyboardType: TextInputType.url,
+                onChanged: (input) {
+                  _serverUrl = input;
+                  _settingsPageService.saveServerUrl(input);
+                },
+                decoration: InputDecoration(hintText: "Не указан"),
               ),
             ],
           ),
@@ -139,6 +180,7 @@ class SettingsPageState extends State<SettingsPage> {
 
   Widget _buildLogoutButton() {
     return Card(
+      color: Colors.white,
       child: FlatButton(
         child: Padding(
           padding: EdgeInsets.only(top: 16, bottom: 16),

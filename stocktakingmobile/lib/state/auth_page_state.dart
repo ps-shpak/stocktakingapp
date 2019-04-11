@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stocktakingmobile/domain/model/sign_in_result.dart';
 import 'package:stocktakingmobile/domain/service/auth_page_service.dart';
 import 'package:stocktakingmobile/navigation/auth_page_navigator.dart';
 import 'package:stocktakingmobile/ui/pages/auth_page.dart';
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
 enum _AuthState { WaitSync, WaitSignIn, Idle }
 
@@ -43,6 +44,7 @@ class AuthPageState extends State<AuthPage> {
         constraints: const BoxConstraints.expand(),
         child: _buildBody(),
       ),
+      backgroundColor: Colors.orangeAccent,
     );
   }
 
@@ -73,14 +75,40 @@ class AuthPageState extends State<AuthPage> {
 
   Widget _buildIdleBody() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        const Text("Authentication"),
+        _buildAppIcon(),
         GoogleSignInButton(
           onPressed: _handleSignIn,
-          darkMode: true,
         )
       ],
+    );
+  }
+
+  Widget _buildAppIcon() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        SvgPicture.asset(
+          "assets/ic_main.svg",
+          width: 132,
+          height: 132,
+        ),
+        _buildTitle(),
+      ],
+    );
+  }
+
+  Widget _buildTitle() {
+    return Padding(
+      padding: EdgeInsets.only(top: 18),
+      child: Text(
+        "Stocktacking app",
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.normal,
+        ),
+      ),
     );
   }
 
@@ -111,7 +139,8 @@ class AuthPageState extends State<AuthPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: new Text("Ошибка авторизации"),
-          content: new Text("Во время авторизации произошла ошибка. Попробуйте войти позже..."),
+          content: new Text(
+              "Во время авторизации произошла ошибка. Попробуйте войти позже..."),
           actions: <Widget>[
             new FlatButton(
               child: new Text("Закрыть"),

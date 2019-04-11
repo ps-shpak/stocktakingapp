@@ -15,16 +15,20 @@
       },
       "oauth_client": [
         {
-          "client_id": "1056277156752-iliar60m98futq6mvrsdnd77t1ttccmu.apps.googleusercontent.com",
+          "client_id": "1056277156752-gdehko01efjq08es8er5f63emjn02nkd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shpak.stocktakingmobile",
+            "certificate_hash": "0f1c54bbf0a3fa32a03a61ab1a179efecfd3fec4"
+          }
+        },
+        {
+          "client_id": "1056277156752-mf2kh53hp552m3oljbdikn25mkkomqr4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.shpak.stocktakingmobile",
             "certificate_hash": "d9ff56b7aae0687d1b56dc89344216c68a3574d6"
           }
-        },
-        {
-          "client_id": "1056277156752-b8dpgbpdjnqhb8bbs54195gedvdgs2or.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -33,20 +37,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "1056277156752-b8dpgbpdjnqhb8bbs54195gedvdgs2or.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }
