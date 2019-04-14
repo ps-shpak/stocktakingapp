@@ -25,7 +25,7 @@ export const MenuView = withStyles(styles)(
                                         {item.options && item.options.map((option: IMenuItem, subRowIndex: number) => {
                                             return (
                                                 <div
-                                                    onClick={() => this.props.changeActive(rowIndex, subRowIndex)}
+                                                    onClick={(e) => this.props.onClickMenuItem(e, rowIndex, subRowIndex)}
                                                     className={this.getMenuItemClassName(option.isActive)}
                                                     key={subRowIndex}
                                                 >

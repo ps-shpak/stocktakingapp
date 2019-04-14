@@ -18,11 +18,16 @@ export class Main extends Component {
         return (
                 <Wrapper title={"Инвенторизация"}>
                     <Sidebar
-                        data={this.store.menuData}
+                        data={this.controller.getMenuData()}
                         onOpenOptions={this.controller.onOpenOptions}
                         onChangeActive={this.controller.onChangeActiveMenuItem}
+                        onChangePosition={this.controller.onChangePosition}
                     />
-                    <Dashboard />
+                    <Dashboard
+                        tree={this.controller.getTreeData()}
+                        position={this.controller.getPosition()}
+                        isTreeVisible={this.store.isTreeVisible}
+                    />
                 </Wrapper>
         );
     }

@@ -9,6 +9,7 @@ export const styles = createStyles({
         boxSizing: "border-box",
         maxHeight: 400,
         minHeight: 100,
-        height: "fit-content"
+        height: "fit-content",
+        position: "absolute"
     },
 });

@@ -1,15 +1,16 @@
 import * as React from "react";
+import { ReactNode, Component } from "react";
 import { Popup } from "../../components/popup";
 import { observer } from "mobx-react";
 import { autobind } from "core-decorators";
 import { DashboardStore } from "./DashboardStore";
 import { DashboardController } from "./DashboardController";
 import { Tree } from "../../components/tree";
-import { toJS } from "mobx";
+import { IDashboardProps } from "./IDashboardProps";
 
 @observer
 @autobind
-export class Dashboard extends React.Component {
+export class Dashboard extends Component<IDashboardProps> {
     private readonly store = new DashboardStore();
     private readonly controller = new DashboardController(this.store);
 
@@ -17,13 +18,15 @@ export class Dashboard extends React.Component {
         this.controller.onMount();
     }
 
-    render(): React.ReactNode {
+    render(): ReactNode {
         return (
             <>
                 <Popup title={"123"} />
                 <Tree
-                    data={toJS(this.store.treeData)}
+                    data={this.props.tree}
                     onChangeActive={this.controller.onChangeActive}
+                    position={this.props.position}
+                    isVisible={this.props.isTreeVisible}
                 />
             </>
         );

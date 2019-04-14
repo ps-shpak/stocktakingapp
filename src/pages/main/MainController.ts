@@ -1,6 +1,9 @@
 import { autobind } from "core-decorators";
 import { MainStore } from "./MainStore";
 import { IMenuItem } from "../../containers/menu";
+import { toJS } from "mobx";
+import { ITreeItem } from "../../components/tree";
+import { IPosition } from "../../interfaces";
 
 @autobind
 export class MainController {
@@ -10,11 +13,24 @@ export class MainController {
         this.store = store;
     }
 
+    getMenuData(): IMenuItem[] {
+        return toJS(this.store.menuData);
+    }
+
+    getTreeData(): ITreeItem[] {
+        return toJS(this.store.treeData);
+    }
+
+    getPosition(): IPosition {
+        return toJS(this.store.position);
+    }
+
     onOpenOptions(index: number): void {
         this.store.menuData[index].isActive = !this.store.menuData[index].isActive;
     }
 
     onChangeActiveMenuItem(rowIndex: number, subRowIndex: number): void {
+        this.store.isTreeVisible = true;
         if (!this.store.menuData[rowIndex] || !this.store.menuData[rowIndex].options) {
             return;
         }
@@ -27,6 +43,9 @@ export class MainController {
             });
         });
         this.store.menuData[rowIndex].options![subRowIndex].isActive = !this.store.menuData[rowIndex].options![subRowIndex].isActive;
+    }
 
+    onChangePosition(position: IPosition): void {
+        this.store.position = position;
     }
 }

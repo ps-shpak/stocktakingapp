@@ -7,11 +7,20 @@ import { TreeView } from "../tree-view";
 @autobind
 export class Tree extends Component<ITreeProps> {
     render(): ReactNode {
-        return (
-            <TreeView
-                data={this.props.data}
-                onChangeActive={this.props.onChangeActive}
-            />
-        );
+        return this.getContent();
+    }
+
+    private getContent(): ReactNode {
+        if (this.props.isVisible) {
+            return (
+                <TreeView
+                    data={this.props.data}
+                    onChangeActive={this.props.onChangeActive}
+                    position={this.props.position}
+                />
+            );
+        } else {
+            return (<></>);
+        }
     }
 }
