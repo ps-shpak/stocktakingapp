@@ -7,6 +7,7 @@ import cn from "classnames";
 import { ITreeItem } from "../../tree";
 import { observer } from "mobx-react";
 import { TreeLineStore } from "./TreeLineStore";
+import { CheckBox } from "../../checkbox";
 
 export const TreeLine = withStyles(styles)(
     observer(
@@ -20,11 +21,10 @@ export const TreeLine = withStyles(styles)(
                     <div className={this.props.classes.line}>
                         <div className={this.props.classes.inner}>
                             {data.children && <div className={arrowClassName} onClick={this.store.onSwitchVisibilityChildren} />}
-                            <input
-                                type="checkbox"
+                            <CheckBox
+                                isChecked={data.isActive}
+                                onCheckboxChanged={this.onChangeCheckbox}
                                 className={this.props.classes.checkbox}
-                                onChange={this.onChangeCheckbox}
-                                checked={data.isActive}
                             />
                             <div className={this.props.classes.title}>{data.title}</div>
                         </div>

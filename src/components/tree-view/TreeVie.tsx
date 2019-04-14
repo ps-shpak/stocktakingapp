@@ -10,7 +10,7 @@ export const TreeView = withStyles(styles)(
     class extends Component<ITreeViewProps> {
         render(): ReactNode {
             return (
-                <div className={this.props.classes.wrapper}>
+                <div className={this.props.classes.tree}>
                     {this.getList()}
                 </div>
             );

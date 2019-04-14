@@ -6,20 +6,23 @@ export const styles = createStyles({
         marginBottom: 20
     },
     inner: {
-        display: "flex"
+        display: "flex",
+        alignItems: "center",
+        marginBottom: 10
     },
     arrow: {
         width: 20,
         height: 20,
         background: "url(/img/arrow.svg)",
-        transition: "transform 0.3s ease"
+        transition: "transform 0.3s ease",
+        cursor: "pointer"
     },
     opened: {
         transform: "rotate(90deg)",
         transition: "transform 0.3s ease"
     },
     checkbox: {
-
+        margin: "0 10px"
     },
     title: {
 

@@ -56,14 +56,14 @@ export class DashboardController {
             const table: ITreeItem = {
                id: tableChildren[index],
                isActive: false,
-               title: `Стол #${index}`,
+               title: `Стол #${index + 1}`,
                parent: tableId
             };
             const chair: ITreeItem = {
                 id: chairChildren[index],
                 isActive: false,
-                title: `Стул #${index}`,
-                parent: chairId
+                title: `Стул #${index + 1}`,
+                parent: chairId,
             };
             this.store.treeData.push(table);
             this.store.treeData.push(chair);
