@@ -27,6 +27,7 @@ export class Dashboard extends Component<IDashboardProps> {
                     onChangeActive={this.controller.onChangeActive}
                     position={this.props.position}
                     isVisible={this.props.isTreeVisible}
+                    onCloseTree={this.props.onCloseTree}
                 />
             </>
         );

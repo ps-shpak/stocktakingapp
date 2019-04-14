@@ -5,4 +5,6 @@ export interface IDashboardProps {
     tree: ITreeItem[];
     position: IPosition;
     isTreeVisible: boolean;
+
+    onCloseTree(): void;
 }

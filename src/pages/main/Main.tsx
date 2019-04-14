@@ -31,6 +31,7 @@ export class Main extends Component {
                         tree={this.controller.getTreeData()}
                         position={this.controller.getPosition()}
                         isTreeVisible={this.store.isTreeVisible}
+                        onCloseTree={this.controller.onCloseTree}
                     />
                 </Wrapper>
         );

@@ -7,4 +7,6 @@ export interface ITreeProps {
     isVisible: boolean;
 
     onChangeActive(id: string): void;
+
+    onCloseTree(): void;
 }

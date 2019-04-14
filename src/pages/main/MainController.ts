@@ -63,6 +63,18 @@ export class MainController {
         this.store.position = position;
     }
 
+    onCloseTree(): void {
+        this.store.isTreeVisible = false;
+        this.store.menuData.map((menuItem: IMenuItem) => {
+           if (!menuItem.options) {
+               return;
+           }
+           menuItem.options.map((submenuItem: IMenuItem) => {
+              submenuItem.isActive = false;
+           });
+        });
+    }
+
     private getTreeDemoData(): ITreeItem[] {
         const tableId = uuid.v4();
         const chairId = uuid.v4();

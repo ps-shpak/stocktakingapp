@@ -15,11 +15,14 @@ export const TreeView = withStyles(styles)(
                 top: this.props.position.top
             };
             return (
-                <div className={this.props.classes.tree} style={style}>
-                    <Scrollbar>
-                        {this.getList()}
-                    </Scrollbar>
-                </div>
+                <>
+                    <div className={this.props.classes.overlay} onClick={this.props.onCloseTree} />
+                    <div className={this.props.classes.tree} style={style}>
+                        <Scrollbar>
+                            {this.getList()}
+                        </Scrollbar>
+                    </div>
+                </>
             );
         }
 

@@ -10,6 +10,16 @@ export const styles = createStyles({
         maxHeight: 400,
         minHeight: 100,
         height: "fit-content",
-        position: "absolute"
+        position: "absolute",
+        zIndex: 5
     },
+    overlay: {
+        width: "100%",
+        height: "100%",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        zIndex: 1,
+        background: "rgba(0, 0, 0, 0.3)"
+    }
 });
