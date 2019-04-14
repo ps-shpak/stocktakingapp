@@ -5,16 +5,19 @@ import { Sidebar } from "../../containers/sidebar";
 import { autobind } from "core-decorators";
 import { observer } from "mobx-react";
 import { Dashboard } from "../../containers/dashboard";
+import { Page } from "../../components/page";
 
 @observer
 @autobind
 export class Main extends Component {
     render(): React.ReactNode {
         return (
-            <Wrapper>
-                <Sidebar />
-                <Dashboard />
-            </Wrapper>
+            <Page title={"Инвенторизация"}>
+                <Wrapper>
+                    <Sidebar />
+                    <Dashboard />
+                </Wrapper>
+            </Page>
         );
     }
 }

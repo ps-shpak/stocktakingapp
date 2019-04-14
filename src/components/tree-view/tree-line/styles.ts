@@ -11,11 +11,12 @@ export const styles = createStyles({
         marginBottom: 10
     },
     arrow: {
-        width: 20,
-        height: 20,
+        width: 15,
+        height: 15,
         background: "url(/img/arrow.svg)",
         transition: "transform 0.3s ease",
-        cursor: "pointer"
+        cursor: "pointer",
+        backgroundSize: "cover"
     },
     opened: {
         transform: "rotate(90deg)",

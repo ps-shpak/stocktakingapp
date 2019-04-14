@@ -5,13 +5,16 @@ import { Component, ReactNode } from "react";
 import { ITreeViewProps } from "./ITreeViewProps";
 import { ITreeItem } from "../tree";
 import { TreeLine } from "./tree-line";
+import { Scrollbar } from "../scrollbar";
 
 export const TreeView = withStyles(styles)(
     class extends Component<ITreeViewProps> {
         render(): ReactNode {
             return (
                 <div className={this.props.classes.tree}>
-                    {this.getList()}
+                    <Scrollbar>
+                        {this.getList()}
+                    </Scrollbar>
                 </div>
             );
         }
