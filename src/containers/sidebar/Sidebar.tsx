@@ -15,7 +15,11 @@ export const Sidebar = withStyles(styles)(
                 <div className={this.props.classes.sidebar}>
                     <Logo className={this.props.classes.sidebarItem} />
                     <Avatar name={"Maxim"} className={this.props.classes.sidebarItem} />
-                    <Menu />
+                    <Menu
+                        data={this.props.data}
+                        onOpenOptions={this.props.onOpenOptions}
+                        onChangeActive={this.props.onChangeActive}
+                    />
                 </div>
             );
         }

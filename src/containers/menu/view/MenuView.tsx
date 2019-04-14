@@ -3,8 +3,8 @@ import { styles } from "./styles";
 import * as React from "react";
 import { Component, ReactNode } from "react";
 import { IMenuViewProps } from "./IMenuViewProps";
-import { IMenuItem } from "../../../pages/main";
-import * as cn from "classnames";
+import cn from "classnames";
+import { IMenuItem } from "../IMenuItem";
 
 export const MenuView = withStyles(styles)(
     class extends Component<IMenuViewProps> {
