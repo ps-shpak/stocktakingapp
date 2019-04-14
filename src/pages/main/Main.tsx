@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Component } from "react";
+import { Component, ReactNode } from "react";
 import { Wrapper } from "../../containers/wrapper";
 import { Sidebar } from "../../containers/sidebar";
 import { autobind } from "core-decorators";
@@ -14,7 +14,11 @@ export class Main extends Component {
     private readonly store = new MainStore();
     private readonly controller = new MainController(this.store);
 
-    render(): React.ReactNode {
+    componentDidMount(): void {
+        this.controller.onMount();
+    }
+
+    render(): ReactNode {
         return (
                 <Wrapper title={"Инвенторизация"}>
                     <Sidebar

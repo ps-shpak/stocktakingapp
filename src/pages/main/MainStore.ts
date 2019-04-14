@@ -2,6 +2,7 @@ import { autobind } from "core-decorators";
 import { observable } from "mobx";
 import { IMenuItem } from "../../containers/menu";
 import { IPosition } from "../../interfaces";
+import { ITreeItem } from "../../components/tree";
 
 @autobind
 export class MainStore {
@@ -26,7 +27,7 @@ export class MainStore {
             options: [
                 {
                     title: "по категориям",
-                    isActive: false
+                    isActive: false,
                 },
                 {
                     title: "по сотрудникам",
@@ -35,7 +36,7 @@ export class MainStore {
             ]
         }
     ];
-    @observable treeData = [];
+    @observable treeData: ITreeItem[] = [];
     @observable position: IPosition = {
         left: 0,
         top: 0
