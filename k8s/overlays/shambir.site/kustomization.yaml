@@ -6,12 +6,13 @@ bases:
 - ../../base
 resources:
 - namespace-stocktaking.yaml
-- certmanager/cert-issuer.yaml
+- ingress/ingress.yaml
+- ingress/ingress-api.yaml
+- ingress/certificate.yaml
+- ingress/letsencrypt-cert-issuer.yaml
 - volumes/postgres-data-persistentvolume.yaml
 
 patchesStrategicMerge:
-- ingress/ingress.yaml
-- ingress/ingress-api.yaml
 - volumes/postgres-data-persistentvolumeclaim.yaml
 
 secretGenerator:
