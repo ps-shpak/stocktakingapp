@@ -20,20 +20,20 @@ export class Main extends Component {
 
     render(): ReactNode {
         return (
-                <Wrapper title={"Инвенторизация"}>
-                    <Sidebar
-                        data={this.controller.getMenuData()}
-                        onOpenOptions={this.controller.onOpenOptions}
-                        onChangeActive={this.controller.onChangeActiveMenuItem}
-                        onChangePosition={this.controller.onChangePosition}
-                    />
-                    <Dashboard
-                        tree={this.controller.getTreeData()}
-                        position={this.controller.getPosition()}
-                        isTreeVisible={this.store.isTreeVisible}
-                        onCloseTree={this.controller.onCloseTree}
-                    />
-                </Wrapper>
+            <Wrapper title={"Инвенторизация"}>
+                <Sidebar
+                    data={this.controller.getMenuData()}
+                    onOpenOptions={this.controller.onOpenOptions}
+                    onChangeActive={this.controller.onChangeActiveMenuItem}
+                    onChangePosition={this.controller.onChangePosition}
+                />
+                <Dashboard
+                    tree={this.controller.getTreeData()}
+                    position={this.controller.getPosition()}
+                    isTreeVisible={this.store.isTreeVisible}
+                    onCloseTree={this.controller.onCloseTree}
+                />
+            </Wrapper>
         );
     }
 }
