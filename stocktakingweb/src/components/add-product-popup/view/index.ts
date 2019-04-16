@@ -1,0 +1,1 @@
+export { AddProductPopupView } from "./AddProductPopupView";
