@@ -5,4 +5,6 @@ export interface IPopupProps extends WithStyles<typeof styles> {
     title: string;
     description?: string;
     className?: string;
+
+    onClose(): void;
 }

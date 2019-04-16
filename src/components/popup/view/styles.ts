@@ -23,7 +23,8 @@ export const styles = createStyles({
     header: {
         display: "flex",
         justifyContent: "center",
-        position: "relative"
+        position: "relative",
+        marginBottom: 20
     },
     title: {
         fontSize: 20

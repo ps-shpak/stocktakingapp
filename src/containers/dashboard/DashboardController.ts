@@ -33,6 +33,10 @@ export class DashboardController {
         });
     }
 
+    onClosePopup(): void {
+        this.store.isPopupVisible = false;
+    }
+
     private generateDemoData(): void {
         const tableId = uuid.v4();
         const chairId = uuid.v4();

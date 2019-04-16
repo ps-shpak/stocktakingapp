@@ -6,7 +6,8 @@ export const styles = createStyles({
        padding: "10px 20px",
        border: `1px solid ${EColors.SIDEBAR}`,
        fontSize: 16,
-       color: EColors.SIDEBAR
+       color: EColors.SIDEBAR,
+       cursor: "pointer"
    },
     disable: {
        background: "rgba(0, 0, 0, 0.3)",

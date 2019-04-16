@@ -20,7 +20,7 @@ export class Main extends Component {
 
     render(): ReactNode {
         return (
-            <Wrapper title={"Инвенторизация"}>
+            <Wrapper title={"Инвентаризация"}>
                 <Sidebar
                     data={this.controller.getMenuData()}
                     onOpenOptions={this.controller.onOpenOptions}

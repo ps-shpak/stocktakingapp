@@ -10,8 +10,12 @@ import { PopupStore } from "./PopupStore";
 export class Popup extends React.Component<IPopupProps> {
     private readonly store = new PopupStore();
 
-    setVisibility(value: boolean): void {
-        this.store.isVisible = value;
+    componentDidMount(): void {
+        this.store.isVisible = this.props.isVisible;
+    }
+
+    componentWillReceiveProps(nextProps: Readonly<IPopupProps>): void {
+        this.store.isVisible = nextProps.isVisible;
     }
 
     render(): React.ReactNode {
@@ -24,7 +28,10 @@ export class Popup extends React.Component<IPopupProps> {
                 <PopupView
                     title={this.props.title}
                     description={this.props.description}
-                />
+                    onClose={this.props.onClose}
+                >
+                    {this.props.children}
+                </PopupView>
             );
         } else {
             return <></>;

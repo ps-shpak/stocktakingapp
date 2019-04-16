@@ -10,6 +10,7 @@ export const Button = withStyles(styles)(
         render(): ReactNode {
             const className = cn(
                 this.props.classes.button,
+                this.props.className,
                 this.props.isDisable && this.props.classes.disable
             );
             return (

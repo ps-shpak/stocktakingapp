@@ -1,12 +1,12 @@
 import * as React from "react";
 import { ReactNode, Component } from "react";
-import { Popup } from "../../components/popup";
 import { observer } from "mobx-react";
 import { autobind } from "core-decorators";
 import { DashboardStore } from "./DashboardStore";
 import { DashboardController } from "./DashboardController";
 import { Tree } from "../../components/tree";
 import { IDashboardProps } from "./IDashboardProps";
+import { AddProductPopup } from "../../components/add-product-popup";
 
 @observer
 @autobind
@@ -16,12 +16,16 @@ export class Dashboard extends Component<IDashboardProps> {
 
     componentDidMount(): void {
         this.controller.onMount();
+        this.store.isPopupVisible = true;
     }
 
     render(): ReactNode {
         return (
             <>
-                <Popup title={"123"} />
+                <AddProductPopup
+                    isVisible={this.store.isPopupVisible}
+                    onClose={this.controller.onClosePopup}
+                />
                 <Tree
                     data={this.props.tree}
                     onChangeActive={this.controller.onChangeActive}
