@@ -199,7 +199,9 @@
       "public/js/*.js",
       "public/old-pages/js/*.js",
       "contact_form",
-      "./src/components/old-pages/assets/css/*.css"
+      "./src/components/old-pages/assets/css/*.css",
+      "./src/api/*.js",
+      "./src/api/*.ts"
     ]
   }
 }
