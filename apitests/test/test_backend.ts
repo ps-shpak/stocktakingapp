@@ -1,16 +1,16 @@
-import * as pb from '../generated/api_pb';
-import * as api from '../generated/api_grpc_pb';
+import * as pb from '../api/api_pb';
+import * as grpcpb from '../api/api_grpc_pb';
 import { rollout, RollbackFunction } from 'trolling';
 import * as grpc from 'grpc';
 import {assert} from 'chai';
 import 'mocha';
 
 class Client {
-    private backend: api.BackendClient;
+    private backend: grpcpb.BackendClient;
 
     constructor() {
         const backendEndpoint = process.env['BACKEND_HOST'] || "localhost:8081";
-        this.backend = new api.BackendClient(backendEndpoint, grpc.credentials.createInsecure());
+        this.backend = new grpcpb.BackendClient(backendEndpoint, grpc.credentials.createInsecure());
     }
 
     public saveItem(request: pb.SaveItemRequest): Promise<pb.SaveItemResponse> {
