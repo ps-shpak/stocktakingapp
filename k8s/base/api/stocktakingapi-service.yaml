@@ -2,12 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    io.kompose.service: stocktakingweb
-  name: stocktakingweb
+    io.kompose.service: stocktakingapi
+  name: stocktakingapi
 spec:
   ports:
   - name: "80"
     port: 80
     targetPort: 80
   selector:
-    io.kompose.service: stocktakingweb
+    io.kompose.service: stocktakingapi

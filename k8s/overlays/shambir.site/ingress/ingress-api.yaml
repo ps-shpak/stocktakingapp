@@ -19,5 +19,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: stocktakingbackend
+          serviceName: stocktakingapi
           servicePort: 80
