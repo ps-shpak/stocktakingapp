@@ -1,4 +1,5 @@
 import createStyles from "@material-ui/core/styles/createStyles";
+import { EColors } from "../../../config";
 
 export const styles = createStyles({
     wrapper: {
@@ -29,7 +30,7 @@ export const styles = createStyles({
     },
     button: {
         width: 200,
-        background: "#27CA46",
+        background: EColors.GREEN,
         display: "flex",
         justifyContent: "center"
     }
