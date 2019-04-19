@@ -50,9 +50,7 @@ class ScanningPageNavigatorImpl implements ScanningPageNavigator {
       context,
       new MaterialPageRoute(
         builder: (context) => ItemPage(
-              initialState: ItemPageState(
-                navigator: ItemPageNavigatorImpl(),
-              ),
+              initialState: ItemPageState(item),
             ),
       ),
     );

@@ -17,11 +17,36 @@ class ScanningPageServiceImpl implements ScanningPageService {
       } else {
         return ItemScanResult(Item(), ItemRequestError.UNKNOWN);
       }
-    } on FormatException {} catch (ex) {
+    } on FormatException {
+      return ItemScanResult(Item(), ItemRequestError.BACK_PRESSED);
+    } catch (ex) {
       return ItemScanResult(Item(), ItemRequestError.UNKNOWN);
     }
 
     await Future.delayed(Duration(seconds: 3));
-    return ItemScanResult(Item(), null);
+
+    var item = _parseItem(code);
+
+    if (item == null) {
+      return ItemScanResult(Item(), ItemRequestError.PARSING);
+    }
+
+    return ItemScanResult(_parseItem(code), null);
+  }
+
+  Item _parseItem(String code) {
+    try {
+      var itemSpec = code.split(';');
+      var result = Item();
+      result.name = itemSpec[0];
+      result.type = itemSpec[1];
+      result.photo = itemSpec[2];
+      result.host = itemSpec[3];
+      result.location = itemSpec[4];
+      result.description = itemSpec[5];
+      return result;
+    } catch (ex) {
+      return null;
+    }
   }
 }
