@@ -37,6 +37,10 @@ export class DashboardController {
         this.store.isPopupVisible = false;
     }
 
+    onOpenPopup(): void {
+        this.store.isPopupVisible = true;
+    }
+
     private generateDemoData(): void {
         const tableId = uuid.v4();
         const chairId = uuid.v4();

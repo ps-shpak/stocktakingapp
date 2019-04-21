@@ -4,9 +4,8 @@ import { observer } from "mobx-react";
 import { autobind } from "core-decorators";
 import { DashboardStore } from "./DashboardStore";
 import { DashboardController } from "./DashboardController";
-import { Tree } from "../../components/tree";
 import { IDashboardProps } from "./IDashboardProps";
-import { AddProductPopup } from "../../components/add-product-popup";
+import { DashboardView } from "./view";
 
 @observer
 @autobind
@@ -16,24 +15,20 @@ export class Dashboard extends Component<IDashboardProps> {
 
     componentDidMount(): void {
         this.controller.onMount();
-        this.store.isPopupVisible = true;
     }
 
     render(): ReactNode {
         return (
-            <>
-                <AddProductPopup
-                    isVisible={this.store.isPopupVisible}
-                    onClose={this.controller.onClosePopup}
-                />
-                <Tree
-                    data={this.props.tree}
-                    onChangeActive={this.controller.onChangeActive}
-                    position={this.props.position}
-                    isVisible={this.props.isTreeVisible}
-                    onCloseTree={this.props.onCloseTree}
-                />
-            </>
+            <DashboardView
+                treeData={this.store.treeData}
+                isPopupVisible={this.store.isPopupVisible}
+                isTreeVisible={this.props.isTreeVisible}
+                treePosition={this.props.position}
+                onCloseTree={this.props.onCloseTree}
+                onChangeActiveTree={this.controller.onChangeActive}
+                onClosePopup={this.controller.onClosePopup}
+                onOpenPopup={this.controller.onOpenPopup}
+            />
         );
     }
 }

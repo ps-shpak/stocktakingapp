@@ -16,7 +16,7 @@ export class AddProductPopup extends Component<IAddProductPopupProps> {
                 title={"Новый предмет"}
                 onClose={this.props.onClose}
             >
-                <AddProductPopupView />
+                <AddProductPopupView onSubmit={this.props.onClose} />
             </Popup>
         );
     }

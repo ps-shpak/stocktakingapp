@@ -45,7 +45,7 @@ export const AddProductPopupView = withStyles(styles)(
                         <Button
                             title={"Добавить"}
                             isDisable={false}
-                            onClick={() => {return; }}
+                            onClick={this.props.onSubmit}
                             className={this.props.classes.button}
                         />
                     </div>
