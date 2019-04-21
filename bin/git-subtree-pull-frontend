@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# This script pulls latest changes from github.com:MaximKudryavtsev/stocktakingweb
+
+FRONTEND_REPO=git@github.com:MaximKudryavtsev/stocktakingweb.git
+BRANCH=development
+git subtree pull --prefix stocktakingweb "$FRONTEND_REPO" "$BRANCH"
