@@ -23,52 +23,62 @@ import {
 } from './api_pb';
 
 export class BackendClient {
-    private backend: pb.BackendClient;
+    private static _instance: BackendClient = new BackendClient();
+    private _backend: pb.BackendClient;
 
-    constructor() {
-        const backendEndpoint = process.env['BACKEND_HOST'] || "localhost:8081";
-        this.backend = new pb.BackendClient(backendEndpoint, null, null);
+    private constructor() {
+        if (BackendClient._instance){
+            throw new Error("instantiation failed: use BackendClient.getInstance() instead of new BackendClient().");
+        }
+
+        const backendApiHostname = `api.${location.hostname}`;
+        this._backend = new pb.BackendClient(backendApiHostname, null, null);
+        BackendClient._instance = this;
+    }
+
+    public static getInstance(): BackendClient {
+        return BackendClient._instance
     }
 
     public authorize(request: AuthorizeRequest): Promise<AuthorizeResponse> {
-        return this.invoke(request, this.backend.authorize);
+        return this.invoke(request, this._backend.authorize);
     }
 
     public listItems(request: ListItemsRequest): Promise<ListItemsResponse> {
-        return this.invoke(request, this.backend.listItems);
+        return this.invoke(request, this._backend.listItems);
     }
 
     public transferItems(request: TransferItemsRequest): Promise<TransferItemsResponse> {
-        return this.invoke(request, this.backend.transferItems);
+        return this.invoke(request, this._backend.transferItems);
     }
 
     public disposeItems(request: DisposeItemsRequest): Promise<DisposeItemsResponse> {
-        return this.invoke(request, this.backend.disposeItems);
+        return this.invoke(request, this._backend.disposeItems);
     }
 
     public saveItem(request: SaveItemRequest): Promise<SaveItemResponse> {
-        return this.invoke(request, this.backend.saveItem);
+        return this.invoke(request, this._backend.saveItem);
     }
 
     public loadItem(request: LoadItemRequest): Promise<LoadItemResponse> {
-        return this.invoke(request, this.backend.loadItem);
+        return this.invoke(request, this._backend.loadItem);
     }
 
     public addOwners(request: AddOwnersRequest): Promise<AddOwnersResponse> {
-        return this.invoke(request, this.backend.addOwners);
+        return this.invoke(request, this._backend.addOwners);
     }
 
     public saveOwner(request: SaveOwnerRequest): Promise<SaveOwnerResponse> {
-        return this.invoke(request, this.backend.saveOwner);
+        return this.invoke(request, this._backend.saveOwner);
     }
 
     public listOwners(request: ListOwnersRequest): Promise<ListOwnersResponse> {
-        return this.invoke(request, this.backend.listOwners)
+        return this.invoke(request, this._backend.listOwners)
     }
 
     private invoke<Req, Res>(req: Req, method: (req: Req, metadata: grpcWeb.Metadata | null, callback: (error: grpcWeb.Error, res: Res) => void) => grpcWeb.ClientReadableStream<Res>): Promise<Res> {
         return new Promise((resolve: Function, reject: Function) => {
-            method.call(this.backend, req, null, (error: grpcWeb.Error, res: Res): void => {
+            method.call(this._backend, req, null, (error: grpcWeb.Error, res: Res): void => {
                 if (error) {
                     reject(error);
                 }
