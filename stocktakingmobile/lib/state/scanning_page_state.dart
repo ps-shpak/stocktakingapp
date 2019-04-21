@@ -93,11 +93,17 @@ class ScanningPageState extends State<ScanningPage> {
       case ItemRequestError.UNKNOWN:
         _showUnknownError();
         break;
+      case ItemRequestError.BACK_PRESSED:
+        // Nothing to do
+        break;
       case ItemRequestError.CAMERA_PERMISSIONS:
         _showPermissionsError();
         break;
       case ItemRequestError.CONNECTION:
         _showConnectionError();
+        break;
+      case ItemRequestError.PARSING:
+        _showParsingError();
         break;
     }
   }
@@ -113,6 +119,13 @@ class ScanningPageState extends State<ScanningPage> {
     _showError(
       'Ошибка доступа',
       'Приложению необходим доступ к камере, чтобы начать сканирование.',
+    );
+  }
+
+  _showParsingError() {
+    _showError(
+      'Ошибка чтения QR-кода',
+      'Сканирован неподдерживаемый формат QR-кода. Убедитесь, что вы сканируете верный QR-код.',
     );
   }
 

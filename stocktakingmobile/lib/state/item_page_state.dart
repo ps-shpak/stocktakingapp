@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:stocktakingmobile/navigation/item_page_navigator.dart';
+import 'package:stocktakingmobile/domain/model/item.dart';
 import 'package:stocktakingmobile/ui/widget/spec_item.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ItemPageState extends State<StatefulWidget> {
-  ItemPageState({navigator: ItemPageNavigator})
-      : assert(navigator != null),
-        _navigator = navigator,
-        super();
+  ItemPageState(this.item) : super();
 
-  ItemPageNavigator _navigator;
+  Item item;
 
   final _iconInUse = "assets/ic_in_use.svg";
   final _iconUser = "assets/ic_user.svg";
@@ -21,36 +20,44 @@ class ItemPageState extends State<StatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          _buildAppBar(),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => _buildBodyItem(index),
+              childCount: 3,
+            ),
+          )
+        ],
+      ),
       backgroundColor: Colors.white,
     );
   }
 
   Widget _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.orangeAccent,
-      elevation: 1,
-      leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back,
-          color: Colors.black,
-        ),
-        onPressed: () {
-          _navigator.close(context);
-        },
+    return SliverAppBar(
+      elevation: 3,
+      expandedHeight: 200.0,
+      floating: false,
+      pinned: true,
+      flexibleSpace: FlexibleSpaceBar(
+        background: new Image.network(item.photo, fit: BoxFit.cover),
       ),
+      backgroundColor: Colors.orangeAccent,
     );
   }
 
-  Widget _buildBody() {
-    return ListView(
-      children: <Widget>[
-        _buildTitle(),
-        _buildSpec(),
-        _buildDescription(),
-      ],
-    );
+  Widget _buildBodyItem(int index) {
+    if (index == 0) {
+      return _buildTitle();
+    } else if (index == 1) {
+      return _buildSpec();
+    } else if (index == 2) {
+      return _buildDescription();
+    }
+
+    return null;
   }
 
   Widget _buildTitle() {
@@ -61,7 +68,7 @@ class ItemPageState extends State<StatefulWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Офисная тумбочка',
+            item.name,
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -70,7 +77,7 @@ class ItemPageState extends State<StatefulWidget> {
           Padding(
             padding: EdgeInsets.only(top: 4),
             child: Text(
-              'Мебель',
+              item.type,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.normal,
@@ -122,7 +129,7 @@ class ItemPageState extends State<StatefulWidget> {
         height: _iconSize,
       ),
       text: Text(
-        "Ivan Andreyshev",
+        item.host,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -140,7 +147,7 @@ class ItemPageState extends State<StatefulWidget> {
         height: _iconSize,
       ),
       text: Text(
-        "Room 42",
+        item.location,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -152,7 +159,7 @@ class ItemPageState extends State<StatefulWidget> {
 
   Widget _buildDescription() {
     return Container(
-      padding: EdgeInsets.only(top: 16, left: 12, right: 12),
+      padding: EdgeInsets.only(top: 16, left: 12, right: 12, bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -165,10 +172,26 @@ class ItemPageState extends State<StatefulWidget> {
           ),
           Padding(
             padding: EdgeInsets.only(top: 6),
-            child: Text('Item page'),
+            child: Linkify(
+              text: item.description,
+              style: TextStyle(fontSize: 16),
+              onOpen: (link) => _launchLink,
+            ),
           ),
         ],
       ),
     );
+  }
+
+  _launchLink(String url) async {
+    try {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        return;
+      }
+    } catch (ex) {
+      return;
+    }
   }
 }
