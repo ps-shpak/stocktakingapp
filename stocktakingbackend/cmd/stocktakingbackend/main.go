@@ -3,21 +3,29 @@ package main
 //go:generate protoc -I ../../../stocktakingapi --go_out=plugins=grpc:../../stocktakingapi ../../../stocktakingapi/api.proto
 
 import (
+	"context"
 	"net"
+	"net/http"
 	"os"
 	"strconv"
 
+	"github.com/improbable-eng/grpc-web/go/grpcweb"
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 
 	stocktakinggrpc "stocktakingbackend/grpc"
 	"stocktakingbackend/postgres"
+	"stocktakingbackend/server"
 	"stocktakingbackend/stock"
 	"stocktakingbackend/stocktakingapi"
 )
 
-// ServedPort - port for GRPC API
-const ServedPort = "8081"
+// ServiceGRPCPort - port for GRPC API
+const ServiceGRPCPort = "8081"
+
+// ServiceGRPCWebPort - port for GRPC-Web API
+const ServiceGRPCWebPort = "8082"
 
 func main() {
 	logger := &log.Logger{
@@ -39,15 +47,44 @@ func main() {
 	grpcServer := stocktakinggrpc.NewGRPCServer(service)
 	grpcServer = stocktakinggrpc.NewLoggingMiddleware(grpcServer, logger)
 
-	grpcListener, err := net.Listen("tcp", ":"+ServedPort)
-	if err != nil {
-		logger.WithError(err).Fatal("failed to listen socket")
-	}
-	logger.Info("listening GRPC requests on port " + ServedPort)
 	baseServer := grpc.NewServer()
 	stocktakingapi.RegisterBackendServer(baseServer, grpcServer)
 
-	err = baseServer.Serve(grpcListener)
+	serverHub := server.NewHub()
+
+	// Serve grpc
+	serverHub.Serve(func() error {
+		grpcListener, grpcErr := net.Listen("tcp", ":"+ServiceGRPCPort)
+		if err != nil {
+			return errors.Wrapf(grpcErr, "failed to listen port %s", ServiceGRPCPort)
+		}
+		grpcErr = baseServer.Serve(grpcListener)
+		return errors.Wrap(grpcErr, "failed to serve GRPC")
+	}, func() error {
+		baseServer.GracefulStop()
+		return nil
+	})
+
+	// Serve grpc-web
+	grpcwebServer := grpcweb.WrapServer(baseServer)
+	httpServer := &http.Server{
+		Addr: ":" + ServiceGRPCWebPort,
+	}
+	serverHub.Serve(func() error {
+		httpServer.Handler = http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
+			if grpcwebServer.IsGrpcWebRequest(req) {
+				grpcwebServer.ServeHTTP(resp, req)
+			}
+			// Fall back to other servers.
+			http.DefaultServeMux.ServeHTTP(resp, req)
+		})
+		return httpServer.ListenAndServe()
+	}, func() error {
+		return httpServer.Shutdown(context.Background())
+	})
+
+	// Wait until stopped
+	err = serverHub.Wait()
 	if err != nil {
 		logger.WithError(err).Fatal("failed to serve")
 	}
