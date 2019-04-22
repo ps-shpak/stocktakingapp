@@ -1,92 +1,173 @@
-import * as pb from './ApiServiceClientPb';
-import * as grpcWeb from 'grpc-web';
-
 import {
-    AddOwnersRequest,
-    AddOwnersResponse,
-    AuthorizeRequest,
-    AuthorizeResponse,
-    DisposeItemsRequest,
-    DisposeItemsResponse,
-    ListItemsRequest,
-    ListItemsResponse,
-    ListOwnersRequest,
-    ListOwnersResponse,
-    LoadItemRequest,
     LoadItemResponse,
+    ItemSpec,
+    ItemGroupingMethod,
+    ItemGroupNode,
+    ItemNode,
+    TransferItemsRequest,
     SaveItemRequest,
     SaveItemResponse,
-    SaveOwnerRequest,
-    SaveOwnerResponse,
-    TransferItemsRequest,
-    TransferItemsResponse
-} from './api_pb';
+    AddOwnersRequestOwner,
+    OwnerSpec,
+} from './models'
 
 export class BackendClient {
     private static _instance: BackendClient = new BackendClient();
-    private _backend: pb.BackendClient;
 
     private constructor() {
         if (BackendClient._instance){
             throw new Error("instantiation failed: use BackendClient.getInstance() instead of new BackendClient().");
         }
-
-        const apiEndpoint = `/api`;
-        this._backend = new pb.BackendClient(apiEndpoint, null, null);
-        BackendClient._instance = this;
     }
 
     public static getInstance(): BackendClient {
         return BackendClient._instance
     }
 
-    public authorize(request: AuthorizeRequest): Promise<AuthorizeResponse> {
-        return this.invoke(request, this._backend.authorize);
+    public async listItems(groupingMethod: ItemGroupingMethod): Promise<ItemGroupNode[]> {
+        const url = new URL('/api/items');
+        url.searchParams.set('grouping_method', groupingMethod);
+
+        const response = await fetch(url.href);
+        const groups: ItemGroupNode[] = [];
+        for (const groupObj of response.json()['results']) {
+            const group = new ItemGroupNode();
+            group.name = groupObj['name'];
+            group.items = []
+            for (const itemObj of groupObj['items']) {
+                const item = new ItemNode();
+                item.displayName = itemObj['display_name'];
+                item.ownerName = itemObj['owner_name'];
+                item.id = itemObj['id'];
+                group.items.push(item);
+            }
+            groups.push(group);
+        }
+
+        return groups;
     }
 
-    public listItems(request: ListItemsRequest): Promise<ListItemsResponse> {
-        return this.invoke(request, this._backend.listItems);
-    }
-
-    public transferItems(request: TransferItemsRequest): Promise<TransferItemsResponse> {
-        return this.invoke(request, this._backend.transferItems);
-    }
-
-    public disposeItems(request: DisposeItemsRequest): Promise<DisposeItemsResponse> {
-        return this.invoke(request, this._backend.disposeItems);
-    }
-
-    public saveItem(request: SaveItemRequest): Promise<SaveItemResponse> {
-        return this.invoke(request, this._backend.saveItem);
-    }
-
-    public loadItem(request: LoadItemRequest): Promise<LoadItemResponse> {
-        return this.invoke(request, this._backend.loadItem);
-    }
-
-    public addOwners(request: AddOwnersRequest): Promise<AddOwnersResponse> {
-        return this.invoke(request, this._backend.addOwners);
-    }
-
-    public saveOwner(request: SaveOwnerRequest): Promise<SaveOwnerResponse> {
-        return this.invoke(request, this._backend.saveOwner);
-    }
-
-    public listOwners(request: ListOwnersRequest): Promise<ListOwnersResponse> {
-        return this.invoke(request, this._backend.listOwners)
-    }
-
-    private invoke<Req, Res>(req: Req, method: (req: Req, metadata: grpcWeb.Metadata | null, callback: (error: grpcWeb.Error, res: Res) => void) => grpcWeb.ClientReadableStream<Res>): Promise<Res> {
-        return new Promise((resolve: Function, reject: Function) => {
-            method.call(this._backend, req, null, (error: grpcWeb.Error, res: Res): void => {
-                if (error) {
-                    reject(error);
-                }
-                else {
-                    resolve(res);
-                }
-            });
+    public async transferItems(request: TransferItemsRequest): Promise<void> {
+        await fetch('/api/items/owner', {
+            method: "PATCH",
+            body: JSON.stringify({
+                ids: request.ids,
+                owner_id: request.ownerId,
+            })
         });
     }
-}
 
+    public async disposeItems(ids: string[]): Promise<void> {
+        const url = new URL('/api/items');
+        for (const id of ids) {
+            url.searchParams.append("ids", id);
+        }
+        await fetch(url.href, {
+            method: "DELETE",
+        });
+    }
+
+    public async saveItem(request: SaveItemRequest): Promise<SaveItemResponse> {
+        const response = await fetch('/api/items', {
+            method: "PUT",
+            body: JSON.stringify({
+                id: request.id,
+                spec: this.serializeSpec(request.spec),
+            })
+        });
+
+        const result = new SaveItemResponse();
+        result.id = response.json()['id'];
+        return result;
+    }
+
+    public async loadItem(id: string): Promise<LoadItemResponse> {
+        const url = new URL('/api/item');
+        url.searchParams.set('id', id);
+
+        const response = await fetch(url.href);
+        const obj = response.json();
+        const res = new LoadItemResponse();
+        res.displayName = obj['display_name'];
+        res.ownerName = obj['owner_name'];
+        res.spec = this.parseItemSpec(obj['spec']);
+
+        return res;
+    }
+
+    public async addOwners(owners: AddOwnersRequestOwner[]): Promise<string[]> {
+        const requestItems: any[] = [];
+        for (let owner of owners) {
+            requestItems.push({
+                name: owner.name,
+                email: owner.email,
+            })
+        }
+        const response = await fetch('/api/owners', {
+            method: "POST",
+            body: JSON.stringify({
+                owners: requestItems,
+            })
+        });
+
+        const result: string[] = [];
+        for (let owner of response.json()['owners']) {
+            result.push(owner['id']);
+        }
+        return result;
+    }
+
+    public async saveOwner(request: OwnerSpec): Promise<void> {
+        await fetch('/api/owner', {
+            method: "PUT",
+            body: JSON.stringify({
+                id: request.id,
+                name: request.name,
+                email: request.email,
+                may_login: request.mayLogin,
+            })
+        });
+    }
+
+    public async listOwners(): Promise<OwnerSpec[]> {
+        const response = await fetch('/api/owners');
+        const owners: OwnerSpec[] = [];
+        for (const obj of response.json()['results']) {
+            const owner = new OwnerSpec();
+            owner.id = obj['user_id'];
+            owner.name = obj['name'];
+            owner.email = obj['email'];
+            owner.mayLogin = obj['may_login'];
+            owners.push(owner);
+        }
+
+        return owners;
+    }
+
+    public async authorize(email: string): Promise<string> {
+        const url = new URL('/auth/token');
+        url.searchParams.set('email', email);
+        const response = await fetch(url.href);
+        return response.json['id'];
+    }
+
+    private serializeSpec(spec: ItemSpec): object {
+        return {
+            category: spec.category,
+            place: spec.place,
+            owner_id: spec.ownerId,
+            price: spec.price,
+            description: spec.description,
+        }
+    }
+
+    private parseItemSpec(obj: object): ItemSpec {
+        const spec = new ItemSpec();
+        spec.category = obj['category'];
+        spec.place = obj['place'];
+        spec.ownerId = obj['owner_id'];
+        spec.price = obj['price'];
+        spec.description = obj['description'];
+        return spec;
+    }
+}
