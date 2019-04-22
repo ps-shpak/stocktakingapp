@@ -1,17 +1,31 @@
+# define $GOPATH and ensure that golang's bin dir is in $PATH
+GOPATH=$(shell go env GOPATH)
+export PATH := $(GOPATH)/bin:$(PATH)
+
+API_PROTO_DIR=../stocktakingapi
 
 .PHONY: all
 all: build test lint
 
 .PHONY: vendor
 vendor:
-	go mod vendor
-
-.PHONY: build
-build:
 	go mod tidy
 	go mod vendor
-	$(shell go env GOPATH)/bin/go-bindata -pkg data -o postgres/data/migrations.go -prefix "postgres/migrations" postgres/migrations
-	go generate cmd/stocktakingbackend/main.go
+
+generate:
+	$(GOPATH)/bin/go-bindata -pkg data -o postgres/data/migrations.go -prefix "postgres/migrations" postgres/migrations
+	protoc \
+		-I/usr/include \
+		-I$(GOPATH)/src \
+		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
+		-I $(API_PROTO_DIR) \
+		--go_out=plugins=grpc:stocktakingapi \
+		--grpc-gateway_out=logtostderr=true:stocktakingapi \
+		--swagger_out=logtostderr=true:. \
+		$(API_PROTO_DIR)/api.proto
+
+.PHONY: build
+build: vendor generate
 	go build -mod vendor -o build/stocktakingbackend cmd/stocktakingbackend/*.go
 
 .PHONY: test
@@ -21,4 +35,4 @@ test:
 
 .PHONY: lint
 lint:
-	$(shell go env GOPATH)/bin/golangci-lint run
+	$(GOPATH)/bin/golangci-lint run

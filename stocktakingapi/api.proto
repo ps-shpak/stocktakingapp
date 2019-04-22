@@ -2,32 +2,70 @@ syntax = "proto3";
 
 package stocktakingapi;
 
+import "google/api/annotations.proto";
+
 service Backend {
     // Creates new or saves existing item
-    rpc SaveItem(SaveItemRequest) returns (SaveItemResponse) {}
+    rpc SaveItem(SaveItemRequest) returns (SaveItemResponse) {
+      option (google.api.http) = {
+        put: "/item",
+        body: "*"
+      };
+    }
 
     // Returns full information for item with given ID
-    rpc LoadItem(LoadItemRequest) returns (LoadItemResponse) {};
+    rpc LoadItem(LoadItemRequest) returns (LoadItemResponse) {
+      option (google.api.http) = {
+        get: "/item",
+      };
+    }
 
     // Lists items tree grouped by category or owner
-    rpc ListItems(ListItemsRequest) returns (ListItemsResponse) {}
+    rpc ListItems(ListItemsRequest) returns (ListItemsResponse) {
+      option (google.api.http) = {
+        get: "/items",
+      };
+    }
 
     // Disposes items with given IDs
     // Disposed item never appears in any listing,
     //  but remains accessible by ID
-    rpc DisposeItems(DisposeItemsRequest) returns (DisposeItemsResponse) {};
+    rpc DisposeItems(DisposeItemsRequest) returns (DisposeItemsResponse) {
+      option (google.api.http) = {
+        delete: "/items",
+      };
+    }
 
     // Transfers ownership to given user for items with given IDs
-    rpc TransferItems(TransferItemsRequest) returns (TransferItemsResponse) {};
+    rpc TransferItems(TransferItemsRequest) returns (TransferItemsResponse) {
+      option (google.api.http) = {
+        patch: "/items/owner",
+        body: "*"
+      };
+    }
 
     // Lists all available owners
-    rpc ListOwners(ListOwnersRequest) returns (ListOwnersResponse) {}
+    rpc ListOwners(ListOwnersRequest) returns (ListOwnersResponse) {
+      option (google.api.http) = {
+        get: "/owners",
+      };
+    }
 
     // Adds new owners and returns list of results/errors
-    rpc AddOwners(AddOwnersRequest) returns (AddOwnersResponse) {};
+    rpc AddOwners(AddOwnersRequest) returns (AddOwnersResponse) {
+      option (google.api.http) = {
+        post: "/owners",
+        body: "*"
+      };
+    };
 
     // Saves existing owner with given ID.
-    rpc SaveOwner(SaveOwnerRequest) returns (SaveOwnerResponse) {};
+    rpc SaveOwner(SaveOwnerRequest) returns (SaveOwnerResponse) {
+      option (google.api.http) = {
+        put: "/owner",
+        body: "*"
+      };
+    };
 
     // Attempts to authorize user in this service
     // Authorization uses only email - caller must validate email
@@ -35,7 +73,11 @@ service Backend {
     // Errors:
     //  - UnknownId - no such email registered in service
     //  - AuthForbidden - email belongs to owner which cannot service itself
-    rpc Authorize(AuthorizeRequest) returns (AuthorizeResponse) {};
+    rpc Authorize(AuthorizeRequest) returns (AuthorizeResponse) {
+      option (google.api.http) = {
+        get: "/auth/token",
+      };
+    };
 }
 
 message ItemSpec {

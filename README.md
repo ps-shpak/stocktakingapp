@@ -39,14 +39,35 @@ task ps
 task down
 ```
 
+В `Taskfile.yml` описаны задачи, общие для проекта: связанные со сборкой компонентов, сборкой Docker-контейнеров, операциями с docker-compose.
+
 ### Для разработки бекенда
 
-Нужно установить:
+Нужно установить утилиты по инструкциям:
 
 * [go](https://github.com/golang/go/wiki/Ubuntu)
-* [grpc](https://grpc.io/docs/quickstart/go.html), в том числе компилятор protoc
+* [protoc в составе protobuf](https://github.com/protocolbuffers/protobuf/releases)
+* [grpc](https://grpc.io/docs/quickstart/go.html)
 * [golang-migrate](https://github.com/golang-migrate/migrate)
 * [go-bindata](https://github.com/jteeuwen/go-bindata): `go get -u github.com/go-bindata/go-bindata/...`
+
+Установите grpc-gateway, используя `go get`:
+
+```bash
+# Устанавливаем grpc-gateway: https://github.com/grpc-ecosystem/grpc-gateway
+go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
+```
+
+Также надо убедиться, что у вас устанлен protoc-gen-go версии v1.2.0 - иначе проявится баг, описанный в [undefined: proto.ProtoPackageIsVersion3](https://stackoverflow.com/questions/53952723/undefined-proto-protopackageisversion3). Установить нужную версию можно так:
+
+```bash
+go get -d -u github.com/golang/protobuf/protoc-gen-go
+git -C "$(go env GOPATH)"/src/github.com/golang/protobuf checkout v1.2.0
+go install github.com/golang/protobuf/protoc-gen-go
+```
+
+Теперь вы можете приступать к разработке. Исходный код бекенда находится в каталоге `stocktakingbackend`, сборка бекенда описана в Makefile.
 
 ### Для разработки фронтенда
 
@@ -72,6 +93,19 @@ task build-frontend
 После этого собранный фронтенд находится в каталоге `stocktakingweb/build`.
 
 Чтобы его запустить, используйте docker-compose (см. выше).
+
+## Процессы
+
+### Работа с API
+
+API предоставляется контейнером `stocktakingbackend` в двух форматах:
+
+* на порту `8081` - в формате GRPC, API описан в файле `stocktakingapi/api.proto`
+** GRPC напрямую недоступен в браузерах, но может использоваться другими сервисами
+* на порту `8082` - в формате REST, API описан в автогенерируемом файле `stocktakingbackend/api.swagger.json`
+** этот формат напрямую доступен из браузера
+
+Для внешнего трафика доступен только REST API с префиксом `/api/`.
 
 ### Деплой в Kubernetes кластер
 

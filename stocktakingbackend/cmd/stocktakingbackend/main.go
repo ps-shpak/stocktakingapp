@@ -1,15 +1,14 @@
 package main
 
-//go:generate protoc -I ../../../stocktakingapi --go_out=plugins=grpc:../../stocktakingapi ../../../stocktakingapi/api.proto
-
 import (
 	"context"
 	"net"
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
-	"github.com/improbable-eng/grpc-web/go/grpcweb"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -22,10 +21,10 @@ import (
 )
 
 // ServiceGRPCPort - port for GRPC API
-const ServiceGRPCPort = "8081"
+const ServiceGRPCPort = ":8081"
 
-// ServiceGRPCWebPort - port for GRPC-Web API
-const ServiceGRPCWebPort = "8082"
+// ServiceRESTPort - port for GRPC-Web API
+const ServiceRESTPort = ":8082"
 
 func main() {
 	logger := &log.Logger{
@@ -47,14 +46,13 @@ func main() {
 	grpcServer := stocktakinggrpc.NewGRPCServer(service)
 	grpcServer = stocktakinggrpc.NewLoggingMiddleware(grpcServer, logger)
 
-	baseServer := grpc.NewServer()
-	stocktakingapi.RegisterBackendServer(baseServer, grpcServer)
-
 	serverHub := server.NewHub()
 
 	// Serve grpc
+	baseServer := grpc.NewServer()
+	stocktakingapi.RegisterBackendServer(baseServer, grpcServer)
 	serverHub.Serve(func() error {
-		grpcListener, grpcErr := net.Listen("tcp", ":"+ServiceGRPCPort)
+		grpcListener, grpcErr := net.Listen("tcp", ServiceGRPCPort)
 		if err != nil {
 			return errors.Wrapf(grpcErr, "failed to listen port %s", ServiceGRPCPort)
 		}
@@ -65,22 +63,28 @@ func main() {
 		return nil
 	})
 
-	// Serve grpc-web
-	grpcwebServer := grpcweb.WrapServer(baseServer)
-	httpServer := &http.Server{
-		Addr: ":" + ServiceGRPCWebPort,
-	}
+	// Serve grpc-gateway proxy
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	var restServer *http.Server
 	serverHub.Serve(func() error {
-		httpServer.Handler = http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
-			if grpcwebServer.IsGrpcWebRequest(req) {
-				grpcwebServer.ServeHTTP(resp, req)
-			}
-			// Fall back to other servers.
-			http.DefaultServeMux.ServeHTTP(resp, req)
-		})
-		return httpServer.ListenAndServe()
+		mux := runtime.NewServeMux()
+		opts := []grpc.DialOption{grpc.WithInsecure()}
+		err = stocktakingapi.RegisterBackendHandlerFromEndpoint(ctx, mux, ServiceGRPCPort, opts)
+		if err != nil {
+			return err
+		}
+		restServer = &http.Server{
+			Handler: mux,
+			Addr:    ServiceRESTPort,
+			// Good practice: enforce timeouts for servers you create!
+			WriteTimeout: 15 * time.Second,
+			ReadTimeout:  15 * time.Second,
+		}
+		return restServer.ListenAndServe()
 	}, func() error {
-		return httpServer.Shutdown(context.Background())
+		cancel()
+		return restServer.Shutdown(context.Background())
 	})
 
 	// Wait until stopped
