@@ -27,12 +27,6 @@
       false,
       "multiline"
     ],
-    "no-import-side-effect": [
-      true,
-      {
-        "ignore-module": "(\\.html|\\.css|\\.scss)$"
-      }
-    ],
     "no-import-side-effect": false,
     "prefer-function-over-method": false,
     "no-namespace": false,

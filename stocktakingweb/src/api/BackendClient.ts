@@ -31,8 +31,8 @@ export class BackendClient {
             throw new Error("instantiation failed: use BackendClient.getInstance() instead of new BackendClient().");
         }
 
-        const backendApiHostname = `api.${location.hostname}`;
-        this._backend = new pb.BackendClient(backendApiHostname, null, null);
+        const apiEndpoint = `/api`;
+        this._backend = new pb.BackendClient(apiEndpoint, null, null);
         BackendClient._instance = this;
     }
 

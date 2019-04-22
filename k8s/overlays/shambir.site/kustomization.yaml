@@ -7,7 +7,6 @@ bases:
 resources:
 - namespace-stocktaking.yaml
 - ingress/ingress.yaml
-- ingress/ingress-api.yaml
 - ingress/certificate.yaml
 - ingress/letsencrypt-cert-issuer.yaml
 - volumes/postgres-data-persistentvolume.yaml
