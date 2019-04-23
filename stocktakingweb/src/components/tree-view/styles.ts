@@ -10,7 +10,6 @@ export const styles = createStyles({
         maxHeight: 400,
         minHeight: 100,
         height: "fit-content",
-        position: "absolute",
         zIndex: 5
     },
     overlay: {

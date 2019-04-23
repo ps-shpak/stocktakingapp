@@ -1,7 +1,7 @@
 import withStyles from "@material-ui/core/styles/withStyles";
 import { styles } from "./styles";
 import * as React from "react";
-import { Component, CSSProperties, ReactNode } from "react";
+import { Component, ReactNode } from "react";
 import { ITreeViewProps } from "./ITreeViewProps";
 import { ITreeItem } from "../tree";
 import { TreeLine } from "./tree-line";
@@ -10,14 +10,10 @@ import { Scrollbar } from "../scrollbar";
 export const TreeView = withStyles(styles)(
     class extends Component<ITreeViewProps> {
         render(): ReactNode {
-            const style: CSSProperties = {
-                left: this.props.position.left,
-                top: this.props.position.top
-            };
             return (
                 <>
                     <div className={this.props.classes.overlay} onClick={this.props.onCloseTree} />
-                    <div className={this.props.classes.tree} style={style}>
+                    <div className={this.props.classes.tree}>
                         <Scrollbar>
                             {this.getList()}
                         </Scrollbar>

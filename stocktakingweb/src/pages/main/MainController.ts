@@ -3,7 +3,6 @@ import { MainStore } from "./MainStore";
 import { IMenuItem } from "../../containers/menu";
 import { toJS } from "mobx";
 import { ITreeItem } from "../../components/tree";
-import { IPosition } from "../../interfaces";
 
 @autobind
 export class MainController {
@@ -13,19 +12,12 @@ export class MainController {
         this.store = store;
     }
 
-    onMount(): void {
-    }
-
     getMenuData(): IMenuItem[] {
         return toJS(this.store.menuData);
     }
 
     getTreeData(): ITreeItem[] {
         return toJS(this.store.treeData);
-    }
-
-    getPosition(): IPosition {
-        return toJS(this.store.position);
     }
 
     onOpenOptions(index: number): void {
@@ -54,10 +46,6 @@ export class MainController {
                 item.options[subRowIndex].isActive = !item.options[subRowIndex].isActive;
             }
         });
-    }
-
-    onChangePosition(position: IPosition): void {
-        this.store.position = position;
     }
 
     onCloseTree(): void {

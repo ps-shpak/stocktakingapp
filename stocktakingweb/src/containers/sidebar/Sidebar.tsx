@@ -19,7 +19,6 @@ export const Sidebar = withStyles(styles)(
                         data={this.props.data}
                         onOpenOptions={this.props.onOpenOptions}
                         onChangeActive={this.props.onChangeActive}
-                        onChangePosition={this.props.onChangePosition}
                     />
                 </div>
             );

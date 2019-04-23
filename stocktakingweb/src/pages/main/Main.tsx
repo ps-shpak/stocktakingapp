@@ -14,10 +14,6 @@ export class Main extends Component {
     private readonly store = new MainStore();
     private readonly controller = new MainController(this.store);
 
-    componentDidMount(): void {
-        this.controller.onMount();
-    }
-
     render(): ReactNode {
         return (
             <Wrapper title={"Инвентаризация"}>
@@ -25,11 +21,9 @@ export class Main extends Component {
                     data={this.controller.getMenuData()}
                     onOpenOptions={this.controller.onOpenOptions}
                     onChangeActive={this.controller.onChangeActiveMenuItem}
-                    onChangePosition={this.controller.onChangePosition}
                 />
                 <Dashboard
                     tree={this.controller.getTreeData()}
-                    position={this.controller.getPosition()}
                     isTreeVisible={this.store.isTreeVisible}
                     onCloseTree={this.controller.onCloseTree}
                 />

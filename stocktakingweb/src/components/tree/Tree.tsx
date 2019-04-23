@@ -27,7 +27,6 @@ export class Tree extends Component<ITreeProps> {
                 <TreeView
                     data={this.props.data}
                     onChangeActive={this.props.onChangeActive}
-                    position={this.props.position}
                     onCloseTree={this.props.onCloseTree}
                 />
             );

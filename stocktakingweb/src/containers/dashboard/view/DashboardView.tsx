@@ -29,7 +29,6 @@ export const DashboardView = withStyles(styles)(
                     <Tree
                         data={this.props.treeData}
                         onChangeActive={this.props.onChangeActiveTree}
-                        position={this.props.treePosition}
                         isVisible={this.props.isTreeVisible}
                         onCloseTree={this.props.onCloseTree}
                     />

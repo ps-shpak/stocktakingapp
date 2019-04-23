@@ -23,7 +23,6 @@ export class Dashboard extends Component<IDashboardProps> {
                 treeData={this.store.treeData}
                 isPopupVisible={this.store.isPopupVisible}
                 isTreeVisible={this.props.isTreeVisible}
-                treePosition={this.props.position}
                 onCloseTree={this.props.onCloseTree}
                 onChangeActiveTree={this.controller.onChangeActive}
                 onClosePopup={this.controller.onClosePopup}
