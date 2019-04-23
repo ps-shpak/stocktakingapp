@@ -15,7 +15,7 @@ export const DashboardView = withStyles(styles)(
                     <div className={this.props.classes.dashboard}>
                         <div className={this.props.classes.header}>
                             <Button
-                                title={"Назначить"}
+                                title={"Добавить"}
                                 isDisable={false}
                                 onClick={this.props.onOpenPopup}
                                 className={this.props.classes.addButton}
