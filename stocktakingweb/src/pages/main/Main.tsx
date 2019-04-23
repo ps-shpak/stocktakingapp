@@ -6,26 +6,24 @@ import { autobind } from "core-decorators";
 import { observer } from "mobx-react";
 import { Dashboard } from "../../containers/dashboard";
 import { MainStore } from "./MainStore";
-import { MainController } from "./MainController";
 
 @observer
 @autobind
 export class Main extends Component {
     private readonly store = new MainStore();
-    private readonly controller = new MainController(this.store);
 
     render(): ReactNode {
         return (
             <Wrapper title={"Инвентаризация"}>
                 <Sidebar
-                    data={this.controller.getMenuData()}
-                    onOpenOptions={this.controller.onOpenOptions}
-                    onChangeActive={this.controller.onChangeActiveMenuItem}
+                    data={this.store.getMenuData()}
+                    onOpenOptions={this.store.onOpenOptions}
+                    onChangeActive={this.store.onChangeActiveMenuItem}
                 />
                 <Dashboard
-                    tree={this.controller.getTreeData()}
+                    tree={this.store.getTreeData()}
                     isTreeVisible={this.store.isTreeVisible}
-                    onCloseTree={this.controller.onCloseTree}
+                    onCloseTree={this.store.onCloseTree}
                 />
             </Wrapper>
         );
