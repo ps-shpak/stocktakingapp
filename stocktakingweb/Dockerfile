@@ -40,7 +40,7 @@ FROM nginx:1.15
 RUN apt-get -qq update && apt-get install -y --no-install-recommends gettext-base
 COPY stocktakingweb/nginx/ /stocktakingweb/nginx/
 COPY stocktakingweb/bin/docker-entrypoint /usr/local/bin/docker-entrypoint
-COPY --from=builder --chown=www-data:www-data /stocktakingweb/build /stocktakingweb
+COPY --from=builder --chown=www-data:www-data /stocktakingweb/build /stocktakingweb/www
 
 ENTRYPOINT [ "docker-entrypoint" ]
 CMD [ "nginx", "-g", "daemon off;" ]

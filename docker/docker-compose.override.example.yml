@@ -7,8 +7,15 @@ version: "3"
 
 services:
   stock-db:
+
   stocktakingbackend:
   ## Uncomment if you want to develop and test backend quickly
   ## Mounts 'stocktakingbackend' binary (built locally) into container
   #  volumes:
     #  - "$PWD/stocktakingbackend/build/stocktakingbackend:/usr/bin/stocktakingbackend:ro"
+
+  stocktakingweb:
+  ## Uncomment if you want to develop and test frontend quickly
+  ## Mounts 'stocktakingweb' assets (built locally) into container
+  #   volumes:
+  #     - "$PWD/stocktakingweb/build:/stocktakingweb/www:ro"
