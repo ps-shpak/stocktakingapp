@@ -1,8 +1,7 @@
-import { ITreeItem } from "../../components/tree";
+import { DashboardStore } from "./DashboardStore";
 
 export interface IDashboardProps {
-    tree: ITreeItem[];
-    isTreeVisible: boolean;
+    store: DashboardStore;
 
     onCloseTree(): void;
 }

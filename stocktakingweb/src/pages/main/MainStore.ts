@@ -1,12 +1,14 @@
 import { autobind } from "core-decorators";
 import { observable } from "mobx";
 import { IMenuItem } from "../../containers/menu";
-import { ITreeItem } from "../../components/tree";
 import { BackendClient, ItemGroupingMethod, ItemGroupNode } from "../../api";
+import { DashboardStore } from "../../containers/dashboard/DashboardStore";
 import { toJS } from "mobx";
 
 @autobind
 export class MainStore {
+    readonly dashboardStore = new DashboardStore();
+
     @observable menuData: IMenuItem[] = [
         {
             title: "Имущество",
@@ -37,15 +39,9 @@ export class MainStore {
             ]
         }
     ];
-    @observable treeData: ITreeItem[] = [];
-    @observable isTreeVisible = false;
 
     getMenuData(): IMenuItem[] {
         return toJS(this.menuData);
-    }
-
-    getTreeData(): ITreeItem[] {
-        return toJS(this.treeData);
     }
 
     onOpenOptions(index: number): void {
@@ -53,7 +49,7 @@ export class MainStore {
     }
 
     onChangeActiveMenuItem(rowIndex: number, subRowIndex: number): void {
-        this.isTreeVisible = true;
+        this.dashboardStore.isTreeVisible = true;
         if (!this.menuData[rowIndex] || !this.menuData[rowIndex].options) {
             return;
         }
@@ -67,7 +63,7 @@ export class MainStore {
                     return;
                 }
                 if (subRowIndex === subIndex) {
-                    this.treeData = subItem.tree;
+                    this.dashboardStore.treeData = subItem.tree;
                 }
             });
             if (rowIndex === index) {
@@ -77,7 +73,7 @@ export class MainStore {
     }
 
     onCloseTree(): void {
-        this.isTreeVisible = false;
+        this.dashboardStore.isTreeVisible = false;
         this.menuData.map((menuItem: IMenuItem) => {
            if (!menuItem.options) {
                return;

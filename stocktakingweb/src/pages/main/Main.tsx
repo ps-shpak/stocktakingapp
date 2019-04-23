@@ -21,8 +21,7 @@ export class Main extends Component {
                     onChangeActive={this.store.onChangeActiveMenuItem}
                 />
                 <Dashboard
-                    tree={this.store.getTreeData()}
-                    isTreeVisible={this.store.isTreeVisible}
+                    store={this.store.dashboardStore}
                     onCloseTree={this.store.onCloseTree}
                 />
             </Wrapper>

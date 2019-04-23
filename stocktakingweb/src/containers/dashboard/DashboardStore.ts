@@ -8,6 +8,7 @@ import * as uuid from "uuid";
 export class DashboardStore {
     @observable treeData: ITreeItem[] = [];
     @observable isPopupVisible = false;
+    @observable isTreeVisible = false;
 
     onMount(): void {
         this.generateDemoData();
