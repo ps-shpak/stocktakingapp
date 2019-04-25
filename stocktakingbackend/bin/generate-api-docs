@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# This script updates "stocktakingapi/api.swagger.json"
+
+SCRIPT_DIR=$(dirname $(readlink -f $0))
+API_PROTO_DIR=$SCRIPT_DIR/../../stocktakingapi
+GOPATH=$(go env GOPATH)
+PATH=${GOPATH}/bin:${PATH}
+
+protoc \
+    -I"/usr/include" \
+    -I"${GOPATH}/src" \
+    -I"${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis" \
+    -I"${API_PROTO_DIR}" \
+    --swagger_out="logtostderr=true:${API_PROTO_DIR}" \
+    "${API_PROTO_DIR}/api.proto"

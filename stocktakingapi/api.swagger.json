@@ -1,0 +1,472 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/auth/token": {
+      "get": {
+        "summary": "Attempts to authorize user in this service\nAuthorization uses only email - caller must validate email\n before calling this method (e.g. sign in with Google).\nErrors:\n - UnknownId - no such email registered in service\n - AuthForbidden - email belongs to owner which cannot service itself",
+        "operationId": "Authorize",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiAuthorizeResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      }
+    },
+    "/item": {
+      "get": {
+        "summary": "Returns full information for item with given ID",
+        "operationId": "LoadItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiLoadItemResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      },
+      "put": {
+        "summary": "Creates new or saves existing item",
+        "operationId": "SaveItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiSaveItemResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiSaveItemRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      }
+    },
+    "/items": {
+      "get": {
+        "summary": "Lists items tree grouped by category or owner",
+        "operationId": "ListItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiListItemsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "grouping_method",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ByCategory",
+              "ByOwner"
+            ],
+            "default": "ByCategory"
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      },
+      "delete": {
+        "summary": "Disposes items with given IDs\nDisposed item never appears in any listing,\n but remains accessible by ID",
+        "operationId": "DisposeItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiDisposeItemsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      }
+    },
+    "/items/owner": {
+      "patch": {
+        "summary": "Transfers ownership to given user for items with given IDs",
+        "operationId": "TransferItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiTransferItemsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiTransferItemsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      }
+    },
+    "/owner": {
+      "put": {
+        "summary": "Saves existing owner with given ID.",
+        "operationId": "SaveOwner",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiSaveOwnerResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiSaveOwnerRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      }
+    },
+    "/owners": {
+      "get": {
+        "summary": "Lists all available owners",
+        "operationId": "ListOwners",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiListOwnersResponse"
+            }
+          }
+        },
+        "tags": [
+          "Backend"
+        ]
+      },
+      "post": {
+        "summary": "Adds new owners and returns list of results/errors",
+        "operationId": "AddOwners",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiAddOwnersResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiAddOwnersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ListOwnersResponseResult": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "may_login": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      }
+    },
+    "stocktakingapiAddOwnersRequest": {
+      "type": "object",
+      "properties": {
+        "owners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/stocktakingapiAddOwnersRequestOwner"
+          }
+        }
+      }
+    },
+    "stocktakingapiAddOwnersRequestOwner": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "stocktakingapiAddOwnersResponse": {
+      "type": "object",
+      "properties": {
+        "owners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/stocktakingapiAddOwnersResponseOwner"
+          }
+        }
+      }
+    },
+    "stocktakingapiAddOwnersResponseOwner": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "stocktakingapiAuthorizeResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "stocktakingapiDisposeItemsResponse": {
+      "type": "object"
+    },
+    "stocktakingapiItemGroupingMethod": {
+      "type": "string",
+      "enum": [
+        "ByCategory",
+        "ByOwner"
+      ],
+      "default": "ByCategory",
+      "title": "Item tree grouping method"
+    },
+    "stocktakingapiItemSpec": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "place": {
+          "type": "string"
+        },
+        "owner_id": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "stocktakingapiItemTreeGroup": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/stocktakingapiItemTreeNode"
+          }
+        }
+      },
+      "title": "Group of item nodes"
+    },
+    "stocktakingapiItemTreeNode": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "owner_name": {
+          "type": "string"
+        }
+      },
+      "title": "Node in items tree"
+    },
+    "stocktakingapiListItemsResponse": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/stocktakingapiItemTreeGroup"
+          }
+        }
+      }
+    },
+    "stocktakingapiListOwnersResponse": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ListOwnersResponseResult"
+          }
+        }
+      }
+    },
+    "stocktakingapiLoadItemResponse": {
+      "type": "object",
+      "properties": {
+        "display_name": {
+          "type": "string"
+        },
+        "owner_name": {
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/definitions/stocktakingapiItemSpec"
+        }
+      }
+    },
+    "stocktakingapiSaveItemRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/definitions/stocktakingapiItemSpec"
+        }
+      }
+    },
+    "stocktakingapiSaveItemResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "stocktakingapiSaveOwnerRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "may_login": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      }
+    },
+    "stocktakingapiSaveOwnerResponse": {
+      "type": "object"
+    },
+    "stocktakingapiTransferItemsRequest": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "owner_id": {
+          "type": "string"
+        }
+      }
+    },
+    "stocktakingapiTransferItemsResponse": {
+      "type": "object"
+    }
+  }
+}

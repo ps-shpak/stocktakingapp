@@ -1,6 +1,6 @@
 # Stocktaking app
 
-Educational project for intuitive stocktaking and inventory service.
+Заказной учебный проект сервиса для управленческого учёта имущества организации.
 
 ## Структура проекта
 
@@ -30,6 +30,7 @@ Educational project for intuitive stocktaking and inventory service.
 task docker-build
 
 # Запуск в docker-compose
+# После этого сервис доступен по адресу http://localhost/
 task up
 
 # Проверка состояния сервисов
@@ -98,14 +99,19 @@ task build-frontend
 
 ### Работа с API
 
-API предоставляется контейнером `stocktakingbackend` в двух форматах:
+Для внешнего трафика доступен REST API с префиксом `/api/`:
 
-* на порту `8081` - в формате GRPC, API описан в файле `stocktakingapi/api.proto`
+* при локальной разработке: `http://localhost/api`
+* в развёрнутом окружении: `https://example.com/api`
+
+Документация к REST API находится в `"stocktakingapi/api.swagger.json"` (генерируется скриптом `"stocktakingbackend/bin/generate-api-docs"`).
+
+Технически, API предоставляется контейнером `stocktakingbackend` в двух форматах:
+
+* на порту `8081` - в формате GRPC, API описан в файле `"stocktakingapi/api.proto"`
 ** GRPC напрямую недоступен в браузерах, но может использоваться другими сервисами
-* на порту `8082` - в формате REST, API описан в автогенерируемом файле `stocktakingbackend/api.swagger.json`
+* на порту `8082` - в формате REST, API описан в автогенерируемом файле `"stocktakingapi/api.swagger.json"`
 ** этот формат напрямую доступен из браузера
-
-Для внешнего трафика доступен только REST API с префиксом `/api/`.
 
 ### Деплой в Kubernetes кластер
 

@@ -21,7 +21,6 @@ generate:
 		-I $(API_PROTO_DIR) \
 		--go_out=plugins=grpc:stocktakingapi \
 		--grpc-gateway_out=logtostderr=true:stocktakingapi \
-		--swagger_out=logtostderr=true:. \
 		$(API_PROTO_DIR)/api.proto
 
 .PHONY: build
