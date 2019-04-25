@@ -31,11 +31,7 @@ services:
     container_name: "stocktakingweb"
     ports:
     - "80:80"
-    - "443:443"
-    volumes:
-    - "./ssl:/etc/ssl/extra"
     environment:
-    - STOCK_SSL_DIR=/etc/ssl/extra
     - STOCK_DOMAIN=localhost
     depends_on:
     - stocktakingbackend
