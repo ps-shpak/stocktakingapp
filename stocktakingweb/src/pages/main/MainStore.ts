@@ -1,7 +1,7 @@
 import { autobind } from "core-decorators";
 import { observable } from "mobx";
 import { IMenuItem } from "../../containers/menu";
-import { BackendClient, ItemGroupingMethod, ItemGroupNode } from "../../api";
+import { BackendClient, ItemKind, ItemGroupingMethod, ItemGroupNode } from "../../api";
 import { DashboardStore } from "../../containers/dashboard/DashboardStore";
 import { toJS } from "mobx";
 
@@ -85,7 +85,7 @@ export class MainStore {
     }
 
     // TODO: translate results into ITreeItem
-    async listItems(groupingMethod: ItemGroupingMethod = ItemGroupingMethod.ByCategory): Promise<ItemGroupNode[]> {
-        return BackendClient.getInstance().listItems(groupingMethod);
+    async listItems(kind: ItemKind, groupingMethod: ItemGroupingMethod): Promise<ItemGroupNode[]> {
+        return BackendClient.getInstance().listItems(kind, groupingMethod);
     }
 }

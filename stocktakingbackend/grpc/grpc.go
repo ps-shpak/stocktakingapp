@@ -33,7 +33,18 @@ func (g *grpcServer) SaveItem(ctx context.Context, req *api.SaveItemRequest) (*a
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid owner ID")
 	}
+	var kind stock.ItemKind
+	switch req.Spec.Kind {
+	case "equipment":
+		kind = stock.ItemKindEquipment
+	case "license":
+		kind = stock.ItemKindEquipment
+	default:
+		return nil, status.Errorf(codes.InvalidArgument, "invalid item kind "+req.Spec.Kind)
+	}
+
 	itemID, err = g.service.SaveItem(itemID, ownerID, stock.ItemSpec{
+		Kind:        kind,
 		Category:    req.Spec.Category,
 		Place:       req.Spec.Place,
 		Price:       req.Spec.Price,
@@ -61,6 +72,7 @@ func (g *grpcServer) LoadItem(ctx context.Context, req *api.LoadItemRequest) (*a
 		DisplayName: item.DisplayName(),
 		OwnerName:   item.OwnerName(),
 		Spec: &api.ItemSpec{
+			Kind:        string(item.Spec().Kind),
 			Category:    item.Spec().Category,
 			Place:       item.Spec().Place,
 			OwnerId:     item.OwnerID().String(),
@@ -78,7 +90,18 @@ func (g *grpcServer) ListItems(ctx context.Context, req *api.ListItemsRequest) (
 	case api.ItemGroupingMethod_ByOwner:
 		groupingMethod = stock.GroupByOwner
 	}
-	views, err := g.service.ListItems(groupingMethod)
+	var kind stock.ItemKind
+	switch req.Kind {
+	case "equipment":
+		kind = stock.ItemKindEquipment
+	case "license":
+		kind = stock.ItemKindEquipment
+	case "":
+	default:
+		return nil, status.Errorf(codes.InvalidArgument, "invalid item kind "+req.Kind)
+	}
+
+	views, err := g.service.ListItems(kind, groupingMethod)
 	if err != nil {
 		return nil, translateError(err)
 	}

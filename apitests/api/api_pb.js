@@ -11,6 +11,8 @@ var jspb = require('google-protobuf');
 var goog = jspb;
 var global = Function('return this')();
 
+//var google_api_annotations_pb = require('./google/api/annotations_pb.js');
+//goog.object.extend(proto, google_api_annotations_pb);
 goog.exportSymbol('proto.stocktakingapi.AddOwnersRequest', null, global);
 goog.exportSymbol('proto.stocktakingapi.AddOwnersRequest.Owner', null, global);
 goog.exportSymbol('proto.stocktakingapi.AddOwnersResponse', null, global);
@@ -83,6 +85,7 @@ proto.stocktakingapi.ItemSpec.prototype.toObject = function(opt_includeInstance)
  */
 proto.stocktakingapi.ItemSpec.toObject = function(includeInstance, msg) {
   var f, obj = {
+    kind: jspb.Message.getFieldWithDefault(msg, 1, ""),
     category: jspb.Message.getFieldWithDefault(msg, 2, ""),
     place: jspb.Message.getFieldWithDefault(msg, 3, ""),
     ownerId: jspb.Message.getFieldWithDefault(msg, 4, ""),
@@ -124,6 +127,10 @@ proto.stocktakingapi.ItemSpec.deserializeBinaryFromReader = function(msg, reader
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setKind(value);
+      break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
       msg.setCategory(value);
@@ -173,6 +180,13 @@ proto.stocktakingapi.ItemSpec.prototype.serializeBinary = function() {
  */
 proto.stocktakingapi.ItemSpec.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getKind();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
   f = message.getCategory();
   if (f.length > 0) {
     writer.writeString(
@@ -208,6 +222,21 @@ proto.stocktakingapi.ItemSpec.serializeBinaryToWriter = function(message, writer
       f
     );
   }
+};
+
+
+/**
+ * optional string kind = 1;
+ * @return {string}
+ */
+proto.stocktakingapi.ItemSpec.prototype.getKind = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/** @param {string} value */
+proto.stocktakingapi.ItemSpec.prototype.setKind = function(value) {
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1407,7 +1436,8 @@ proto.stocktakingapi.ListItemsRequest.prototype.toObject = function(opt_includeI
  */
 proto.stocktakingapi.ListItemsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    groupingMethod: jspb.Message.getFieldWithDefault(msg, 1, 0)
+    groupingMethod: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    kind: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -1448,6 +1478,10 @@ proto.stocktakingapi.ListItemsRequest.deserializeBinaryFromReader = function(msg
       var value = /** @type {!proto.stocktakingapi.ItemGroupingMethod} */ (reader.readEnum());
       msg.setGroupingMethod(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setKind(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1484,6 +1518,13 @@ proto.stocktakingapi.ListItemsRequest.serializeBinaryToWriter = function(message
       f
     );
   }
+  f = message.getKind();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -1499,6 +1540,21 @@ proto.stocktakingapi.ListItemsRequest.prototype.getGroupingMethod = function() {
 /** @param {!proto.stocktakingapi.ItemGroupingMethod} value */
 proto.stocktakingapi.ListItemsRequest.prototype.setGroupingMethod = function(value) {
   jspb.Message.setProto3EnumField(this, 1, value);
+};
+
+
+/**
+ * optional string kind = 2;
+ * @return {string}
+ */
+proto.stocktakingapi.ListItemsRequest.prototype.getKind = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/** @param {string} value */
+proto.stocktakingapi.ListItemsRequest.prototype.setKind = function(value) {
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

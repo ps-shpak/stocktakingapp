@@ -5,11 +5,15 @@ set -e
 SCRIPT_DIR=$(dirname $(readlink -f $0))
 PROJECT_DIR=$(realpath "$SCRIPT_DIR/../..")
 OUTPUT_DIR=$(realpath "$PROJECT_DIR/apitests/api")
+GOPATH=$(go env GOPATH)
 
 mkdir -p "$OUTPUT_DIR"
 
 # Generate GPRC and protobuf
 grpc_tools_node_protoc \
+    -I"/usr/include" \
+    -I"${GOPATH}/src" \
+    -I"${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis" \
     --js_out="import_style=commonjs,binary:${OUTPUT_DIR}" \
     --grpc_out="${OUTPUT_DIR}" \
     --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` \
@@ -18,7 +22,19 @@ grpc_tools_node_protoc \
 
 # Generate d.ts
 protoc \
-    --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts \
+    -I"/usr/include" \
+    -I"${GOPATH}/src" \
+    -I"${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis" \
+    --plugin=protoc-gen-ts=$SCRIPT_DIR/../node_modules/.bin/protoc-gen-ts \
     --ts_out="${OUTPUT_DIR}" \
     --proto_path="$PROJECT_DIR/stocktakingapi" \
     api.proto
+
+# HACK: fix useless annotations import
+comment_require_annotations() {
+    local FILENAME=$1
+    sed -i -e 's/var google_api_annotations_pb/\/\/var google_api_annotations_pb/g' "$OUTPUT_DIR/$FILENAME"
+    sed -i -e 's/goog.object.extend(proto/\/\/goog.object.extend(proto/g' "$OUTPUT_DIR/$FILENAME"
+}
+comment_require_annotations "api_grpc_pb.js"
+comment_require_annotations "api_pb.js"

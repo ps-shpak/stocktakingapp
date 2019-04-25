@@ -25,6 +25,7 @@ func (sr *stockRepository) FindItems(spec stock.FindItemsSpec) ([]*stock.Item, e
 	query := `
 		SELECT
 			"item"."id",
+			"item"."kind",
 			"item"."category",
 			"item"."place",
 			"item"."price",
@@ -41,6 +42,10 @@ func (sr *stockRepository) FindItems(spec stock.FindItemsSpec) ([]*stock.Item, e
 	if len(spec.ItemIDs) != 0 {
 		bindings := binder.bindIDs(spec.ItemIDs)
 		query += fmt.Sprintf(` AND "item"."id" in (%s)`, strings.Join(bindings, ","))
+	}
+	if spec.Kind != "" {
+		binding := binder.bind(spec.Kind)
+		query += fmt.Sprintf(` AND "item"."kind" = %s`, binding)
 	}
 	if !spec.ShowDisposed {
 		query += ` AND "item"."disposed" = FALSE`
@@ -60,6 +65,7 @@ func (sr *stockRepository) FindItems(spec stock.FindItemsSpec) ([]*stock.Item, e
 		var data ItemData
 		err = rows.Scan(
 			&data.ID,
+			&data.Kind,
 			&data.Category,
 			&data.Place,
 			&data.Price,
@@ -87,18 +93,20 @@ func (sr *stockRepository) SaveItems(items []*stock.Item) error {
 	for _, item := range items {
 		_, err := sr.db.Query(`
 			INSERT INTO "item"
-				("id", "category", "place", "price", "description", "owner_id", "disposed")
+				("id", "kind", "category", "place", "price", "description", "owner_id", "disposed")
 			VALUES
-				($1, $2, $3, $4, $5, $6, $7)
+				($1, $2, $3, $4, $5, $6, $7, $8)
 			ON CONFLICT ("id")
 			DO UPDATE SET
 				"category"="excluded"."category",
+				"kind"="excluded"."kind",
 				"place"="excluded"."place",
 				"price"="excluded"."price",
 				"description"="excluded"."description",
 				"owner_id"="excluded"."owner_id",
 				"disposed"="excluded"."disposed"`,
 			item.ID().String(),
+			item.Spec().Kind,
 			item.Spec().Category,
 			item.Spec().Place,
 			item.Spec().Price,

@@ -6,53 +6,59 @@ export enum ItemGroupingMethod {
     ByOwner = "ByOwner",
 }
 
+export enum ItemKind {
+    Equipment = "equipment",
+    License = "license",
+}
+
 export class ItemSpec {
-    category: string = '';
-    place: string = '';
-    ownerId: string = '';
-    price: number = 0;
-    description: string = '';
+    kind = '';
+    category = '';
+    place = '';
+    ownerId = '';
+    price = 0;
+    description = '';
 }
 
 export class LoadItemResponse {
-    displayName: string = '';
-    ownerName: string = '';
-    spec: ItemSpec = new ItemSpec();
+    displayName = '';
+    ownerName = '';
+    spec = new ItemSpec();
 }
 
 export class ItemGroupNode {
-    name: string = '';
+    name = '';
     items: ItemNode[] = [];
 }
 
 export class ItemNode {
-    id: string = '';
-    displayName: string = '';
-    ownerName: string = '';
+    id = '';
+    displayName = '';
+    ownerName= '';
 }
 
 export class TransferItemsRequest {
     ids: string[] = [];
-    ownerId: string = '';
+    ownerId = '';
 }
 
 export class SaveItemRequest{
     id: string | undefined;
-    spec: ItemSpec = new ItemSpec();
+    spec = new ItemSpec();
 }
 
 export class SaveItemResponse {
-    id: string = '';
+    id = '';
 }
 
 export class AddOwnersRequestOwner {
-    name: string = '';
-    email: string = '';
+    name = '';
+    email = '';
 }
 
 export class OwnerSpec {
-    id: string = '';
-    name: string = '';
-    email: string = '';
-    mayLogin: boolean = false;
+    id = '';
+    name = '';
+    email = '';
+    mayLogin = false;
 }

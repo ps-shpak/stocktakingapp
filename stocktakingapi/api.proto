@@ -81,6 +81,7 @@ service Backend {
 }
 
 message ItemSpec {
+  string kind = 1; // item kind, either "equipment" or "license"
   string category = 2; // item category (e.g. "Стол")
   string place = 3; // item placement (e.g. room name or number)
   string owner_id = 4;
@@ -128,6 +129,7 @@ enum ItemGroupingMethod {
 
 message ListItemsRequest {
   ItemGroupingMethod grouping_method = 1;
+  string kind = 2; // item kinds to find, either "" (means find all), "equipment" or "license"
 }
 
 message ListItemsResponse {

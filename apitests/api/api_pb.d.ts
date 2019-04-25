@@ -6,6 +6,9 @@
 import * as jspb from "google-protobuf";
 
 export class ItemSpec extends jspb.Message { 
+    getKind(): string;
+    setKind(value: string): void;
+
     getCategory(): string;
     setCategory(value: string): void;
 
@@ -34,6 +37,7 @@ export class ItemSpec extends jspb.Message {
 
 export namespace ItemSpec {
     export type AsObject = {
+        kind: string,
         category: string,
         place: string,
         ownerId: string,
@@ -204,6 +208,9 @@ export class ListItemsRequest extends jspb.Message {
     getGroupingMethod(): ItemGroupingMethod;
     setGroupingMethod(value: ItemGroupingMethod): void;
 
+    getKind(): string;
+    setKind(value: string): void;
+
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ListItemsRequest.AsObject;
@@ -218,6 +225,7 @@ export class ListItemsRequest extends jspb.Message {
 export namespace ListItemsRequest {
     export type AsObject = {
         groupingMethod: ItemGroupingMethod,
+        kind: string,
     }
 }
 

@@ -102,6 +102,7 @@ describe("stocktaking backend", () => {
 
         const spec = new pb.ItemSpec();
         {
+            spec.setKind("equipment");
             spec.setCategory("Table");
             spec.setDescription("The old oaken table");
             spec.setPrice(10.2);
@@ -121,6 +122,7 @@ describe("stocktaking backend", () => {
             req.setId(itemId);
             const res = await client.loadItem(req);
             const resSpec = res.getSpec();
+            assert.equal(resSpec && resSpec.getKind(), spec.getKind());
             assert.equal(resSpec && resSpec.getCategory(), spec.getCategory());
             assert.equal(resSpec && resSpec.getDescription(), spec.getDescription());
             assert.equal(resSpec && resSpec.getPlace(), spec.getPlace());
@@ -155,6 +157,7 @@ describe("stocktaking backend", () => {
         }
         const spec = new pb.ItemSpec();
         {
+            spec.setKind("equipment");
             spec.setOwnerId(ownerIdA);
     
             const req = new pb.SaveItemRequest();

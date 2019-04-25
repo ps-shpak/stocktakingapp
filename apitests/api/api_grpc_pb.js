@@ -3,6 +3,7 @@
 'use strict';
 var grpc = require('grpc');
 var api_pb = require('./api_pb.js');
+//var google_api_annotations_pb = require('./google/api/annotations_pb.js');
 
 function serialize_stocktakingapi_AddOwnersRequest(arg) {
   if (!(arg instanceof api_pb.AddOwnersRequest)) {

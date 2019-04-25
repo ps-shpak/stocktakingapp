@@ -113,6 +113,12 @@
               "ByOwner"
             ],
             "default": "ByCategory"
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -327,6 +333,9 @@
     "stocktakingapiItemSpec": {
       "type": "object",
       "properties": {
+        "kind": {
+          "type": "string"
+        },
         "category": {
           "type": "string"
         },

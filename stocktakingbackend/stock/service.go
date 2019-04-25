@@ -13,6 +13,16 @@ const (
 	GroupByOwner
 )
 
+// ItemKind - e.g. "equipment" or "license"
+type ItemKind string
+
+const (
+	// ItemKindEquipment - kind for physical equipment
+	ItemKindEquipment = ItemKind("equipment")
+	// ItemKindLicense kind for software licenses
+	ItemKindLicense = ItemKind("license")
+)
+
 // ItemView - brief item overview
 type ItemView struct {
 	ID          ID
@@ -30,7 +40,7 @@ type ItemGroupView struct {
 type Service interface {
 	SaveItem(id ID, ownerID ID, spec ItemSpec) (ID, error)
 	LoadItem(id ID) (*Item, error)
-	ListItems(method GroupingMethod) ([]*ItemGroupView, error)
+	ListItems(kind ItemKind, method GroupingMethod) ([]*ItemGroupView, error)
 	DisposeItems(ids []ID) error
 	TransferItems(ids []ID, ownerID ID) error
 
@@ -50,8 +60,9 @@ type FindOwnersSpec struct {
 // FindItemsSpec - requirements used to select items list
 type FindItemsSpec struct {
 	ShowDisposed bool
-	Limit        uint // 0 means "no limit"
-	ItemIDs      []ID // empty means "find all"
+	Kind         string // item kind to search, can be empty to find any
+	Limit        uint   // 0 means "no limit"
+	ItemIDs      []ID   // empty means "find all"
 }
 
 // Repository - represents stock as persistent collection
@@ -108,7 +119,7 @@ func (s *service) LoadItem(id ID) (*Item, error) {
 	return items[0], nil
 }
 
-func (s *service) ListItems(method GroupingMethod) ([]*ItemGroupView, error) {
+func (s *service) ListItems(kind ItemKind, method GroupingMethod) ([]*ItemGroupView, error) {
 	mapping := map[string]*ItemGroupView{}
 	var views []*ItemGroupView
 	items, err := s.repo.FindItems(FindItemsSpec{})

@@ -2,6 +2,7 @@ package stock
 
 // ItemSpec - stock item specification
 type ItemSpec struct {
+	Kind        ItemKind
 	Category    string
 	Place       string
 	Price       float64
@@ -46,6 +47,7 @@ func (i *Item) Dispose() {
 	i.owner = nil
 }
 
+// ID - returns unique item ID
 func (i *Item) ID() ID {
 	return i.id
 }

@@ -1,6 +1,7 @@
 import {
     LoadItemResponse,
     ItemSpec,
+    ItemKind,
     ItemGroupingMethod,
     ItemGroupNode,
     ItemNode,
@@ -24,8 +25,9 @@ export class BackendClient {
         return BackendClient._instance
     }
 
-    public async listItems(groupingMethod: ItemGroupingMethod): Promise<ItemGroupNode[]> {
+    public async listItems(kind: ItemKind, groupingMethod: ItemGroupingMethod): Promise<ItemGroupNode[]> {
         const url = new URL('/api/items');
+        url.searchParams.set('kind', kind);
         url.searchParams.set('grouping_method', groupingMethod);
 
         const response = await fetch(url.href);
@@ -153,6 +155,7 @@ export class BackendClient {
 
     private serializeSpec(spec: ItemSpec): object {
         return {
+            kind: spec.kind,
             category: spec.category,
             place: spec.place,
             owner_id: spec.ownerId,
@@ -163,6 +166,7 @@ export class BackendClient {
 
     private parseItemSpec(obj: object): ItemSpec {
         const spec = new ItemSpec();
+        spec.kind = obj['kind'];
         spec.category = obj['category'];
         spec.place = obj['place'];
         spec.ownerId = obj['owner_id'];

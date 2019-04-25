@@ -26,7 +26,15 @@ func (f *itemsFactory) buildItem(data ItemData) (*stock.Item, error) {
 	if err != nil {
 		return nil, errors.Wrapf(err, "invalid item ID: %s", data.ID)
 	}
+	var kind stock.ItemKind
+	switch data.Kind {
+	case ItemKindEquipment:
+		kind = stock.ItemKindEquipment
+	case ItemKindLicense:
+		kind = stock.ItemKindLicense
+	}
 	spec := stock.ItemSpec{
+		Kind:        kind,
 		Category:    data.Category,
 		Place:       data.Place,
 		Price:       data.Price,
