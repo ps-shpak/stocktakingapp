@@ -15,8 +15,9 @@ RUN go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway && 
 
 # install protoc-gen-go v1.2.0
 RUN go get -d -u github.com/golang/protobuf/protoc-gen-go && \
-    git -C "$(go env GOPATH)"/src/github.com/golang/protobuf checkout v1.2.0 && \
-    go install github.com/golang/protobuf/protoc-gen-go
+    git -C "$(go env GOPATH)/src/github.com/golang/protobuf" checkout v1.2.0 && \
+    go install github.com/golang/protobuf/protoc-gen-go && \
+    rm -rf "$(go env GOPATH)/src/github.com/golang/protobuf"
 
 # install golangci-lint
 RUN go get -u github.com/golangci/golangci-lint/cmd/golangci-lint

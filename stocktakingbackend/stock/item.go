@@ -9,6 +9,14 @@ type ItemSpec struct {
 	Description string
 }
 
+// Annotation - annotation for the item, descriptive enough for human
+type Annotation struct {
+	ID        ID
+	Name      string
+	OwnerName string
+	OwnerID   ID
+}
+
 // Item - stock item: software license or material object
 type Item struct {
 	id       ID
@@ -80,4 +88,13 @@ func (i *Item) DisplayName() string {
 // Disposed - returns true if item disposed (deleted from stock)
 func (i *Item) Disposed() bool {
 	return i.disposed
+}
+
+func (i *Item) Annotation() Annotation {
+	return Annotation{
+		ID:        i.ID(),
+		Name:      i.DisplayName(),
+		OwnerName: i.OwnerName(),
+		OwnerID:   i.OwnerID(),
+	}
 }

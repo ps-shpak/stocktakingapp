@@ -1,6 +1,13 @@
 package stock
 
-import "sort"
+import (
+	"encoding/json"
+	"image"
+	"sort"
+
+	"github.com/pkg/errors"
+	"github.com/skip2/go-qrcode"
+)
 
 // GroupingMethod - method used to make parent nodes in item tree
 type GroupingMethod int
@@ -43,6 +50,7 @@ type Service interface {
 	ListItems(kind ItemKind, method GroupingMethod) ([]*ItemGroupView, error)
 	DisposeItems(ids []ID) error
 	TransferItems(ids []ID, ownerID ID) error
+	GetItemAnnotationQR(id ID, imageSize int) (image.Image, error)
 
 	ListOwners() ([]*Owner, error)
 	AddOwner(spec OwnerSpec) (ID, error)
@@ -177,6 +185,18 @@ func (s *service) TransferItems(ids []ID, ownerID ID) error {
 	return s.repo.SaveItems(items)
 }
 
+func (s *service) GetItemAnnotationQR(id ID, imageSize int) (image.Image, error) {
+	item, err := s.LoadItem(id)
+	if err != nil {
+		return nil, err
+	}
+	img, err := s.encodeAnnotationToQR(item.Annotation(), imageSize)
+	if err != nil {
+		return nil, err
+	}
+	return img, nil
+}
+
 func (s *service) ListOwners() ([]*Owner, error) {
 	return s.repo.FindOwners(FindOwnersSpec{})
 }
@@ -249,6 +269,44 @@ func (s *service) findOwnerWithID(ownerID ID) (*Owner, error) {
 		return nil, ErrUnknownOwnerID
 	}
 	return owners[0], err
+}
+
+func (s *service) encodeAnnotationToQR(ann Annotation, imageSize int) (image.Image, error) {
+	// Encode JSON with all sensitive data
+	fullData := map[string]interface{}{
+		"id":       ann.ID,
+		"name":     ann.Name,
+		"owner":    ann.OwnerName,
+		"owner_id": ann.OwnerID,
+	}
+	img, err := s.encodeMapToQR(fullData, imageSize)
+	if err != nil {
+		// Maybe too much data (QR code has limited capacity),
+		//  so try again with minimal data and predictable size
+		minimalData := map[string]interface{}{
+			"id": ann.ID,
+		}
+		img, err = s.encodeMapToQR(minimalData, imageSize)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return img, nil
+}
+
+func (s *service) encodeMapToQR(data map[string]interface{}, imageSize int) (image.Image, error) {
+	bytes, err := json.Marshal(data)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to marshal JSON")
+	}
+
+	// Use high recovery level to make scanning more reliable
+	code, err := qrcode.New(string(bytes), qrcode.High)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to generate QR code")
+	}
+
+	return code.Image(imageSize), nil
 }
 
 func insertSortItemViews(data []ItemView, el ItemView) []ItemView {

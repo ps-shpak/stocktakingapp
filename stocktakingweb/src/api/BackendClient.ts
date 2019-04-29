@@ -26,7 +26,7 @@ export class BackendClient {
     }
 
     public async listItems(kind: ItemKind, groupingMethod: ItemGroupingMethod): Promise<ItemGroupNode[]> {
-        const url = new URL('/api/items');
+        const url = new URL('/stocktaking/items');
         url.searchParams.set('kind', kind);
         url.searchParams.set('grouping_method', groupingMethod);
 
@@ -50,7 +50,7 @@ export class BackendClient {
     }
 
     public async transferItems(request: TransferItemsRequest): Promise<void> {
-        await fetch('/api/items/owner', {
+        await fetch('/stocktaking/items/owner', {
             method: "PATCH",
             body: JSON.stringify({
                 ids: request.ids,
@@ -60,7 +60,7 @@ export class BackendClient {
     }
 
     public async disposeItems(ids: string[]): Promise<void> {
-        const url = new URL('/api/items');
+        const url = new URL('/stocktaking/items');
         for (const id of ids) {
             url.searchParams.append("ids", id);
         }
@@ -70,7 +70,7 @@ export class BackendClient {
     }
 
     public async saveItem(request: SaveItemRequest): Promise<SaveItemResponse> {
-        const response = await fetch('/api/items', {
+        const response = await fetch('/stocktaking/items', {
             method: "PUT",
             body: JSON.stringify({
                 id: request.id,
@@ -84,7 +84,7 @@ export class BackendClient {
     }
 
     public async loadItem(id: string): Promise<LoadItemResponse> {
-        const url = new URL('/api/item');
+        const url = new URL('/stocktaking/item');
         url.searchParams.set('id', id);
 
         const response = await fetch(url.href);
@@ -105,7 +105,7 @@ export class BackendClient {
                 email: owner.email,
             })
         }
-        const response = await fetch('/api/owners', {
+        const response = await fetch('/stocktaking/owners', {
             method: "POST",
             body: JSON.stringify({
                 owners: requestItems,
@@ -120,7 +120,7 @@ export class BackendClient {
     }
 
     public async saveOwner(request: OwnerSpec): Promise<void> {
-        await fetch('/api/owner', {
+        await fetch('/stocktaking/owner', {
             method: "PUT",
             body: JSON.stringify({
                 id: request.id,
@@ -132,7 +132,7 @@ export class BackendClient {
     }
 
     public async listOwners(): Promise<OwnerSpec[]> {
-        const response = await fetch('/api/owners');
+        const response = await fetch('/stocktaking/owners');
         const owners: OwnerSpec[] = [];
         for (const obj of response.json()['results']) {
             const owner = new OwnerSpec();

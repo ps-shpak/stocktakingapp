@@ -112,19 +112,7 @@ task build-frontend
 
 ### Работа с API
 
-Для внешнего трафика доступен REST API с префиксом `/api/`:
-
-* при локальной разработке: `http://localhost/api`
-* в развёрнутом окружении: `https://example.com/api`
-
-Документация к REST API находится в `"stocktakingapi/api.swagger.json"` (генерируется скриптом `"stocktakingbackend/bin/generate-api-docs"`).
-
-Технически, API предоставляется контейнером `stocktakingbackend` в двух форматах:
-
-* на порту `8081` - в формате GRPC, API описан в файле `"stocktakingapi/api.proto"`
-** GRPC напрямую недоступен в браузерах, но может использоваться другими сервисами
-* на порту `8082` - в формате REST, API описан в автогенерируемом файле `"stocktakingapi/api.swagger.json"`
-** этот формат напрямую доступен из браузера
+См. [docs/API.md](docs/API.md)
 
 ### Деплой в Kubernetes кластер
 

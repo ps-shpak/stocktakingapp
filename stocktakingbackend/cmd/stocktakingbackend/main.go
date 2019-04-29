@@ -8,15 +8,17 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 
-	stocktakinggrpc "stocktakingbackend/grpc"
+	"stocktakingbackend/labeling"
 	"stocktakingbackend/postgres"
 	"stocktakingbackend/server"
 	"stocktakingbackend/stock"
+	"stocktakingbackend/stocktaking"
 	"stocktakingbackend/stocktakingapi"
 )
 
@@ -43,8 +45,8 @@ func main() {
 
 	repository := postgres.NewStockRepository(db)
 	service := stock.NewService(repository)
-	grpcServer := stocktakinggrpc.NewGRPCServer(service)
-	grpcServer = stocktakinggrpc.NewLoggingMiddleware(grpcServer, logger)
+	grpcServer := stocktaking.NewGRPCServer(service)
+	grpcServer = stocktaking.NewLoggingMiddleware(grpcServer, logger)
 
 	serverHub := server.NewHub()
 
@@ -66,25 +68,30 @@ func main() {
 	// Serve grpc-gateway proxy
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
-	var restServer *http.Server
+	var httpServer *http.Server
 	serverHub.Serve(func() error {
-		mux := runtime.NewServeMux()
+		grpcGatewayMux := runtime.NewServeMux()
 		opts := []grpc.DialOption{grpc.WithInsecure()}
-		err = stocktakingapi.RegisterBackendHandlerFromEndpoint(ctx, mux, ServiceGRPCPort, opts)
+		err = stocktakingapi.RegisterBackendHandlerFromEndpoint(ctx, grpcGatewayMux, ServiceGRPCPort, opts)
 		if err != nil {
 			return err
 		}
-		restServer = &http.Server{
-			Handler: mux,
+
+		router := mux.NewRouter()
+		router.PathPrefix("/stocktaking/").Handler(http.StripPrefix("/stocktaking", grpcGatewayMux))
+		router.PathPrefix("/labeling/").Handler(labeling.MakeHTTPHandler(service))
+
+		httpServer = &http.Server{
+			Handler: router,
 			Addr:    ServiceRESTPort,
 			// Good practice: enforce timeouts for servers you create!
 			WriteTimeout: 15 * time.Second,
 			ReadTimeout:  15 * time.Second,
 		}
-		return restServer.ListenAndServe()
+		return httpServer.ListenAndServe()
 	}, func() error {
 		cancel()
-		return restServer.Shutdown(context.Background())
+		return httpServer.Shutdown(context.Background())
 	})
 
 	// Wait until stopped
