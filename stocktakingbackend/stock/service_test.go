@@ -44,9 +44,16 @@ func (m *MockRepository) addOwner(owner *Owner) {
 	m.foundOwners = append(m.foundOwners, owner)
 }
 
+type MockEnvironment struct {
+}
+
+func (env *MockEnvironment) SiteDomain() string {
+	return "example.com"
+}
+
 func TestSaveItem(t *testing.T) {
 	repo := &MockRepository{}
-	s := NewService(repo)
+	s := NewService(repo, &MockEnvironment{})
 	spec := ItemSpec{
 		Category:    "Table",
 		Place:       "room 404",

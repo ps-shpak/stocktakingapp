@@ -43,8 +43,13 @@ func main() {
 	}
 	defer db.Close()
 
+	environment, err := newStockEnvironment()
+	if err != nil {
+		logger.WithError(err).Fatal("failed to start")
+	}
+
 	repository := postgres.NewStockRepository(db)
-	service := stock.NewService(repository)
+	service := stock.NewService(repository, environment)
 	grpcServer := stocktaking.NewGRPCServer(service)
 	grpcServer = stocktaking.NewLoggingMiddleware(grpcServer, logger)
 
@@ -99,6 +104,25 @@ func main() {
 	if err != nil {
 		logger.WithError(err).Fatal("failed to serve")
 	}
+}
+
+type stockEnvironment struct {
+	siteDomain string
+}
+
+func newStockEnvironment() (stock.Environment, error) {
+	siteDomain, ok := os.LookupEnv("STOCK_DOMAIN")
+	if !ok || siteDomain == "" {
+		return nil, errors.New("environment variable STOCK_DOMAIN not set")
+	}
+	env := &stockEnvironment{
+		siteDomain: siteDomain,
+	}
+	return env, nil
+}
+
+func (env *stockEnvironment) SiteDomain() string {
+	return env.siteDomain
 }
 
 func getDSN() postgres.DSN {

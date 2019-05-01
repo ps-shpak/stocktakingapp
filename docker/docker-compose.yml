@@ -23,6 +23,7 @@ services:
     - STOCK_DB_USERNAME=stock
     - STOCK_DB_PASSWORD=1234
     - STOCK_DB_NAME=stock
+    - STOCK_DOMAIN=localhost
     depends_on:
     - stock-db
 

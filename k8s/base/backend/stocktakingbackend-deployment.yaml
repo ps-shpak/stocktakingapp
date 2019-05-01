@@ -24,6 +24,11 @@ spec:
               key: STOCK_DB_PASSWORD
         - name: STOCK_DB_USERNAME
           value: stock
+        - name: STOCK_DOMAIN
+          valueFrom:
+            configMapKeyRef:
+              name: stocktaking-config
+              key: STOCK_DOMAIN
         image: psshpak/stocktakingbackend
         imagePullPolicy: Always
         name: stocktakingbackend

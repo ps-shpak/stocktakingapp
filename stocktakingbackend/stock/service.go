@@ -73,6 +73,11 @@ type FindItemsSpec struct {
 	ItemIDs      []ID   // empty means "find all"
 }
 
+// Environment - represents configuration from runtime environment
+type Environment interface {
+	SiteDomain() string
+}
+
 // Repository - represents stock as persistent collection
 type Repository interface {
 	FindItems(spec FindItemsSpec) ([]*Item, error)
@@ -84,12 +89,14 @@ type Repository interface {
 
 type service struct {
 	repo Repository
+	env  Environment
 }
 
 // NewService - creates stock management service
-func NewService(repo Repository) Service {
+func NewService(repo Repository, env Environment) Service {
 	return &service{
 		repo: repo,
+		env:  env,
 	}
 }
 
@@ -272,19 +279,22 @@ func (s *service) findOwnerWithID(ownerID ID) (*Owner, error) {
 }
 
 func (s *service) encodeAnnotationToQR(ann Annotation, imageSize int) (image.Image, error) {
+	siteDomain := s.env.SiteDomain()
 	// Encode JSON with all sensitive data
 	fullData := map[string]interface{}{
-		"id":       ann.ID,
+		"site":     siteDomain,
+		"id":       ann.ID.String(),
 		"name":     ann.Name,
 		"owner":    ann.OwnerName,
-		"owner_id": ann.OwnerID,
+		"owner_id": ann.OwnerID.String(),
 	}
 	img, err := s.encodeMapToQR(fullData, imageSize)
 	if err != nil {
 		// Maybe too much data (QR code has limited capacity),
 		//  so try again with minimal data and predictable size
 		minimalData := map[string]interface{}{
-			"id": ann.ID,
+			"site": siteDomain,
+			"id":   ann.ID.String(),
 		}
 		img, err = s.encodeMapToQR(minimalData, imageSize)
 		if err != nil {
