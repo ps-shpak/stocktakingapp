@@ -17,7 +17,6 @@ import (
 	"stocktakingbackend/labeling"
 	"stocktakingbackend/postgres"
 	"stocktakingbackend/server"
-	"stocktakingbackend/stock"
 	"stocktakingbackend/stocktaking"
 	"stocktakingbackend/stocktakingapi"
 )
@@ -43,21 +42,24 @@ func main() {
 	}
 	defer db.Close()
 
-	environment, err := newStockEnvironment()
+	urlBuilder, err := newURLBuilder()
 	if err != nil {
 		logger.WithError(err).Fatal("failed to start")
 	}
 
 	repository := postgres.NewStockRepository(db)
-	service := stock.NewService(repository, environment)
-	grpcServer := stocktaking.NewGRPCServer(service)
-	grpcServer = stocktaking.NewLoggingMiddleware(grpcServer, logger)
+	stocktakingService := stocktaking.NewService(repository)
+	stocktakingGRPCServer := stocktaking.NewGRPCServer(stocktakingService)
+	stocktakingGRPCServer = stocktaking.NewLoggingMiddleware(stocktakingGRPCServer, logger)
+
+	labelingService := labeling.NewService(stocktakingService, urlBuilder)
+	labelingHandler := labeling.MakeHTTPHandler(labelingService)
 
 	serverHub := server.NewHub()
 
 	// Serve grpc
 	baseServer := grpc.NewServer()
-	stocktakingapi.RegisterBackendServer(baseServer, grpcServer)
+	stocktakingapi.RegisterBackendServer(baseServer, stocktakingGRPCServer)
 	serverHub.Serve(func() error {
 		grpcListener, grpcErr := net.Listen("tcp", ServiceGRPCPort)
 		if err != nil {
@@ -70,7 +72,7 @@ func main() {
 		return nil
 	})
 
-	// Serve grpc-gateway proxy
+	// Serve http endpoints and grpc-gateway proxy
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	var httpServer *http.Server
@@ -84,7 +86,7 @@ func main() {
 
 		router := mux.NewRouter()
 		router.PathPrefix("/stocktaking/").Handler(http.StripPrefix("/stocktaking", grpcGatewayMux))
-		router.PathPrefix("/labeling/").Handler(labeling.MakeHTTPHandler(service))
+		router.PathPrefix("/labeling/").Handler(labelingHandler)
 
 		httpServer = &http.Server{
 			Handler: router,
@@ -106,23 +108,12 @@ func main() {
 	}
 }
 
-type stockEnvironment struct {
-	siteDomain string
-}
-
-func newStockEnvironment() (stock.Environment, error) {
+func newURLBuilder() (labeling.URLBuilder, error) {
 	siteDomain, ok := os.LookupEnv("STOCK_DOMAIN")
 	if !ok || siteDomain == "" {
 		return nil, errors.New("environment variable STOCK_DOMAIN not set")
 	}
-	env := &stockEnvironment{
-		siteDomain: siteDomain,
-	}
-	return env, nil
-}
-
-func (env *stockEnvironment) SiteDomain() string {
-	return env.siteDomain
+	return labeling.NewURLBuilder(siteDomain), nil
 }
 
 func getDSN() postgres.DSN {

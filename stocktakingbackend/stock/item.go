@@ -1,5 +1,8 @@
 package stock
 
+// ItemKind - e.g. "equipment" or "license"
+type ItemKind string
+
 // ItemSpec - stock item specification
 type ItemSpec struct {
 	Kind        ItemKind
@@ -9,14 +12,6 @@ type ItemSpec struct {
 	Description string
 }
 
-// Annotation - annotation for the item, descriptive enough for human
-type Annotation struct {
-	ID        ID
-	Name      string
-	OwnerName string
-	OwnerID   ID
-}
-
 // Item - stock item: software license or material object
 type Item struct {
 	id       ID
@@ -24,6 +19,13 @@ type Item struct {
 	owner    *Owner
 	disposed bool
 }
+
+const (
+	// ItemKindEquipment - kind for physical equipment
+	ItemKindEquipment = ItemKind("equipment")
+	// ItemKindLicense kind for software licenses
+	ItemKindLicense = ItemKind("license")
+)
 
 // CreateItem - creates item with unique ID
 func CreateItem(spec ItemSpec) *Item {
@@ -88,13 +90,4 @@ func (i *Item) DisplayName() string {
 // Disposed - returns true if item disposed (deleted from stock)
 func (i *Item) Disposed() bool {
 	return i.disposed
-}
-
-func (i *Item) Annotation() Annotation {
-	return Annotation{
-		ID:        i.ID(),
-		Name:      i.DisplayName(),
-		OwnerName: i.OwnerName(),
-		OwnerID:   i.OwnerID(),
-	}
 }

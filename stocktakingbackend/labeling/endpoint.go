@@ -9,25 +9,45 @@ import (
 	"stocktakingbackend/stock"
 )
 
-type generateItemLabelRequest struct {
+type generateItemLabelImageRequest struct {
 	ID        stock.ID
 	ImageSize int
 }
 
-type generateItemLabelResponse struct {
+type generateItemLabelImageResponse struct {
 	Image image.Image
 }
 
-func makeGenerateItemLabelEndpoint(service stock.Service) endpoint.Endpoint {
+type generateItemLabelsHTMLRequest struct {
+	IDs []stock.ID
+}
+
+type generateItemLabelsHTMLResponse struct {
+	HTML []byte
+}
+
+func makeGenerateItemLabelImageEndpoint(service Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(*generateItemLabelRequest)
-		img, err := service.GetItemAnnotationQR(req.ID, req.ImageSize)
+		req := request.(*generateItemLabelImageRequest)
+		img, err := service.GenerateItemLabelImage(req.ID, req.ImageSize)
 		if err != nil {
 			return nil, err
 		}
-
-		return &generateItemLabelResponse{
+		return &generateItemLabelImageResponse{
 			Image: img,
+		}, nil
+	}
+}
+
+func makeGenerateItemLabelsHTMLEndpoint(service Service) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(*generateItemLabelsHTMLRequest)
+		html, err := service.GenerateItemsLabelsHTML(req.IDs)
+		if err != nil {
+			return nil, err
+		}
+		return &generateItemLabelsHTMLResponse{
+			HTML: html,
 		}, nil
 	}
 }

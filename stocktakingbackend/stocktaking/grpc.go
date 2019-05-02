@@ -2,19 +2,21 @@ package stocktaking
 
 import (
 	"context"
-	"stocktakingbackend/stock"
-	api "stocktakingbackend/stocktakingapi"
 
+	"github.com/pkg/errors"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"stocktakingbackend/stock"
+	api "stocktakingbackend/stocktakingapi"
 )
 
 type grpcServer struct {
-	service stock.Service
+	service Service
 }
 
-// NewGRPCServer creates GRPC server which accesses to stock.Service
-func NewGRPCServer(service stock.Service) api.BackendServer {
+// NewGRPCServer creates GRPC server which accesses to Service
+func NewGRPCServer(service Service) api.BackendServer {
 	server := &grpcServer{
 		service: service,
 	}
@@ -83,12 +85,12 @@ func (g *grpcServer) LoadItem(ctx context.Context, req *api.LoadItemRequest) (*a
 }
 
 func (g *grpcServer) ListItems(ctx context.Context, req *api.ListItemsRequest) (*api.ListItemsResponse, error) {
-	var groupingMethod stock.GroupingMethod
+	var groupingMethod GroupingMethod
 	switch req.GroupingMethod {
 	case api.ItemGroupingMethod_ByCategory:
-		groupingMethod = stock.GroupByCategory
+		groupingMethod = GroupByCategory
 	case api.ItemGroupingMethod_ByOwner:
-		groupingMethod = stock.GroupByOwner
+		groupingMethod = GroupByOwner
 	}
 	var kind stock.ItemKind
 	switch req.Kind {
@@ -232,7 +234,7 @@ func (g *grpcServer) Authorize(ctx context.Context, req *api.AuthorizeRequest) (
 }
 
 func translateError(err error) error {
-	switch err {
+	switch errors.Cause(err) {
 	case stock.ErrUnknownItemID:
 		return status.Error(codes.NotFound, err.Error())
 	case stock.ErrUnknownOwnerID:

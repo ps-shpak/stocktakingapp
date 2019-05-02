@@ -1,73 +1,68 @@
-package stock
+package stocktaking
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"stocktakingbackend/stock"
 )
 
 type MockRepository struct {
-	foundItems     []*Item
-	foundOwners    []*Owner
-	lastSavedItems []*Item
-	lastSavedOwner *Owner
+	foundItems     []*stock.Item
+	foundOwners    []*stock.Owner
+	lastSavedItems []*stock.Item
+	lastSavedOwner *stock.Owner
 }
 
-func (m MockRepository) FindItems(spec FindItemsSpec) ([]*Item, error) {
+func (m MockRepository) FindItems(spec FindItemsSpec) ([]*stock.Item, error) {
 	return m.foundItems, nil
 }
 
-func (m *MockRepository) SaveItems(items []*Item) error {
+func (m *MockRepository) SaveItems(items []*stock.Item) error {
 	m.lastSavedItems = items
 	return nil
 }
 
-func (m MockRepository) FindOwners(spec FindOwnersSpec) ([]*Owner, error) {
+func (m MockRepository) FindOwners(spec FindOwnersSpec) ([]*stock.Owner, error) {
 	return m.foundOwners, nil
 }
 
-func (m *MockRepository) SaveOwner(owner *Owner) error {
+func (m *MockRepository) SaveOwner(owner *stock.Owner) error {
 	m.lastSavedOwner = owner
 	return nil
 }
 
 func (m *MockRepository) reset() {
-	m.foundItems = []*Item{}
-	m.foundOwners = []*Owner{}
+	m.foundItems = []*stock.Item{}
+	m.foundOwners = []*stock.Owner{}
 }
 
-func (m *MockRepository) addItem(item *Item) {
+func (m *MockRepository) addItem(item *stock.Item) {
 	m.foundItems = append(m.foundItems, item)
 }
 
-func (m *MockRepository) addOwner(owner *Owner) {
+func (m *MockRepository) addOwner(owner *stock.Owner) {
 	m.foundOwners = append(m.foundOwners, owner)
-}
-
-type MockEnvironment struct {
-}
-
-func (env *MockEnvironment) SiteDomain() string {
-	return "example.com"
 }
 
 func TestSaveItem(t *testing.T) {
 	repo := &MockRepository{}
-	s := NewService(repo, &MockEnvironment{})
-	spec := ItemSpec{
+	s := NewService(repo)
+	spec := stock.ItemSpec{
 		Category:    "Table",
 		Place:       "room 404",
 		Price:       37,
 		Description: "Just a table",
 	}
-	anotherSpec := ItemSpec{
+	anotherSpec := stock.ItemSpec{
 		Category:    "Monitor",
 		Place:       "no room",
 		Price:       20,
 		Description: "just a monitor",
 	}
-	item := CreateItem(spec)
-	owner := CreateOwner(OwnerSpec{
+	item := stock.CreateItem(spec)
+	owner := stock.CreateOwner(stock.OwnerSpec{
 		Email: "anyone@example.com",
 		Name:  "Any One",
 	})
@@ -76,8 +71,8 @@ func TestSaveItem(t *testing.T) {
 	repo.reset()
 	{
 		repo.addItem(item)
-		id, err := s.SaveItem(item.ID(), GenerateID(), spec)
-		assert.Equal(t, NilID, id)
+		id, err := s.SaveItem(item.ID(), stock.GenerateID(), spec)
+		assert.Equal(t, stock.NilID, id)
 		assert.Error(t, err)
 	}
 
@@ -85,9 +80,9 @@ func TestSaveItem(t *testing.T) {
 	repo.reset()
 	{
 		repo.addOwner(owner)
-		id, err := s.SaveItem(NilID, owner.ID, spec)
+		id, err := s.SaveItem(stock.NilID, owner.ID, spec)
 		assert.NoError(t, err)
-		assert.NotEqual(t, NilID, id)
+		assert.NotEqual(t, stock.NilID, id)
 		assert.Equal(t, 1, len(repo.lastSavedItems))
 		lastSavedItem := repo.lastSavedItems[0]
 		assert.Equal(t, lastSavedItem.ID(), id)

@@ -20,26 +20,34 @@ const (
 	defaultImageSize = 256
 )
 
-func MakeHTTPHandler(service stock.Service) http.Handler {
+func MakeHTTPHandler(service Service) http.Handler {
 	r := mux.NewRouter()
 
 	opts := []kithttp.ServerOption{
 		kithttp.ServerErrorEncoder(encodeError),
 	}
 
-	generateItemLabelHandler := kithttp.NewServer(
-		makeGenerateItemLabelEndpoint(service),
-		decodeGenerateItemLabelRequest,
-		encodeGenerateItemLabelRequest,
+	generateItemLabelImageHandler := kithttp.NewServer(
+		makeGenerateItemLabelImageEndpoint(service),
+		decodeGenerateItemLabelImageRequest,
+		encodeGenerateItemLabelImageResponse,
 		opts...,
 	)
 
-	r.Handle("/labeling/item/{id}", generateItemLabelHandler).Methods("GET")
+	generateItemLabelsHTMLHandler := kithttp.NewServer(
+		makeGenerateItemLabelsHTMLEndpoint(service),
+		decodeGenerateItemLabelsHTMLRequest,
+		encodeGenerateItemLabelsHTMLResponse,
+		opts...,
+	)
+
+	r.Handle("/labeling/item/{id}/qr", generateItemLabelImageHandler).Methods("GET")
+	r.Handle("/labeling/items", generateItemLabelsHTMLHandler).Methods("GET")
 
 	return r
 }
 
-func decodeGenerateItemLabelRequest(_ context.Context, r *http.Request) (interface{}, error) {
+func decodeGenerateItemLabelImageRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	// Parse variable part of route
 	vars := mux.Vars(r)
 	idStr, ok := vars["id"]
@@ -70,19 +78,61 @@ func decodeGenerateItemLabelRequest(_ context.Context, r *http.Request) (interfa
 		params.Size = defaultImageSize
 	}
 
-	return &generateItemLabelRequest{
+	return &generateItemLabelImageRequest{
 		ID:        itemID,
 		ImageSize: params.Size,
 	}, nil
 }
 
-func encodeGenerateItemLabelRequest(_ context.Context, w http.ResponseWriter, response interface{}) error {
-	res := response.(*generateItemLabelResponse)
+func decodeGenerateItemLabelsHTMLRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	// Parse GET parameters from url query
+	var params struct {
+		IDs []string `schema:"id"`
+	}
+	queryValues, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		return nil, stockerrors.WrapErrorWithStatus(err, "bad url query", http.StatusBadRequest)
+	}
+	decoder := schema.NewDecoder()
+	err = decoder.Decode(&params, queryValues)
+	if err != nil {
+		return nil, stockerrors.WrapErrorWithStatus(err, "bad url query", http.StatusBadRequest)
+	}
+	if len(params.IDs) == 0 {
+		return nil, stockerrors.NewErrorWithStatus("bad url query: empty id list", http.StatusBadRequest)
+	}
+
+	ids := make([]stock.ID, 0, len(params.IDs))
+	for _, idStr := range params.IDs {
+		id, err := stock.IDFromString(idStr)
+		if err != nil {
+			return nil, stockerrors.NewErrorWithStatus("invalid item ID "+idStr, http.StatusBadRequest)
+		}
+		ids = append(ids, id)
+	}
+
+	return &generateItemLabelsHTMLRequest{
+		IDs: ids,
+	}, nil
+}
+
+func encodeGenerateItemLabelImageResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
+	res := response.(*generateItemLabelImageResponse)
 
 	w.Header().Set("Content-Type", "image/png")
 	err := png.Encode(w, res.Image)
 	if err != nil {
 		return errors.Wrap(err, "failed to encode png")
+	}
+	return nil
+}
+
+func encodeGenerateItemLabelsHTMLResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
+	res := response.(*generateItemLabelsHTMLResponse)
+	w.Header().Set("Content-Type", "text/html")
+	_, err := w.Write(res.HTML)
+	if err != nil {
+		return errors.Wrap(err, "failed to write response")
 	}
 	return nil
 }

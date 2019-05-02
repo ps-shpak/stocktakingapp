@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 
 	"stocktakingbackend/stock"
+	"stocktakingbackend/stocktaking"
 )
 
 type stockRepository struct {
@@ -15,13 +16,13 @@ type stockRepository struct {
 }
 
 // NewStockRepository - creates new repository instance
-func NewStockRepository(db *sql.DB) stock.Repository {
+func NewStockRepository(db *sql.DB) stocktaking.Repository {
 	return &stockRepository{
 		db: db,
 	}
 }
 
-func (sr *stockRepository) FindItems(spec stock.FindItemsSpec) ([]*stock.Item, error) {
+func (sr *stockRepository) FindItems(spec stocktaking.FindItemsSpec) ([]*stock.Item, error) {
 	query := `
 		SELECT
 			"item"."id",
@@ -121,7 +122,7 @@ func (sr *stockRepository) SaveItems(items []*stock.Item) error {
 	return nil
 }
 
-func (sr *stockRepository) FindOwners(spec stock.FindOwnersSpec) ([]*stock.Owner, error) {
+func (sr *stockRepository) FindOwners(spec stocktaking.FindOwnersSpec) ([]*stock.Owner, error) {
 	query := `
 		SELECT
 			"id", "name", "email", "may_login"
