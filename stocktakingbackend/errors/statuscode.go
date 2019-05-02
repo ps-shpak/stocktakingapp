@@ -36,7 +36,10 @@ func WrapErrorWithStatus(err error, reason string, statusCode int) error {
 }
 
 func (e *errorWithStatus) Error() string {
-	return fmt.Sprintf("%s: %s", e.reason, e.next.Error())
+	if e.next != nil {
+		return fmt.Sprintf("%s: %s", e.reason, e.next.Error())
+	}
+	return e.reason
 }
 
 func (e *errorWithStatus) StatusCode() int {
