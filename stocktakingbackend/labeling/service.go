@@ -1,7 +1,6 @@
 package labeling
 
 import (
-	"errors"
 	"image"
 
 	"stocktakingbackend/stock"
@@ -12,9 +11,8 @@ type Service interface {
 	// Returns image with QR code that contains item annotation (in JSON)
 	GenerateItemLabelImage(itemID stock.ID, imageSize int) (image.Image, error)
 
-	// Returns HTML for page with list of labels,
-	//  where each label contains image with QR code and text.
-	GenerateItemsLabelsHTML(itemIDs []stock.ID) ([]byte, error)
+	// Returns list with annotations, one annotation per item.
+	GenerateItemAnnotations(itemIDs []stock.ID) ([]Annotation, error)
 }
 
 type service struct {
@@ -43,6 +41,15 @@ func (s *service) GenerateItemLabelImage(itemID stock.ID, imageSize int) (image.
 	return img, nil
 }
 
-func (s *service) GenerateItemsLabelsHTML(itemIDs []stock.ID) ([]byte, error) {
-	return nil, errors.New("not implemented: GenerateItemsLabelsHTML")
+func (s *service) GenerateItemAnnotations(itemIDs []stock.ID) ([]Annotation, error) {
+	items, err := s.stockService.LoadItems(itemIDs)
+	if err != nil {
+		return nil, err
+	}
+	annotations := make([]Annotation, 0, len(items))
+	for _, item := range items {
+		label := NewLabel(*item, s.urlBuilder)
+		annotations = append(annotations, label.Annotation())
+	}
+	return annotations, nil
 }

@@ -2,7 +2,6 @@ package labeling
 
 import (
 	"context"
-	"encoding/json"
 	"image/png"
 	"net/http"
 	"net/url"
@@ -20,7 +19,7 @@ const (
 	defaultImageSize = 256
 )
 
-func MakeHTTPHandler(service Service) http.Handler {
+func MakeHTTPHandler(service Service, pageGenerator PageGenerator, encodeError kithttp.ErrorEncoder) http.Handler {
 	r := mux.NewRouter()
 
 	opts := []kithttp.ServerOption{
@@ -35,9 +34,11 @@ func MakeHTTPHandler(service Service) http.Handler {
 	)
 
 	generateItemLabelsHTMLHandler := kithttp.NewServer(
-		makeGenerateItemLabelsHTMLEndpoint(service),
-		decodeGenerateItemLabelsHTMLRequest,
-		encodeGenerateItemLabelsHTMLResponse,
+		makeGenerateItemAnnotationsEndpoint(service),
+		decodeGenerateItemAnnotationsRequest,
+		func(_ context.Context, w http.ResponseWriter, response interface{}) error {
+			return writePrintLabelsPage(w, response, pageGenerator)
+		},
 		opts...,
 	)
 
@@ -84,7 +85,7 @@ func decodeGenerateItemLabelImageRequest(_ context.Context, r *http.Request) (in
 	}, nil
 }
 
-func decodeGenerateItemLabelsHTMLRequest(_ context.Context, r *http.Request) (interface{}, error) {
+func decodeGenerateItemAnnotationsRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	// Parse GET parameters from url query
 	var params struct {
 		IDs []string `schema:"id"`
@@ -111,7 +112,7 @@ func decodeGenerateItemLabelsHTMLRequest(_ context.Context, r *http.Request) (in
 		ids = append(ids, id)
 	}
 
-	return &generateItemLabelsHTMLRequest{
+	return &generateItemAnnotationsRequest{
 		IDs: ids,
 	}, nil
 }
@@ -127,26 +128,12 @@ func encodeGenerateItemLabelImageResponse(_ context.Context, w http.ResponseWrit
 	return nil
 }
 
-func encodeGenerateItemLabelsHTMLResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
-	res := response.(*generateItemLabelsHTMLResponse)
+func writePrintLabelsPage(w http.ResponseWriter, response interface{}, pageGenerator PageGenerator) error {
+	res := response.(*generateItemAnnotationsResponse)
 	w.Header().Set("Content-Type", "text/html")
-	_, err := w.Write(res.HTML)
+	err := pageGenerator.WritePrintLabelsPage(w, res.Annotations)
 	if err != nil {
-		return errors.Wrap(err, "failed to write response")
+		return errors.Wrap(err, "failed to write html page")
 	}
 	return nil
-}
-
-func encodeError(_ context.Context, err error, w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	switch errors.Cause(err) {
-	case stock.ErrUnknownItemID:
-		w.WriteHeader(http.StatusNotFound)
-	default:
-		statusCode := stockerrors.ErrorStatusCode(err)
-		w.WriteHeader(statusCode)
-	}
-	_ = json.NewEncoder(w).Encode(map[string]interface{}{
-		"error": err.Error(),
-	})
 }

@@ -47,13 +47,18 @@ func main() {
 		logger.WithError(err).Fatal("failed to start")
 	}
 
-	repository := postgres.NewStockRepository(db)
-	stocktakingService := stocktaking.NewService(repository)
+	stockRepository := postgres.NewStockRepository(db)
+	stocktakingService := stocktaking.NewService(stockRepository)
 	stocktakingGRPCServer := stocktaking.NewGRPCServer(stocktakingService)
 	stocktakingGRPCServer = stocktaking.NewLoggingMiddleware(stocktakingGRPCServer, logger)
 
 	labelingService := labeling.NewService(stocktakingService, urlBuilder)
-	labelingHandler := labeling.MakeHTTPHandler(labelingService)
+	pageGenerator, err := labeling.NewPageGenerator()
+	if err != nil {
+		logger.WithError(err).Fatal("failed to start")
+	}
+	encodeError := labeling.NewLoggingEncoder(labeling.EncodeError, logger)
+	labelingHandler := labeling.MakeHTTPHandler(labelingService, pageGenerator, encodeError)
 
 	serverHub := server.NewHub()
 

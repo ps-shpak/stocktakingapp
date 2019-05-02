@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <title>Печать наклеек</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .label-container {
+        overflow: hidden;
+        display: inline-block;
+      }
+      .label-text {
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+      @media not print {
+        body {
+          width: 730px;
+          margin: 0 auto;
+          font-size: 14px;
+        }
+        .label-container {
+          width: 360px;
+          height: 432px;
+          border: #c0c0c0 1px solid;
+        }
+        .label-image {
+          width: 360px;
+          height: 360px;
+        }
+        .label-text {
+          width: 350px;
+          height: 72px;
+          margin: 0 8px;
+        }
+      }
+      @page {
+        size: A4;
+        margin: 1cm;
+      }
+      @media print {
+        /* Optimized for A4 paper size */
+        body {
+          font-size: 4mm;
+        }
+        html, body {
+          width: 210mm;
+          height: 297mm;
+        }
+        .label-container {
+          width: 100.5mm;
+          height: 120.5mm;
+          padding: 0.25mm;
+          border: #c0c0c0 0.25mm solid;
+        }
+        .label-image {
+          width: 100mm;
+          height: 100mm;
+        }
+        .label-text {
+          width: 100mm;
+          height: 20mm;
+          margin: 0 2mm;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {{range .Annotations}}
+        <div class="label-container">
+        <img class="label-image" src="{{.QRCodeURL}}?size=360" />
+        <div class="label-text">{{.Text.Name}} ({{.Text.Owner}})<br>{{.Text.URL}}</div>
+        </div>
+    {{end}}
+  </body>
+</html>

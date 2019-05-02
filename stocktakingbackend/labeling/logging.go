@@ -35,10 +35,10 @@ func (lm *loggingMiddleware) GenerateItemLabelImage(itemID stock.ID, imageSize i
 	return img, err
 }
 
-func (lm *loggingMiddleware) GenerateItemsLabelsHTML(itemIDs []stock.ID) ([]byte, error) {
+func (lm *loggingMiddleware) GenerateItemAnnotations(itemIDs []stock.ID) ([]Annotation, error) {
 	start := time.Now()
-	html, err := lm.impl.GenerateItemsLabelsHTML(itemIDs)
-	lm.logCall(start, err, "GenerateItemsLabelsHTML", log.Fields{
+	html, err := lm.impl.GenerateItemAnnotations(itemIDs)
+	lm.logCall(start, err, "GenerateItemAnnotations", log.Fields{
 		"itemIDs": itemIDs,
 	})
 	return html, err

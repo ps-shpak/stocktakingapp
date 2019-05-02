@@ -18,12 +18,12 @@ type generateItemLabelImageResponse struct {
 	Image image.Image
 }
 
-type generateItemLabelsHTMLRequest struct {
+type generateItemAnnotationsRequest struct {
 	IDs []stock.ID
 }
 
-type generateItemLabelsHTMLResponse struct {
-	HTML []byte
+type generateItemAnnotationsResponse struct {
+	Annotations []Annotation
 }
 
 func makeGenerateItemLabelImageEndpoint(service Service) endpoint.Endpoint {
@@ -39,15 +39,15 @@ func makeGenerateItemLabelImageEndpoint(service Service) endpoint.Endpoint {
 	}
 }
 
-func makeGenerateItemLabelsHTMLEndpoint(service Service) endpoint.Endpoint {
+func makeGenerateItemAnnotationsEndpoint(service Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(*generateItemLabelsHTMLRequest)
-		html, err := service.GenerateItemsLabelsHTML(req.IDs)
+		req := request.(*generateItemAnnotationsRequest)
+		anns, err := service.GenerateItemAnnotations(req.IDs)
 		if err != nil {
 			return nil, err
 		}
-		return &generateItemLabelsHTMLResponse{
-			HTML: html,
+		return &generateItemAnnotationsResponse{
+			Annotations: anns,
 		}, nil
 	}
 }

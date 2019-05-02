@@ -10,44 +10,48 @@ import (
 	"stocktakingbackend/stock"
 )
 
-// Annotation - annotation for the item, descriptive enough for human
+// TextAnnotation - annotation for the item, descriptive enough for human
+type TextAnnotation struct {
+	URL   string
+	Name  string
+	Owner string
+}
+
+// Annotation - full annotation for the item, with both QR code and human-readable text
 type Annotation struct {
-	ID        stock.ID
-	Name      string
-	OwnerName string
-	OwnerID   stock.ID
+	Text      TextAnnotation
+	QRCodeURL string
 }
 
 // Label - represents annotation in form suitable for printing
 type Label struct {
 	urlBuilder URLBuilder
-	annotation Annotation
+	itemID     stock.ID
+	itemName   string
+	ownerName  string
+	ownerID    stock.ID
 }
 
 // NewLabel creates new label
 func NewLabel(item stock.Item, urlBuilder URLBuilder) *Label {
-	ann := Annotation{
-		ID:        item.ID(),
-		Name:      item.DisplayName(),
-		OwnerName: item.OwnerName(),
-		OwnerID:   item.OwnerID(),
-	}
 	return &Label{
 		urlBuilder: urlBuilder,
-		annotation: ann,
+		itemID:     item.ID(),
+		itemName:   item.DisplayName(),
+		ownerName:  item.OwnerName(),
+		ownerID:    item.OwnerID(),
 	}
 }
 
 // GenerateQRCode - generates QR code with JSON representation of label annotation
 func (l *Label) GenerateQRCode(imageSize int) (image.Image, error) {
-	url := l.urlBuilder.BuildLoadItemURL(l.annotation)
-
+	url := l.urlBuilder.BuildLoadItemURL(l.itemID.String())
 	// Encode JSON with all sensitive data
 	fullData := map[string]interface{}{
 		"url":      url,
-		"name":     l.annotation.Name,
-		"owner":    l.annotation.OwnerName,
-		"owner_id": l.annotation.OwnerID.String(),
+		"name":     l.itemName,
+		"owner":    l.ownerName,
+		"owner_id": l.ownerID.String(),
 	}
 	img, err := encodeValuesToQRCode(fullData, imageSize)
 	if err != nil {
@@ -62,6 +66,25 @@ func (l *Label) GenerateQRCode(imageSize int) (image.Image, error) {
 		}
 	}
 	return img, nil
+}
+
+// TextAnnotation - returns human-readable annotation for given item
+func (l *Label) TextAnnotation() TextAnnotation {
+	loadURL := l.urlBuilder.BuildLoadItemURL(l.itemID.String())
+	return TextAnnotation{
+		URL:   loadURL,
+		Name:  l.itemName,
+		Owner: l.ownerName,
+	}
+}
+
+// Annotation - returns annotation with both QR code and human-readable text
+func (l *Label) Annotation() Annotation {
+	qrCodeURL := l.urlBuilder.BuildQRCodeRelativeURL(l.itemID.String())
+	return Annotation{
+		Text:      l.TextAnnotation(),
+		QRCodeURL: qrCodeURL,
+	}
 }
 
 func encodeValuesToQRCode(data map[string]interface{}, imageSize int) (image.Image, error) {

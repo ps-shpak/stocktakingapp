@@ -14,6 +14,7 @@ vendor:
 
 generate:
 	$(GOPATH)/bin/go-bindata -pkg data -o postgres/data/migrations.go -prefix "postgres/migrations" postgres/migrations
+	$(GOPATH)/bin/go-bindata -pkg data -o labeling/data/templates.go -prefix "labeling/templates" labeling/templates
 	protoc \
 		-I/usr/include \
 		-I$(GOPATH)/src \
