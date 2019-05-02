@@ -51,12 +51,12 @@ func (e *errorWithStatus) Cause() error {
 func ErrorStatusCode(err error) int {
 	var statusCode = http.StatusInternalServerError
 	for err != nil {
-		errWithStatusCode := err.(WithStatusCode)
-		if errWithStatusCode != nil {
+		errWithStatusCode, ok := err.(WithStatusCode)
+		if ok {
 			statusCode = errWithStatusCode.StatusCode()
 		}
-		errWithCause := err.(WithCause)
-		if errWithCause != nil {
+		errWithCause, ok := err.(WithCause)
+		if ok {
 			err = errWithCause.Cause()
 		} else {
 			err = nil
