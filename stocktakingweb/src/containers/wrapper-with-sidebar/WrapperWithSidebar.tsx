@@ -13,6 +13,10 @@ import { attempt } from "lodash";
 export class WrapperWithSidebar extends Component<IWrapperWithSidebarProps> {
     private readonly store = new WrapperWithSidebarStore();
 
+    componentDidMount(): void {
+        this.store.onMount();
+    }
+
     render(): ReactNode {
         return (
             <Wrapper title={this.props.title}>

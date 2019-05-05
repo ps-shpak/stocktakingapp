@@ -11,6 +11,7 @@ export class WrapperWithSidebarStore {
             title: "Имущество",
             isActive: false,
             onClick: () => this.goToPage(EPaths.PROPERTY),
+            path: EPaths.PROPERTY,
             options: [
                 {
                     title: "по категориям",
@@ -26,6 +27,7 @@ export class WrapperWithSidebarStore {
             title: "Лицензии",
             isActive: false,
             onClick: () => this.goToPage(EPaths.LICENSE),
+            path: EPaths.LICENSE,
             options: [
                 {
                     title: "по категориям",
@@ -40,9 +42,22 @@ export class WrapperWithSidebarStore {
         {
             title: "Пользователи",
             isActive: false,
-            onClick: () => this.goToPage(EPaths.USERS)
+            onClick: () => this.goToPage(EPaths.USERS),
+            path: EPaths.USERS
         }
     ];
+
+    onMount(): void {
+        const url = window.location.href;
+        this.menuData.map((item: IMenuItem) => {
+            if (!item.path) {
+                return;
+            }
+            if (url.indexOf(item.path) >= 0) {
+               item.isActive = true;
+            }
+        });
+    }
 
     getMenuData(): IMenuItem[] {
         return toJS(this.menuData);
