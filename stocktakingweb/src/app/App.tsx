@@ -5,6 +5,8 @@ import { EPaths } from "../config";
 import { Main } from "../pages/main";
 import DevTools from "mobx-react-devtools";
 import { Users } from "../pages/users";
+import { Licences } from "../pages/licences";
+import { Property } from "../pages/property";
 
 export class App extends React.Component {
   render() {
@@ -15,6 +17,8 @@ export class App extends React.Component {
                 <Switch>
                     <Route exact={true} path={EPaths.MAIN} component={Main} />
                     <Route exact={true} path={EPaths.USERS} component={Users} />
+                    <Route exact={true} path={EPaths.LICENSE} component={Licences} />
+                    <Route exact={true} path={EPaths.PROPERTY} component={Property} />
                 </Switch>
             </>
         </Router>

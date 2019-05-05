@@ -10,6 +10,7 @@ export class WrapperWithSidebarStore {
         {
             title: "Имущество",
             isActive: false,
+            onClick: () => this.goToPage(EPaths.PROPERTY),
             options: [
                 {
                     title: "по категориям",
@@ -24,6 +25,7 @@ export class WrapperWithSidebarStore {
         {
             title: "Лицензии",
             isActive: false,
+            onClick: () => this.goToPage(EPaths.LICENSE),
             options: [
                 {
                     title: "по категориям",
@@ -38,7 +40,7 @@ export class WrapperWithSidebarStore {
         {
             title: "Пользователи",
             isActive: false,
-            onClick: this.goToUserPage
+            onClick: () => this.goToPage(EPaths.USERS)
         }
     ];
 
@@ -73,7 +75,7 @@ export class WrapperWithSidebarStore {
         });
     }
 
-    private goToUserPage(): void {
-        AppContext.getHistory().push(EPaths.USERS);
+    private goToPage(path: string): void {
+        AppContext.getHistory().push(path);
     }
 }
