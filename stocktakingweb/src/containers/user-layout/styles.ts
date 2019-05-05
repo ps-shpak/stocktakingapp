@@ -13,7 +13,7 @@ export const styles = createStyles({
         padding: 20
     },
     button: {
-        background: EColors.SIDEBAR_ITEM_BACKGROUND,
+        background: EColors.SIDEBAR,
         color: EColors.SIDEBAR_TEXT
     },
     content: {

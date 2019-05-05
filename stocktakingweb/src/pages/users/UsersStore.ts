@@ -8,19 +8,23 @@ export class UsersStore {
     @observable userList: IListItem[] = [
         {
             id: uuid.v4(),
-            title: "Ivanov Ivan"
+            title: "Ivanov Ivan",
+            email: "ivan@email.ru"
         },
         {
             id: uuid.v4(),
-            title: "Ivanov Petr"
+            title: "Ivanov Petr",
+            email: "petr@email.ru"
         },
         {
             id: uuid.v4(),
-            title: "Ivanov Max"
+            title: "Ivanov Max",
+            email: "max@email.ru"
         },
         {
             id: uuid.v4(),
-            title: "Ivanov Andrey"
+            title: "Ivanov Andrey",
+            email: "andrey@email.ru"
         },
     ];
 

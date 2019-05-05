@@ -11,7 +11,7 @@ export const ListItem = withStyles(styles)(
             return (
                 <div className={this.props.classes.listItem}>
                     <div className={this.props.classes.index}>{props.index + 1}.</div>
-                    <div className={this.props.classes.title}>{props.data.title}</div>
+                    <div className={this.props.classes.title}>{props.data.title} {props.data.email && ` (${props.data.email})`}</div>
                     <div className={this.props.classes.right}>
                         <div className={this.props.classes.button} onClick={this.onView}>Просмотр</div>
                         <div className={this.props.classes.button} onClick={this.onEdit}>Редактировать</div>

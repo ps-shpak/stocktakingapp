@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Component, ReactNode } from "react";
+import { Component, CSSProperties, ReactNode } from "react";
 import { IWrapperWithSidebarProps } from "./IWrapperWithSidebarProps";
 import { autobind } from "core-decorators";
 import { Wrapper } from "../wrapper";
@@ -18,6 +18,9 @@ export class WrapperWithSidebar extends Component<IWrapperWithSidebarProps> {
     }
 
     render(): ReactNode {
+        const style: CSSProperties = {
+            width: "calc(100% - 300px)"
+        };
         return (
             <Wrapper title={this.props.title}>
                 <Sidebar
@@ -25,7 +28,9 @@ export class WrapperWithSidebar extends Component<IWrapperWithSidebarProps> {
                     onOpenOptions={this.onOpen}
                     onChangeActive={this.onChangeActive}
                 />
-                {this.props.children}
+                <div style={style}>
+                    {this.props.children}
+                </div>
             </Wrapper>
         );
     }
