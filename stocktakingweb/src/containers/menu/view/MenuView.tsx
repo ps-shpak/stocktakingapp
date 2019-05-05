@@ -5,6 +5,7 @@ import { Component, ReactNode } from "react";
 import { IMenuViewProps } from "./IMenuViewProps";
 import cn from "classnames";
 import { IMenuItem } from "../IMenuItem";
+import { attempt } from "lodash";
 
 export const MenuView = withStyles(styles)(
     class extends Component<IMenuViewProps> {
@@ -15,8 +16,8 @@ export const MenuView = withStyles(styles)(
                         return (
                             <div className={this.props.classes.menuItem} key={rowIndex}>
                                 <div
-                                    className={this.props.classes.header}
-                                    onClick={() => this.props.openOptions(rowIndex)}
+                                    className={this.getHeaderClassName(item.isActive)}
+                                    onClick={() => this.onOpenOptions(rowIndex, item.onClick)}
                                 >
                                     {item.title}
                                 </div>
@@ -42,11 +43,23 @@ export const MenuView = withStyles(styles)(
             );
         }
 
-        private getMenuItemClassName(prediacate: boolean): string {
+        private getMenuItemClassName(predicate: boolean): string {
             return cn(
                 this.props.classes.optionItem,
-                prediacate && this.props.classes.activeOptionItem
+                predicate && this.props.classes.activeOptionItem
             );
+        }
+
+        private getHeaderClassName(predicate: boolean): string {
+            return cn(
+                this.props.classes.header,
+                predicate && this.props.classes.activeOptionItem
+            );
+        }
+
+        private onOpenOptions(index: number, callback?: () => void): void {
+            this.props.openOptions(index);
+            attempt(callback!);
         }
     }
 );

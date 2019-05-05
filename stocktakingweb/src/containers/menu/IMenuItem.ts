@@ -5,4 +5,5 @@ export interface IMenuItem {
     isActive: boolean;
     options?: IMenuItem[];
     tree?: ITreeItem[];
+    onClick?(): void;
 }
