@@ -5,6 +5,7 @@ import { Component, ReactNode } from "react";
 import { IListProps } from "./IListProps";
 import { IListItem } from "./IListItem";
 import { ListItem } from "./list-item";
+import { isEmpty } from "lodash";
 
 export const List = withStyles(styles)(
     class extends Component<IListProps> {
@@ -23,6 +24,7 @@ export const List = withStyles(styles)(
                             />
                         );
                     })}
+                    {isEmpty(props.list) && <div className={this.props.classes.empty}>{props.emptyListMessage}</div>}
                 </div>
             );
         }

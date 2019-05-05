@@ -5,6 +5,7 @@ import { WrapperWithSidebar } from "../../containers/wrapper-with-sidebar";
 import { observer } from "mobx-react";
 import { List } from "../../components/list";
 import { UsersStore } from "./UsersStore";
+import { UserLayout } from "../../containers/user-layout";
 
 @observer
 @autobind
@@ -14,11 +15,14 @@ export class Users extends Component {
     render(): ReactNode {
         return (
             <WrapperWithSidebar title={"Пользователи"}>
-                <List
-                    list={this.store.userList}
-                    onDeleteItem={this.store.onDelete}
-                    onEditItem={this.store.onEdit}
-                />
+                <UserLayout onAddUser={this.store.onAddUser}>
+                    <List
+                        list={this.store.userList}
+                        onDeleteItem={this.store.onDelete}
+                        onEditItem={this.store.onEdit}
+                        emptyListMessage={"В списке нет ни одного пользователя"}
+                    />
+                </UserLayout>
             </WrapperWithSidebar>
         );
     }

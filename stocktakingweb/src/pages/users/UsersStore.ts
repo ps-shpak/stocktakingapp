@@ -14,13 +14,25 @@ export class UsersStore {
             id: uuid.v4(),
             title: "Ivanov Petr"
         },
+        {
+            id: uuid.v4(),
+            title: "Ivanov Max"
+        },
+        {
+            id: uuid.v4(),
+            title: "Ivanov Andrey"
+        },
     ];
 
     onEdit(index: number): void {
-        console.log(index);
+        console.log("edit", index);
     }
 
     onDelete(index: number): void {
-        console.log(index);
+        console.log("delete", index);
+    }
+
+    onAddUser(): void {
+        console.log("add");
     }
 }

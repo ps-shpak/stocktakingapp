@@ -5,6 +5,10 @@ export const styles = createStyles({
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        padding: "20px 0"
+        justifyContent: "center"
+    },
+    empty: {
+        fontSize: 30,
+        textAlign: "center"
     }
 });

@@ -4,6 +4,7 @@ import { IListItem } from "./IListItem";
 
 export interface IListProps extends WithStyles<typeof styles> {
     list: IListItem[];
+    emptyListMessage: string;
 
     onDeleteItem(index: number): void;
 

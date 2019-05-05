@@ -9,6 +9,8 @@ export const styles = createStyles({
         "borderBottom": `1px solid ${EColors.SIDEBAR}`,
         "boxSizing": "border-box",
         "fontSize": 20,
+        "position": "relative",
+        "zIndex": 1,
         "&:first-child": {
             borderTop: `1px solid ${EColors.SIDEBAR}`,
         }
@@ -16,16 +18,19 @@ export const styles = createStyles({
     title: {
         overflow: "hidden",
         textOverflow: "ellipsis",
-        flexGrow: 3
+        flexGrow: 3,
+        paddingRight: 10
     },
     index: {
         marginRight: 10
     },
     right: {
-        display: "flex"
+        display: "flex",
+        position: "relative",
+        zIndex: 5,
     },
     button: {
-        "marginLeft": 20,
+        "marginRight": 20,
         "cursor": "pointer",
         "textDecoration": "underline",
         "&:hover": {
