@@ -1,3 +1,4 @@
 export enum EPaths {
-    MAIN = "/"
+    MAIN = "/",
+    USERS = "/users",
 }
