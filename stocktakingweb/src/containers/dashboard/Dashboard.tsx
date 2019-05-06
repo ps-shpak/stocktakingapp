@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { autobind } from "core-decorators";
 import { IDashboardProps } from "./IDashboardProps";
 import { DashboardView } from "./view";
+import { AddProductPopup } from "../../components/add-product-popup";
 
 @observer
 @autobind
@@ -16,12 +17,19 @@ export class Dashboard extends Component<IDashboardProps> {
         return (
             <DashboardView
                 treeData={this.props.store.treeData}
-                isPopupVisible={this.props.store.isPopupVisible}
                 isTreeVisible={this.props.store.isTreeVisible}
                 onCloseTree={this.props.onCloseTree}
                 onChangeActiveTree={this.props.store.onChangeActive}
-                onClosePopup={this.props.store.onClosePopup}
-                onOpenPopup={this.props.store.onOpenPopup}
+                createAddProductPopup={this.createAddProductPopup}
+                showAddProductPopup={this.props.store.showAddProductPopup}
+            />
+        );
+    }
+
+    createAddProductPopup(): ReactNode {
+        return (
+            <AddProductPopup
+                store={this.props.store.addProductStore}
             />
         );
     }

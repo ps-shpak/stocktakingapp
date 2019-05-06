@@ -1,14 +1,16 @@
 import { autobind } from "core-decorators";
 import { observable } from "mobx";
 import { ITreeItem } from "../../components/tree";
+import { AddProductStore } from "../../components/add-product-popup";
 import { findIndex, range } from "lodash";
 import * as uuid from "uuid";
 
 @autobind
 export class DashboardStore {
     @observable treeData: ITreeItem[] = [];
-    @observable isPopupVisible = false;
     @observable isTreeVisible = false;
+
+    addProductStore: AddProductStore = new AddProductStore();
 
     onMount(): void {
         this.generateDemoData();
@@ -31,12 +33,8 @@ export class DashboardStore {
         });
     }
 
-    onClosePopup(): void {
-        this.isPopupVisible = false;
-    }
-
-    onOpenPopup(): void {
-        this.isPopupVisible = true;
+    showAddProductPopup(): void {
+        this.addProductStore.isPopupVisible = true;
     }
 
     private generateDemoData(): void {

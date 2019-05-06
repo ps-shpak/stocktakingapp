@@ -1,33 +1,75 @@
 import { autobind } from "core-decorators";
-import { observable } from "mobx";
+import { observable, autorun } from "mobx";
 import { Owner } from "./Owner";
-import { BackendClient, SaveItemRequest, OwnerSpec } from "../../api";
+import { BackendClient, SaveItemRequest, ItemKind } from "../../api";
+import { AddProductPopupState } from "./view/AddProductPopupState";
 
-// TODO: connect Store and View
 @autobind
 export class AddProductStore {
-    @observable category = "";
-    @observable ownerId = "";
-    @observable price = 0;
-    @observable place = "";
-    @observable description = "";
-
+    @observable isPopupVisible = false;
     @observable availableOwners: Owner[] = [];
+    @observable errorMessage = "";
+    private fetchOwnersPromise: Promise<void> | undefined = undefined;
 
-    async loadAvailableOwners(): Promise<void> {
-        const owners = await BackendClient.getInstance().listOwners();
-        this.availableOwners = owners.map((owner: OwnerSpec) => {
-            return new Owner(owner.id, owner.name);
+    constructor() {
+        autorun(() => {
+            if (this.isPopupVisible) {
+                this.fetchAvailableOwners();
+            }
         });
     }
 
-    async addProduct(): Promise<void> {
+    getAvailableOwners(): Owner[] {
+        return this.availableOwners;
+    }
+
+    async fetchAvailableOwners(): Promise<void> {
+        // Run fetch owners only once.
+        if (this.fetchOwnersPromise) {
+            return this.fetchOwnersPromise;
+        }
+        this.fetchOwnersPromise = this.fetchAvailableOwnersImpl();
+        return this.fetchOwnersPromise.catch((err) => {
+            // Drop promise to retry next time
+            this.fetchOwnersPromise = undefined;
+            throw err;
+        });
+    }
+
+    cancelAddProduct(): void {
+        this.errorMessage = "";
+        this.isPopupVisible = false;
+    }
+
+    submitAddProduct(state: AddProductPopupState): void {
+        this.errorMessage = "";
+        this.addProduct(state).then(
+            () => {
+                this.isPopupVisible = false;
+            },
+            (err) => {
+                this.errorMessage = err.message;
+            }
+        );
+    }
+
+    private async fetchAvailableOwnersImpl(): Promise<void> {
+        const owners = await BackendClient.getInstance().listOwners();
+        for (const owner of owners) {
+            this.availableOwners.push(new Owner(owner.id, owner.name));
+        }
+        console.log("fetchAvailableOwnersImpl owners:", this.availableOwners);
+    }
+
+    private async addProduct(state: AddProductPopupState): Promise<void> {
         const req = new SaveItemRequest();
-        req.spec.category = this.category;
-        req.spec.ownerId = this.ownerId;
-        req.spec.price = this.price;
-        req.spec.place = this.place;
-        req.spec.description = this.description;
+        // TODO: select item kind dynamically using parent store
+        req.spec.kind = ItemKind.Equipment;
+        req.spec.category = state.category;
+        req.spec.ownerId = state.ownerId;
+        req.spec.price = Number.parseFloat(state.price);
+        req.spec.place = state.place;
+        req.spec.description = state.description;
         await BackendClient.getInstance().saveItem(req);
     }
 }

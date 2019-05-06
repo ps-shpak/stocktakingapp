@@ -1,5 +1,5 @@
-export interface IAddProductPopupProps {
-    isVisible: boolean;
+import { AddProductStore } from "./AddProductStore";
 
-    onClose(): void;
+export interface IAddProductPopupProps {
+    store: AddProductStore;
 }
