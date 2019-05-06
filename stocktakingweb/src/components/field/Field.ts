@@ -35,6 +35,10 @@ export class Field {
         return this.field.isError;
     }
 
+    getPlaceholder(): string {
+        return this.field.placeholder;
+    }
+
     setValidState(value: boolean): void {
         this.field.isValid = value;
     }
