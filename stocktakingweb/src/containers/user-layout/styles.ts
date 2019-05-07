@@ -13,8 +13,7 @@ export const styles = createStyles({
         padding: 20
     },
     button: {
-        background: EColors.SIDEBAR,
-        color: EColors.SIDEBAR_TEXT
+        background: EColors.GREEN,
     },
     content: {
         display: "flex",

@@ -11,7 +11,7 @@ interface IFieldsArray {
 
 @autobind
 export class FormStore {
-    @observable private fields: IFieldsArray[] = [];
+    @observable private readonly fields: IFieldsArray[] = [];
 
     addField(field: Field): void {
         this.fields.push({field, index: this.fields.length});

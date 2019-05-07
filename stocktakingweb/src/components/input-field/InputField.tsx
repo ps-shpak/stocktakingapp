@@ -23,4 +23,10 @@ export class InputField extends Component<IInputFieldProps> {
     componentDidMount(): void {
         this.props.addField(this.field);
     }
+
+    render(): ReactNode {
+        return (
+            <div>1</div>
+        );
+    }
 }
