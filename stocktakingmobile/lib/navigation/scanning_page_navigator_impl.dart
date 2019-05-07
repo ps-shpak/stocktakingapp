@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stocktakingmobile/domain/model/authentication_manager.dart';
-import 'package:stocktakingmobile/domain/model/item.dart';
+import 'package:stocktakingmobile/domain/model/qr_code_Item.dart';
 import 'package:stocktakingmobile/domain/model/storage_manager.dart';
 import 'package:stocktakingmobile/domain/service/settings_page_service_impl.dart';
-import 'package:stocktakingmobile/navigation/item_page_navigator_impl.dart';
 import 'package:stocktakingmobile/navigation/scanning_page_navigator.dart';
 import 'package:stocktakingmobile/navigation/settings_page_navigator_impl.dart';
 import 'package:stocktakingmobile/state/item_page_state.dart';
@@ -45,7 +44,7 @@ class ScanningPageNavigatorImpl implements ScanningPageNavigator {
   }
 
   @override
-  openItem(BuildContext context, Item item) {
+  openItem(BuildContext context, QRCodeItem item) {
     Navigator.push(
       context,
       new MaterialPageRoute(

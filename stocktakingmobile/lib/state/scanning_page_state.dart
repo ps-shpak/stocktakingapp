@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:stocktakingmobile/domain/model/item_request_result.dart';
+import 'package:stocktakingmobile/domain/model/qr_code_scan_result.dart';
 import 'package:stocktakingmobile/domain/service/scanning_page_service.dart';
 import 'package:stocktakingmobile/navigation/scanning_page_navigator.dart';
 import 'package:stocktakingmobile/state/picker_body_state.dart';
@@ -50,17 +50,17 @@ class ScanningPageState extends State<ScanningPage> {
           color: Colors.black,
         ),
       ),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(
-            Icons.settings,
-            color: Colors.black54,
-          ),
-          onPressed: () {
-            _navigator.openSettings(context);
-          },
-        ),
-      ],
+//      actions: <Widget>[
+//        IconButton(
+//          icon: Icon(
+//            Icons.settings,
+//            color: Colors.black54,
+//          ),
+//          onPressed: () {
+//            _navigator.openSettings(context);
+//          },
+//        ),
+//      ],
     );
   }
 
@@ -78,7 +78,7 @@ class ScanningPageState extends State<ScanningPage> {
     });
   }
 
-  _handleScanResult(ItemScanResult result) {
+  _handleScanResult(QRCodeScanResult result) {
     if (result.error != null) {
       _showScanItemError(result.error);
     } else if (result.item != null) {
@@ -88,21 +88,18 @@ class ScanningPageState extends State<ScanningPage> {
     }
   }
 
-  _showScanItemError(ItemRequestError error) {
+  _showScanItemError(QRCodeScanError error) {
     switch (error) {
-      case ItemRequestError.UNKNOWN:
+      case QRCodeScanError.UNKNOWN:
         _showUnknownError();
         break;
-      case ItemRequestError.BACK_PRESSED:
+      case QRCodeScanError.BACK_PRESSED:
         // Nothing to do
         break;
-      case ItemRequestError.CAMERA_PERMISSIONS:
+      case QRCodeScanError.CAMERA_PERMISSIONS:
         _showPermissionsError();
         break;
-      case ItemRequestError.CONNECTION:
-        _showConnectionError();
-        break;
-      case ItemRequestError.PARSING:
+      case QRCodeScanError.PARSING:
         _showParsingError();
         break;
     }

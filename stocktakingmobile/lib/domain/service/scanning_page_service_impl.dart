@@ -1,50 +1,70 @@
+import 'dart:convert';
+
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:stocktakingmobile/domain/model/item.dart';
 import 'package:stocktakingmobile/domain/model/item_request_result.dart';
+import 'package:stocktakingmobile/domain/model/qr_code_Item.dart';
+import 'package:stocktakingmobile/domain/model/item.dart';
+import 'package:stocktakingmobile/domain/model/qr_code_scan_result.dart';
 import 'package:stocktakingmobile/domain/service/scanning_page_service.dart';
 import 'package:flutter/services.dart';
 
 class ScanningPageServiceImpl implements ScanningPageService {
   @override
-  Future<ItemScanResult> scanCode() async {
+  Future<QRCodeScanResult> scanCode() async {
     String code = '';
 
     try {
       code = await BarcodeScanner.scan();
     } on PlatformException catch (ex) {
       if (ex.code == BarcodeScanner.CameraAccessDenied) {
-        return ItemScanResult(Item(), ItemRequestError.CAMERA_PERMISSIONS);
+        return QRCodeScanResult(QRCodeItem(), QRCodeScanError.CAMERA_PERMISSIONS);
       } else {
-        return ItemScanResult(Item(), ItemRequestError.UNKNOWN);
+        return QRCodeScanResult(QRCodeItem(), QRCodeScanError.UNKNOWN);
       }
     } on FormatException {
-      return ItemScanResult(Item(), ItemRequestError.BACK_PRESSED);
+      return QRCodeScanResult(QRCodeItem(), QRCodeScanError.BACK_PRESSED);
     } catch (ex) {
-      return ItemScanResult(Item(), ItemRequestError.UNKNOWN);
+      return QRCodeScanResult(QRCodeItem(), QRCodeScanError.UNKNOWN);
     }
 
     await Future.delayed(Duration(seconds: 3));
 
-    var item = _parseItem(code);
+    var item = _parseQRCode(code);
 
     if (item == null) {
-      return ItemScanResult(Item(), ItemRequestError.PARSING);
+      return QRCodeScanResult(QRCodeItem(), QRCodeScanError.PARSING);
     }
 
-    return ItemScanResult(_parseItem(code), null);
+    return QRCodeScanResult(_parseQRCode(code), null);
   }
 
-  Item _parseItem(String code) {
+  @override
+  Future<ItemRequestResult> requestItem(String url) async {
     try {
-      var itemSpec = code.split(';');
-      var result = Item();
-      result.name = itemSpec[0];
-      result.type = itemSpec[1];
-      result.photo = itemSpec[2];
-      result.host = itemSpec[3];
-      result.location = itemSpec[4];
-      result.description = itemSpec[5];
+      return null;
+    } catch (ex) {
+      return ItemRequestResult(Item(), ItemRequestError.UNKNOWN);
+    }
+  }
+
+  QRCodeItem _parseQRCode(String code) {
+    try {
+//      Map<String, dynamic> itemJson = jsonDecode(code);
+      var result = QRCodeItem();
+//      result.url = itemJson['url'];
+//      result.name = itemJson['name'];
+//      result.owner = itemJson['owner'];
+//      result.ownerId = itemJson['owner_id'];
       return result;
+    } catch (ex) {
+      return null;
+    }
+  }
+
+  Item _parseResponse(String body) {
+    try {
+      Map<String, dynamic> itemJson = jsonDecode(body);
+      return null;
     } catch (ex) {
       return null;
     }

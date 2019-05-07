@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stocktakingmobile/domain/model/sign_in_result.dart';
 import 'package:stocktakingmobile/domain/service/auth_page_service.dart';
 import 'package:stocktakingmobile/navigation/auth_page_navigator.dart';
 import 'package:stocktakingmobile/ui/pages/auth_page.dart';
 
-enum _AuthState { WaitSync, WaitSignIn, Idle }
+enum _AuthState {
+//  WaitSync,
+//  WaitSignIn,
+  Idle,
+}
 
 class AuthPageState extends State<AuthPage> {
   AuthPageState({navigator: AuthPageNavigator, service: AuthPageService})
@@ -20,7 +23,7 @@ class AuthPageState extends State<AuthPage> {
   final AuthPageNavigator _navigator;
 
   BuildContext _context;
-  _AuthState _state = _AuthState.WaitSync;
+  _AuthState _state = _AuthState.Idle;
 
   @override
   void initState() {
@@ -50,10 +53,10 @@ class AuthPageState extends State<AuthPage> {
 
   Widget _buildBody() {
     switch (_state) {
-      case _AuthState.WaitSync:
-        return _buildWaitSyncBody();
-      case _AuthState.WaitSignIn:
-        return _buildWaitSignInBody();
+//      case _AuthState.WaitSync:
+//        return _buildWaitSyncBody();
+//      case _AuthState.WaitSignIn:
+//        return _buildWaitSignInBody();
       case _AuthState.Idle:
         return _buildIdleBody();
       default:
@@ -78,9 +81,9 @@ class AuthPageState extends State<AuthPage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         _buildAppIcon(),
-        GoogleSignInButton(
-          onPressed: _handleSignIn,
-        )
+//        GoogleSignInButton(
+//          onPressed: _handleSignIn,
+//        )
       ],
     );
   }
