@@ -18,6 +18,7 @@ export const InputFieldView = withStyles(styles)(
                         readOnly={this.props.isReadonly}
                         value={this.props.value}
                         onChange={this.props.onChange}
+                        className={this.props.classes.input}
                     />
                 </div>
             );

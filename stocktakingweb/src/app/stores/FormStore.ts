@@ -39,6 +39,12 @@ export class FormStore {
         return head(fields)!.field;
     }
 
+    isFormValid(): boolean {
+        return this.fields.every((data) => {
+            return data.field.getValidState();
+        });
+    }
+
     private isTextValid(value: string): boolean {
         return value !== "";
     }

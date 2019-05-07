@@ -6,6 +6,7 @@ import { observer } from "mobx-react";
 import { List } from "../../components/list";
 import { UsersStore } from "./UsersStore";
 import { UserLayout } from "../../containers/user-layout";
+import { AddUserPopup } from "../../components/add-user-popup";
 
 @observer
 @autobind
@@ -16,7 +17,7 @@ export class Users extends Component {
         return (
             <Fragment>
                 <WrapperWithSidebar title={"Пользователи"}>
-                    <UserLayout onAddUser={this.store.onAddUser}>
+                    <UserLayout onAddUser={this.showCreateUserPopup}>
                         <List
                             list={this.store.userList}
                             onDeleteItem={this.store.onDelete}
@@ -25,7 +26,19 @@ export class Users extends Component {
                         />
                     </UserLayout>
                 </WrapperWithSidebar>
+                <AddUserPopup
+                    isVisible={this.store.isCreateUserPopupVisible}
+                    onClose={this.hideCreateUserPopup}
+                />
             </Fragment>
         );
+    }
+
+    private showCreateUserPopup(): void {
+        this.store.onShowCreateUserPopup(true);
+    }
+
+    private hideCreateUserPopup(): void {
+        this.store.onShowCreateUserPopup(false);
     }
 }

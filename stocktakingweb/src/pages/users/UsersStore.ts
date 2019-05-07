@@ -27,6 +27,7 @@ export class UsersStore {
             email: "andrey@email.ru"
         },
     ];
+    @observable isCreateUserPopupVisible = false;
 
     onEdit(index: number): void {
         console.log("edit", index);
@@ -36,7 +37,7 @@ export class UsersStore {
         console.log("delete", index);
     }
 
-    onAddUser(): void {
-        console.log("add");
+    onShowCreateUserPopup(value: boolean): void {
+        this.isCreateUserPopupVisible = value;
     }
 }

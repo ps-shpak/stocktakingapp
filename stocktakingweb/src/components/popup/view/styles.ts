@@ -24,11 +24,14 @@ export const styles = createStyles({
     },
     popup: {
         display: "block",
-        margin: "0 auto",
+        position: "fixed",
+        left: "50%",
+        top: "50%",
+        transform: "translate(-50%, -50%)",
         padding: 20,
         zIndex: 2,
         width: 600,
-        height: 400,
+        maxHeight: 600,
         background: "#fff",
     },
     header: {
