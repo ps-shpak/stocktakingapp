@@ -27,7 +27,7 @@ func (g *grpcServer) SaveItem(ctx context.Context, req *api.SaveItemRequest) (*a
 	if req.Spec == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "missing item spec")
 	}
-	itemID, err := stock.IDFromString(req.Id)
+	itemID, err := parseOrGenerateID(req.Id)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid item ID")
 	}
@@ -208,7 +208,7 @@ func (g *grpcServer) AddOwners(ctx context.Context, req *api.AddOwnersRequest) (
 }
 
 func (g *grpcServer) SaveOwner(ctx context.Context, req *api.SaveOwnerRequest) (*api.SaveOwnerResponse, error) {
-	id, err := stock.IDFromString(req.Id)
+	id, err := parseOrGenerateID(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid owner id"+req.Id)
 	}
@@ -231,6 +231,13 @@ func (g *grpcServer) Authorize(ctx context.Context, req *api.AuthorizeRequest) (
 	return &api.AuthorizeResponse{
 		Id: id.String(),
 	}, nil
+}
+
+func parseOrGenerateID(id string) (stock.ID, error) {
+	if id == "" {
+		return stock.GenerateID(), nil
+	}
+	return stock.IDFromString(id)
 }
 
 func translateError(err error) error {

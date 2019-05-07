@@ -3,7 +3,6 @@ import { styles } from "./styles";
 import * as React from "react";
 import { Component, ReactNode } from "react";
 import { IDashboardViewProps } from "./IDashboardViewProps";
-import { AddProductPopup } from "../../../components/add-product-popup";
 import { Tree } from "../../../components/tree";
 import { Button } from "../../../components/button";
 
@@ -17,15 +16,12 @@ export const DashboardView = withStyles(styles)(
                             <Button
                                 title={"Добавить"}
                                 isDisable={false}
-                                onClick={this.props.onOpenPopup}
+                                onClick={this.props.showAddProductPopup}
                                 className={this.props.classes.addButton}
                             />
                         </div>
                     </div>
-                    <AddProductPopup
-                        isVisible={this.props.isPopupVisible}
-                        onClose={this.props.onClosePopup}
-                    />
+                    {this.props.createAddProductPopup()}
                     <Tree
                         data={this.props.treeData}
                         onChangeActive={this.props.onChangeActiveTree}

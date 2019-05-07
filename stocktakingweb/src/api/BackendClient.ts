@@ -32,7 +32,8 @@ export class BackendClient {
 
         const response = await fetch(url.href);
         const groups: ItemGroupNode[] = [];
-        for (const groupObj of response.json()['results']) {
+        const responseJSON = await response.json();
+        for (const groupObj of responseJSON['results']) {
             const group = new ItemGroupNode();
             group.name = groupObj['name'];
             group.items = [];
@@ -70,7 +71,7 @@ export class BackendClient {
     }
 
     public async saveItem(request: SaveItemRequest): Promise<SaveItemResponse> {
-        const response = await fetch('/stocktaking/items', {
+        const response = await fetch('/stocktaking/item', {
             method: "PUT",
             body: JSON.stringify({
                 id: request.id,
@@ -79,7 +80,8 @@ export class BackendClient {
         });
 
         const result = new SaveItemResponse();
-        result.id = response.json()['id'];
+        const responseJSON = await response.json();
+        result.id = responseJSON['id'];
         return result;
     }
 
@@ -88,13 +90,13 @@ export class BackendClient {
         url.searchParams.set('id', id);
 
         const response = await fetch(url.href);
-        const obj = response.json();
-        const res = new LoadItemResponse();
-        res.displayName = obj['display_name'];
-        res.ownerName = obj['owner_name'];
-        res.spec = this.parseItemSpec(obj['spec']);
+        const responseJSON = await response.json();
+        const result = new LoadItemResponse();
+        result.displayName = responseJSON['display_name'];
+        result.ownerName = responseJSON['owner_name'];
+        result.spec = this.parseItemSpec(responseJSON['spec']);
 
-        return res;
+        return result;
     }
 
     public async addOwners(owners: AddOwnersRequestOwner[]): Promise<string[]> {
@@ -113,7 +115,8 @@ export class BackendClient {
         });
 
         const result: string[] = [];
-        for (let owner of response.json()['owners']) {
+        const responseJSON = await response.json();
+        for (let owner of responseJSON['owners']) {
             result.push(owner['id']);
         }
         return result;
@@ -134,7 +137,9 @@ export class BackendClient {
     public async listOwners(): Promise<OwnerSpec[]> {
         const response = await fetch('/stocktaking/owners');
         const owners: OwnerSpec[] = [];
-        for (const obj of response.json()['results']) {
+        const responseJSON = await response.json();
+        console.log('listOwners responseJSON:', responseJSON);
+        for (const obj of responseJSON['results']) {
             const owner = new OwnerSpec();
             owner.id = obj['user_id'];
             owner.name = obj['name'];
@@ -142,6 +147,7 @@ export class BackendClient {
             owner.mayLogin = obj['may_login'];
             owners.push(owner);
         }
+        console.log('listOwners owners:', JSON.stringify(owners));
 
         return owners;
     }
@@ -150,7 +156,8 @@ export class BackendClient {
         const url = new URL('/auth/token');
         url.searchParams.set('email', email);
         const response = await fetch(url.href);
-        return response.json['id'];
+        const responseJSON = await response.json();
+        return responseJSON['id'];
     }
 
     private serializeSpec(spec: ItemSpec): object {
