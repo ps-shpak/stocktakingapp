@@ -3,21 +3,30 @@ import { styles } from "./styles";
 import * as React from "react";
 import { Component, ReactNode } from "react";
 import { IPopupProps } from "./IPopupProps";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import Dialog from "@material-ui/core/Dialog";
+import * as cn from "classnames";
 
 export const PopupView = withStyles(styles)(
     class extends Component<IPopupProps> {
         render(): ReactNode {
+            const className = cn(this.props.classes.popup, this.props.className);
             return (
-                <>
-                    <div className={this.props.classes.overlay} onClick={this.props.onClose} />
-                    <div className={this.props.classes.popup}>
-                        <div className={this.props.classes.header}>
-                            <div className={this.props.classes.title}>{this.props.title}</div>
-                            <div className={this.props.classes.icon} onClick={this.props.onClose}>&#10006;</div>
-                        </div>
-                        <div className={this.props.classes.content}>{this.props.children}</div>
+                <Dialog open={this.props.isVisible} onClose={this.props.onClose}>
+                    <div className={className}>
+                        <DialogTitle>{this.props.title}</DialogTitle>
+                        <DialogContent>
+                            {this.props.description &&
+                            <DialogContentText>
+                                {this.props.description}
+                            </DialogContentText>
+                            }
+                            {this.props.children}
+                        </DialogContent>
                     </div>
-                </>
+                </Dialog>
             );
         }
     }
