@@ -45,7 +45,7 @@ export const AddUserPopup = withStyles(styles)(
                             isDisable={!this.store.isFormValid()}
                             onClick={this.store.createUser}
                             isFullWidth={true}
-                            variant={EButtonVariant.CONTAINED}
+                            variant={EButtonVariant.TEXT}
                             color={"primary"}
                         />
                     </Popup>

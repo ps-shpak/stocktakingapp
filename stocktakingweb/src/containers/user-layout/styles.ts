@@ -19,5 +19,8 @@ export const styles = createStyles({
     content: {
         display: "flex",
         width: "100%"
+    },
+    tooltip: {
+        fontSize: 14
     }
 });

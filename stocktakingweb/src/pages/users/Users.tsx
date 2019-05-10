@@ -6,7 +6,8 @@ import { observer } from "mobx-react";
 import { List } from "../../components/list";
 import { UsersStore } from "./UsersStore";
 import { UserLayout } from "../../containers/user-layout";
-import { AddUserPopup } from "../../components/add-user-popup";
+import { AddUserForm } from "../../components/add-user-form";
+// import { AddUserPopup } from "../../components/add-user-popup";
 
 @observer
 @autobind
@@ -26,8 +27,13 @@ export class Users extends Component {
                         />
                     </UserLayout>
                 </WrapperWithSidebar>
-                <AddUserPopup
+                {/*<AddUserPopup*/}
+                {/*    isVisible={this.store.isCreateUserPopupVisible}*/}
+                {/*    onClose={this.hideCreateUserPopup}*/}
+                {/*/>*/}
+                <AddUserForm
                     isVisible={this.store.isCreateUserPopupVisible}
+                    onOpen={this.showCreateUserPopup}
                     onClose={this.hideCreateUserPopup}
                 />
             </Fragment>
