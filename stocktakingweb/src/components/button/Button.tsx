@@ -3,20 +3,26 @@ import { styles } from "./styles";
 import * as React from "react";
 import { Component, ReactNode } from "react";
 import { IButtonProps } from "./IButtonProps";
-import * as cn from "classnames";
+import { Button as ButtonMaterial } from "@material-ui/core";
+import { EButtonVariant } from "./EButtonVariant";
+import { EButtonSize } from "./EButtonSize";
 
 export const Button = withStyles(styles)(
     class extends Component<IButtonProps> {
         render(): ReactNode {
-            const className = cn(
-                this.props.classes.button,
-                this.props.className,
-                this.props.isDisable && this.props.classes.disable
-            );
             return (
-                <div className={className} onClick={this.props.onClick}>
+                <ButtonMaterial
+                    disabled={this.props.isDisable}
+                    fullWidth={this.props.isFullWidth}
+                    onClick={this.props.onClick}
+                    className={this.props.className}
+                    component={this.props.component}
+                    color={this.props.color || "primary"}
+                    variant={this.props.variant || EButtonVariant.CONTAINED}
+                    size={this.props.size || EButtonSize.MEDIUM}
+                >
                     {this.props.title}
-                </div>
+                </ButtonMaterial>
             );
         }
     }

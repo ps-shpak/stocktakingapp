@@ -8,6 +8,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import Dialog from "@material-ui/core/Dialog";
 import * as cn from "classnames";
+import { IconButton } from "@material-ui/core";
+import { Close } from "@material-ui/icons";
 
 export const PopupView = withStyles(styles)(
     class extends Component<IPopupProps> {
@@ -16,8 +18,17 @@ export const PopupView = withStyles(styles)(
             return (
                 <Dialog open={this.props.isVisible} onClose={this.props.onClose}>
                     <div className={className}>
-                        <DialogTitle>{this.props.title}</DialogTitle>
-                        <DialogContent>
+                        <DialogTitle className={this.props.classes.title}>
+                            {this.props.title}
+                            <IconButton
+                                aria-label="Close"
+                                className={this.props.classes.close}
+                                onClick={this.props.onClose}
+                            >
+                                <Close />
+                            </IconButton>
+                        </DialogTitle>
+                        <DialogContent className={this.props.classes.content}>
                             {this.props.description &&
                             <DialogContentText>
                                 {this.props.description}

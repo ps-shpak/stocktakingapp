@@ -8,6 +8,8 @@ export interface IInputFieldProps extends IFieldProps {
     isRequired?: boolean;
     value?: string;
     maxLength?: number;
+    isTextArea?: boolean;
+    autoFocus?: boolean;
 
     onChange(id: string, value: string): void;
 

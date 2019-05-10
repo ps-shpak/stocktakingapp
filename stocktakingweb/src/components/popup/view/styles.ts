@@ -5,4 +5,17 @@ export const styles = createStyles({
         width: 600,
         maxHeight: 600,
     },
+    content: {
+        paddingTop: 10
+    },
+    title: {
+        position: "relative",
+        display: "flex",
+        alignItems: "center"
+    },
+    close: {
+        position: "absolute",
+        right: 24,
+        top: 12
+    }
 });

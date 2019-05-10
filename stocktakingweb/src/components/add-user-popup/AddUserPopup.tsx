@@ -6,9 +6,9 @@ import { IAddUserPopupProps } from "./IAddUserPopupProps";
 import { observer } from "mobx-react";
 import { Popup } from "../popup";
 import { AddUserPopupStore } from "./AddUserPopupStore";
-import { InputField } from "../input-field/InputField";
+import { InputField } from "../input-field";
 import { EFormTypes } from "../../config";
-import { Button } from "../button";
+import { Button, EButtonVariant } from "../button";
 
 export const AddUserPopup = withStyles(styles)(
     observer(
@@ -44,7 +44,9 @@ export const AddUserPopup = withStyles(styles)(
                             title={"Создать"}
                             isDisable={!this.store.isFormValid()}
                             onClick={this.store.createUser}
-                            className={this.props.classes.button}
+                            isFullWidth={true}
+                            variant={EButtonVariant.CONTAINED}
+                            color={"primary"}
                         />
                     </Popup>
                 );
