@@ -14,6 +14,7 @@ export const styles = createStyles({
     },
     button: {
         background: EColors.GREEN,
+        color: "#000"
     },
     content: {
         display: "flex",

@@ -2,8 +2,11 @@ import * as React from "react";
 import { IPopupProps } from "./IPopupProps";
 import { autobind } from "core-decorators";
 import { observer } from "mobx-react";
-import { PopupView } from "./view";
 import { PopupStore } from "./PopupStore";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 @observer
 @autobind
@@ -19,22 +22,18 @@ export class Popup extends React.Component<IPopupProps> {
     }
 
     render(): React.ReactNode {
-        return this.renderPopup();
-    }
-
-    private renderPopup(): React.ReactNode {
-        if (this.store.isVisible) {
-            return (
-                <PopupView
-                    title={this.props.title}
-                    description={this.props.description}
-                    onClose={this.props.onClose}
-                >
+        return (
+            <Dialog open={this.store.isVisible} onClose={this.props.onClose}>
+                <DialogTitle>{this.props.title}</DialogTitle>
+                <DialogContent>
+                    {this.props.description &&
+                        <DialogContentText>
+                            {this.props.description}
+                        </DialogContentText>
+                    }
                     {this.props.children}
-                </PopupView>
-            );
-        } else {
-            return <></>;
-        }
+                </DialogContent>
+            </Dialog>
+        );
     }
 }
