@@ -1,3 +1,6 @@
 export enum EPaths {
-    MAIN = "/"
+    MAIN = "/",
+    USERS = "/users",
+    LICENSE = "/license",
+    PROPERTY = "/property"
 }

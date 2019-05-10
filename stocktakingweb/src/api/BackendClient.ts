@@ -36,7 +36,7 @@ export class BackendClient {
         for (const groupObj of responseJSON['results']) {
             const group = new ItemGroupNode();
             group.name = groupObj['name'];
-            group.items = []
+            group.items = [];
             for (const itemObj of groupObj['items']) {
                 const item = new ItemNode();
                 item.displayName = itemObj['display_name'];

@@ -10,7 +10,7 @@ export const styles = createStyles({
        cursor: "pointer"
    },
     disable: {
-       background: "rgba(0, 0, 0, 0.3)",
+        background: "rgba(0, 0, 0, 0.3) !important",
         pointerEvents: "none"
     }
 });
