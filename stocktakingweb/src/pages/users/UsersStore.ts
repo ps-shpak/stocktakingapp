@@ -30,6 +30,7 @@ export class UsersStore extends FormStore {
     ];
     @observable isCreateUserPopupVisible = false;
     @observable isConfirmCancelAddUser = false;
+    @observable isInfoPopupVisible = false;
 
     onEdit(index: number): void {
         console.log("edit", index);
@@ -41,10 +42,15 @@ export class UsersStore extends FormStore {
 
     onShowCreateUserPopup(value: boolean): void {
         this.isCreateUserPopupVisible = value;
+        if (!this.isCreateUserPopupVisible) {
+            this.resetFields();
+        }
     }
 
     onSubmit(): void {
         console.log(this.getFieldValues());
+        this.isCreateUserPopupVisible = false;
+        this.isInfoPopupVisible = true;
     }
 
     onSubmitCancelCreateUser(): void {
@@ -56,6 +62,9 @@ export class UsersStore extends FormStore {
     onCancelCreateUser(): void {
         this.isConfirmCancelAddUser = false;
         this.onShowCreateUserPopup(true);
-        console.log(this.isCreateUserPopupVisible);
+    }
+
+    onCloseInfoPopup(): void {
+        this.isInfoPopupVisible = false;
     }
 }

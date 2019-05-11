@@ -8,6 +8,7 @@ import { UsersStore } from "./UsersStore";
 import { UserLayout } from "../../containers/user-layout";
 import { AddUserForm } from "../../components/add-user-form";
 import { ConfirmPopup } from "../../components/confirm-popup/ConfirmPopup";
+import { InfoPopup } from "../../components/info-popup";
 
 @observer
 @autobind
@@ -42,6 +43,11 @@ export class Users extends Component {
                     description={"Введенные вами данные не будут сохранены"}
                     onSubmit={this.store.onSubmitCancelCreateUser}
                     onClose={this.store.onCancelCreateUser}
+                />
+                <InfoPopup
+                    isVisible={this.store.isInfoPopupVisible}
+                    title={"Пользователь удачно создан"}
+                    onClose={this.store.onCloseInfoPopup}
                 />
             </Fragment>
         );

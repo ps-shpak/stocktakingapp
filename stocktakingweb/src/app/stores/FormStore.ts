@@ -47,6 +47,10 @@ export class FormStore {
         });
     }
 
+    resetFields(): void {
+        this.fields.length = 0;
+    }
+
     private isTextValid(value: string): boolean {
         return value !== "";
     }
