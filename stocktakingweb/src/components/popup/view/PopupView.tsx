@@ -30,11 +30,13 @@ export const PopupView = withStyles(styles)(
                         </DialogTitle>
                         <DialogContent className={this.props.classes.content}>
                             {this.props.description &&
-                            <DialogContentText>
-                                {this.props.description}
-                            </DialogContentText>
+                                <DialogContentText className={this.props.classes.contentText}>
+                                    {this.props.description}
+                                </DialogContentText>
                             }
-                            {this.props.children}
+                            <div className={this.props.classes.children}>
+                                {this.props.children}
+                            </div>
                         </DialogContent>
                     </div>
                 </Dialog>

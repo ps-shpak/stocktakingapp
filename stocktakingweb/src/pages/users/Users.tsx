@@ -7,7 +7,7 @@ import { List } from "../../components/list";
 import { UsersStore } from "./UsersStore";
 import { UserLayout } from "../../containers/user-layout";
 import { AddUserForm } from "../../components/add-user-form";
-// import { AddUserPopup } from "../../components/add-user-popup";
+import { ConfirmPopup } from "../../components/confirm-popup/ConfirmPopup";
 
 @observer
 @autobind
@@ -27,14 +27,21 @@ export class Users extends Component {
                         />
                     </UserLayout>
                 </WrapperWithSidebar>
-                {/*<AddUserPopup*/}
-                {/*    isVisible={this.store.isCreateUserPopupVisible}*/}
-                {/*    onClose={this.hideCreateUserPopup}*/}
-                {/*/>*/}
                 <AddUserForm
                     isVisible={this.store.isCreateUserPopupVisible}
                     onOpen={this.showCreateUserPopup}
                     onClose={this.hideCreateUserPopup}
+                    addField={this.store.addField}
+                    onChange={this.store.onChange}
+                    onSubmit={this.store.onSubmit}
+                    isFormValid={!this.store.isFormValid()}
+                />
+                <ConfirmPopup
+                    isVisible={this.store.isConfirmCancelAddUser}
+                    title={"Вы действительно хотите отменить создание пользователя?"}
+                    description={"Введенные вами данные не будут сохранены"}
+                    onSubmit={this.store.onSubmitCancelCreateUser}
+                    onClose={this.store.onCancelCreateUser}
                 />
             </Fragment>
         );
@@ -45,6 +52,10 @@ export class Users extends Component {
     }
 
     private hideCreateUserPopup(): void {
+        if (this.store.isDataChanged) {
+            this.store.isConfirmCancelAddUser = this.store.isDataChanged;
+            return;
+        }
         this.store.onShowCreateUserPopup(false);
     }
 }

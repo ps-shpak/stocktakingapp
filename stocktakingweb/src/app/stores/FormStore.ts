@@ -11,6 +11,7 @@ interface IFieldsArray {
 
 @autobind
 export class FormStore {
+    @observable isDataChanged = false;
     @observable private readonly fields: IFieldsArray[] = [];
 
     addField(field: Field): void {
@@ -30,6 +31,7 @@ export class FormStore {
         field.setValue(value);
         const type = field.getType();
         field.setValidState(this.getValidationFunction(value, type));
+        this.isDataChanged = true;
     }
 
     getFieldById(id: string): Field {

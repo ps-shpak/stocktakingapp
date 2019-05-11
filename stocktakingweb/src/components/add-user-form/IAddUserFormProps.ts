@@ -1,10 +1,12 @@
-import { WithStyles } from "@material-ui/core";
-import { styles } from "./styles";
+import { IFieldProps } from "../field";
 
-export interface IAddUserFormProps extends WithStyles<typeof styles> {
+export interface IAddUserFormProps extends IFieldProps {
     isVisible: boolean;
+    isFormValid: boolean;
 
     onOpen(): void;
 
     onClose(): void;
+
+    onSubmit(): void;
 }

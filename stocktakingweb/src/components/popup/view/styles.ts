@@ -6,16 +6,23 @@ export const styles = createStyles({
         maxHeight: 600,
     },
     content: {
-        paddingTop: 10
+        paddingTop: 10,
+    },
+    contentText: {
+        marginBottom: 20
     },
     title: {
         position: "relative",
         display: "flex",
-        alignItems: "center"
+        alignItems: "center",
+        paddingBottom: 0,
     },
     close: {
         position: "absolute",
         right: 24,
         top: 12
-    }
+    },
+    children: {
+        display: "flex"
+    },
 });

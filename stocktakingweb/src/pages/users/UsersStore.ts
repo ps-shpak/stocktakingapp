@@ -2,9 +2,10 @@ import { autobind } from "core-decorators";
 import { observable } from "mobx";
 import { IListItem } from "../../components/list/IListItem";
 import * as uuid from "uuid";
+import { FormStore } from "../../app/stores";
 
 @autobind
-export class UsersStore {
+export class UsersStore extends FormStore {
     @observable userList: IListItem[] = [
         {
             id: uuid.v4(),
@@ -28,6 +29,7 @@ export class UsersStore {
         },
     ];
     @observable isCreateUserPopupVisible = false;
+    @observable isConfirmCancelAddUser = false;
 
     onEdit(index: number): void {
         console.log("edit", index);
@@ -39,5 +41,21 @@ export class UsersStore {
 
     onShowCreateUserPopup(value: boolean): void {
         this.isCreateUserPopupVisible = value;
+    }
+
+    onSubmit(): void {
+        console.log(this.getFieldValues());
+    }
+
+    onSubmitCancelCreateUser(): void {
+        this.isConfirmCancelAddUser = false;
+        this.onShowCreateUserPopup(false);
+        this.isDataChanged = false;
+    }
+
+    onCancelCreateUser(): void {
+        this.isConfirmCancelAddUser = false;
+        this.onShowCreateUserPopup(true);
+        console.log(this.isCreateUserPopupVisible);
     }
 }

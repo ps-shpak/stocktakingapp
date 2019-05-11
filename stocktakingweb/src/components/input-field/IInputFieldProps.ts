@@ -11,7 +11,5 @@ export interface IInputFieldProps extends IFieldProps {
     isTextArea?: boolean;
     autoFocus?: boolean;
 
-    onChange(id: string, value: string): void;
-
     onBlur?(): void;
 }

@@ -13,7 +13,7 @@ export class App extends React.Component {
     return (
         <Router history={AppContext.getHistory()}>
             <>
-                <DevTools />
+                <DevTools position={"topRight"} />
                 <Switch>
                     <Route exact={true} path={EPaths.MAIN} component={Main} />
                     <Route exact={true} path={EPaths.USERS} component={Users} />

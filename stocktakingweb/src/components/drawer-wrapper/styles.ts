@@ -14,9 +14,7 @@ export const styles = createStyles({
     },
     button: {
         position: "absolute",
-        bottom: 40,
-        display: "flex",
-        justifyContent: "center",
-        width: "100%"
+        bottom: 30,
+        right: 30,
     }
 });
