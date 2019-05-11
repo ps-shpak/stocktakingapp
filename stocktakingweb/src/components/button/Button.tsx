@@ -20,7 +20,7 @@ export const Button = withStyles(styles)(
                     component={this.props.component}
                     color={this.props.color || EButtonColors.PRIMARY}
                     variant={this.props.variant || EButtonVariant.CONTAINED}
-                    size={this.props.size || EButtonSize.MEDIUM}
+                    size={this.props.size || EButtonSize.LARGE}
                 >
                     {this.props.title}
                 </ButtonMaterial>
