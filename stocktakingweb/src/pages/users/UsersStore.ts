@@ -44,6 +44,7 @@ export class UsersStore extends FormStore {
         this.isCreateUserPopupVisible = value;
         if (!this.isCreateUserPopupVisible) {
             this.resetFields();
+            this.isDataChanged = false;
         }
     }
 
