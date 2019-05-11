@@ -5,6 +5,7 @@ import { styles } from "./styles";
 import { IDrawerWrapperProps } from "./IDrawerWrapperProps";
 import { SwipeableDrawer } from "@material-ui/core";
 import { Button, EButtonSize, EButtonVariant } from "../button";
+import { CloseButton } from "../close-button";
 
 export const DrawerWrapper = withStyles(styles)(
     class extends Component<IDrawerWrapperProps> {
@@ -17,7 +18,10 @@ export const DrawerWrapper = withStyles(styles)(
                     anchor={"right"}
                 >
                     <div className={this.props.classes.drawer}>
-                        <div className={this.props.classes.title}>{this.props.title}</div>
+                        <div className={this.props.classes.header}>
+                            <div className={this.props.classes.title}>{this.props.title}</div>
+                            <CloseButton onClick={this.props.onClose} />
+                        </div>
                         {this.props.children}
                         <Button
                             title={this.props.buttonTitle}

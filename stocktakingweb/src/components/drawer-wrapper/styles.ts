@@ -10,11 +10,16 @@ export const styles = createStyles({
     },
     title: {
         fontSize: 30,
-        marginBottom: 20
     },
     button: {
         position: "absolute",
         bottom: 30,
         right: 30,
+    },
+    header: {
+        display: "flex",
+        alignItems: "center",
+        position: "relative",
+        marginBottom: 20
     }
 });

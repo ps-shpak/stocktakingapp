@@ -17,6 +17,11 @@ export const styles = createStyles({
         alignItems: "center",
         paddingBottom: 0,
     },
+    titleInner: {
+        position: "relative",
+        display: "flex",
+        width: "100%"
+    },
     close: {
         position: "absolute",
         right: 24,

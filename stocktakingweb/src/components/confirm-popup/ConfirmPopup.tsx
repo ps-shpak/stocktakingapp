@@ -2,7 +2,7 @@ import * as React from "react";
 import { ReactNode, Component } from "react";
 import { IConfirmPopupProps } from "./IConfirmPopupProps";
 import { Popup } from "../popup";
-import { Button, EButtonSize, EButtonVariant } from "../button";
+import { Button, EButtonColors, EButtonSize, EButtonVariant } from "../button";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { styles } from "./styles";
 
@@ -21,10 +21,10 @@ export const ConfirmPopup = withStyles(styles)(
                             title={"Отмена"}
                             onClick={this.props.onClose}
                             isDisable={false}
-                            variant={EButtonVariant.CONTAINED}
+                            variant={EButtonVariant.OUTLINED}
                             size={EButtonSize.LARGE}
                             isFullWidth={false}
-                            color={"default"}
+                            color={EButtonColors.PRIMARY}
                             className={this.props.classes.button}
                         />
                         <Button
@@ -34,7 +34,7 @@ export const ConfirmPopup = withStyles(styles)(
                             variant={EButtonVariant.CONTAINED}
                             size={EButtonSize.LARGE}
                             isFullWidth={false}
-                            color={"primary"}
+                            color={EButtonColors.PRIMARY}
                             className={this.props.classes.button}
                         />
                     </div>

@@ -6,6 +6,7 @@ import { IButtonProps } from "./IButtonProps";
 import { Button as ButtonMaterial } from "@material-ui/core";
 import { EButtonVariant } from "./EButtonVariant";
 import { EButtonSize } from "./EButtonSize";
+import { EButtonColors } from "./EButtonColors";
 
 export const Button = withStyles(styles)(
     class extends Component<IButtonProps> {
@@ -17,7 +18,7 @@ export const Button = withStyles(styles)(
                     onClick={this.props.onClick}
                     className={this.props.className}
                     component={this.props.component}
-                    color={this.props.color || "primary"}
+                    color={this.props.color || EButtonColors.PRIMARY}
                     variant={this.props.variant || EButtonVariant.CONTAINED}
                     size={this.props.size || EButtonSize.MEDIUM}
                 >
