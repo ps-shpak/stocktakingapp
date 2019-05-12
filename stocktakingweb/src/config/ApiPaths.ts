@@ -1,5 +1,5 @@
-const server = "https://shambir.site/";
+// const server = "http://localhost";
 
 export const ApiPaths = {
-    OWNERS: `${server}stocktaking/owners`
+    OWNERS: "/stocktaking/owners"
 };

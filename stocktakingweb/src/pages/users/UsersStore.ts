@@ -52,20 +52,16 @@ export class UsersStore extends FormStore {
         if (this.isFormValid()) {
             const formData = this.getFieldValues();
             const name = formData[0];
-            const surname = formData[1];
-            const email = formData[2];
+            const email = formData[1];
             this.transport.createUser({
-                owners: [
-                    {
-                        name: `${name} ${surname}`,
-                        email
-                    }
-                ]
-            }).then((response) => {
-                this.isCreateUserPopupVisible = false;
-                this.isInfoPopupVisible = true;
-                console.log(response);
-            });
+                owners: [{name, email}]
+            })
+                .then((response) => {
+                    this.isCreateUserPopupVisible = false;
+                    this.isInfoPopupVisible = true;
+                    console.log(response);
+            })
+                .catch((err) => console.log(err));
         }
 
     }

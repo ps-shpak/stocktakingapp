@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { ICreateUser } from "./RequestInterfaces";
-import * as qs from "qs";
 import { ApiPaths } from "../config";
+import { IGetUserData } from "./ResponseInterfaces";
 
 export class Transport {
     private readonly instance: AxiosInstance;
@@ -11,6 +11,10 @@ export class Transport {
     }
 
     async createUser(data: ICreateUser): Promise<AxiosResponse<void>> {
-        return this.instance.post(ApiPaths.OWNERS, qs.stringify(data));
+        return this.instance.post(ApiPaths.OWNERS, data);
+    }
+
+    async getUserList(): Promise<AxiosResponse<IGetUserData>> {
+        return this.instance.get(ApiPaths.OWNERS);
     }
 }
