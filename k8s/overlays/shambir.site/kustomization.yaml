@@ -9,10 +9,9 @@ resources:
 - ingress/ingress.yaml
 - ingress/certificate.yaml
 - ingress/letsencrypt-cert-issuer.yaml
-- volumes/postgres-data-persistentvolume.yaml
 
 patchesStrategicMerge:
-- volumes/postgres-data-persistentvolumeclaim.yaml
+- db/stock-db-deployment-volume.yaml
 
 secretGenerator:
 - name: stocktaking-secret

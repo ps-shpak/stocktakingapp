@@ -1,0 +1,11 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: stock-db
+spec:
+  template:
+    spec:
+      volumes:
+      - name: postgres-data
+        hostPath:
+          path: "/mnt/data"

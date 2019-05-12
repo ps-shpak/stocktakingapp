@@ -35,6 +35,5 @@ spec:
       restartPolicy: Always
       volumes:
       - name: postgres-data
-        persistentVolumeClaim:
-          claimName: postgres-data
+      # NOTE: overlay should setup this volume
 status: {}

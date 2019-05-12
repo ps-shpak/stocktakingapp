@@ -34,5 +34,6 @@ spec:
         name: stocktakingbackend
         ports:
         - containerPort: 8081
+        - containerPort: 8082
         resources: {}
       restartPolicy: Always
