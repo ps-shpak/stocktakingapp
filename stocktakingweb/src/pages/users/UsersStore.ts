@@ -1,33 +1,12 @@
 import { autobind } from "core-decorators";
 import { observable } from "mobx";
-import { IListItem } from "../../components/list/IListItem";
-import * as uuid from "uuid";
 import { FormStore } from "../../app/stores";
+import { IGetUserData } from "../../services";
+import { get } from "lodash";
 
 @autobind
 export class UsersStore extends FormStore {
-    @observable userList: IListItem[] = [
-        {
-            id: uuid.v4(),
-            title: "Ivanov Ivan",
-            email: "ivan@email.ru"
-        },
-        {
-            id: uuid.v4(),
-            title: "Ivanov Petr",
-            email: "petr@email.ru"
-        },
-        {
-            id: uuid.v4(),
-            title: "Ivanov Max",
-            email: "max@email.ru"
-        },
-        {
-            id: uuid.v4(),
-            title: "Ivanov Andrey",
-            email: "andrey@email.ru"
-        },
-    ];
+    @observable userList: IGetUserData[] = [];
     @observable isCreateUserPopupVisible = false;
     @observable isConfirmCancelAddUser = false;
     @observable isInfoPopupVisible = false;
@@ -59,7 +38,7 @@ export class UsersStore extends FormStore {
                 .then((response) => {
                     this.isCreateUserPopupVisible = false;
                     this.isInfoPopupVisible = true;
-                    console.log(response);
+                    this.getUsers();
             })
                 .catch((err) => console.log(err));
         }
@@ -79,5 +58,11 @@ export class UsersStore extends FormStore {
 
     onCloseInfoPopup(): void {
         this.isInfoPopupVisible = false;
+    }
+
+    getUsers(): void {
+        this.transport.getUserList().then((response) => {
+            this.userList = get(response.data, "results");
+        });
     }
 }

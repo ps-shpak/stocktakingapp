@@ -15,6 +15,10 @@ import { Wrapper } from "../../containers/wrapper";
 export class Users extends Component {
     private readonly store = new UsersStore();
 
+    componentDidMount(): void {
+        this.store.getUsers();
+    }
+
     render(): ReactNode {
         return (
             <Fragment>

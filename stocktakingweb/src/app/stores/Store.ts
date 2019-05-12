@@ -5,7 +5,7 @@ import { Transport } from "../../services";
 export class Store {
     private readonly _transport = new Transport();
 
-    get transport(): Transport {
+    protected get transport(): Transport {
         return this._transport;
     }
 }

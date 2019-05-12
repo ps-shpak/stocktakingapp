@@ -1,9 +1,9 @@
 import { WithStyles } from "@material-ui/core";
 import { styles } from "./styles";
-import { IListItem } from "./IListItem";
+import { IGetUserData } from "../../services";
 
 export interface IListProps extends WithStyles<typeof styles> {
-    list: IListItem[];
+    list: IGetUserData[];
     emptyListMessage: string;
 
     onDeleteItem(index: number): void;
