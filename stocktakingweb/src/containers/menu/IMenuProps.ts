@@ -1,9 +1,9 @@
+import { WithStyles } from "@material-ui/core";
+import { styles } from "./styles";
 import { IMenuItem } from "./IMenuItem";
 
-export interface IMenuProps {
-    data: IMenuItem[];
+export interface IMenuProps extends WithStyles<typeof styles> {
+    menuList: IMenuItem[];
 
-    onChangeActive?(rowIndex: number, subRowIndex: number): void;
-
-    onOpenOptions?(index: number): void;
+    onOpen(index: number): void;
 }

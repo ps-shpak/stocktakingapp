@@ -1,8 +1,9 @@
 import { autobind } from "core-decorators";
-import { observable } from "mobx";
+import { action, observable } from "mobx";
 import { IMenuItem } from "../menu";
 import { EPaths } from "../../config";
 import { AppContext } from "../../context";
+import { findIndex } from "lodash";
 
 @autobind
 export class SidebarStore {
@@ -50,5 +51,21 @@ export class SidebarStore {
 
     private static goToPage(path: string): void {
         AppContext.getHistory().push(path);
+    }
+
+    @action onOpenSubMenu(index: number): void {
+        this.menuData.map((item: IMenuItem) => {
+            item.isActive = false;
+        });
+        this.menuData[index].isActive = !this.menuData[index].isActive;
+    }
+
+    @action onMount(): void {
+        const url = window.location.href;
+        const activeIndex = findIndex(this.menuData, (item) => url.indexOf(item.path ? item.path : "") >= 0);
+        if (activeIndex < 0) {
+            return;
+        }
+        this.menuData[activeIndex].isActive = true;
     }
 }

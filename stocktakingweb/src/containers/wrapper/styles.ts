@@ -9,9 +9,11 @@ export const styles = createStyles({
     appBar: {
         marginLeft: 300,
         width: "calc(100% - 300px)",
-        padding: "10px 30px"
+        padding: "10px 30px",
+        background: "#2196f3"
     },
     content: {
-        paddingTop: 52
+        paddingTop: 52,
+        width: "100%"
     }
 });

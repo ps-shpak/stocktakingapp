@@ -8,9 +8,13 @@ export const styles = createStyles({
        display: "flex",
        flexDirection: "column",
        alignItems: "center",
-       boxSizing: "border-box"
+       boxSizing: "border-box",
+       borderRight: "1px solid rgba(0, 0, 0, 0.12)"
    },
     sidebarItem: {
        marginBottom: 10
+    },
+    divider: {
+       width: "100%"
     }
 });
