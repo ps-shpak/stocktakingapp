@@ -95,15 +95,6 @@ func (g *loggingMiddleware) SaveOwner(ctx context.Context, req *api.SaveOwnerReq
 	return res, err
 }
 
-func (g *loggingMiddleware) Authorize(ctx context.Context, req *api.AuthorizeRequest) (*api.AuthorizeResponse, error) {
-	start := time.Now()
-	res, err := g.impl.Authorize(ctx, req)
-	g.logCall(start, err, "Authorize", log.Fields{
-		"email": req.Email,
-	})
-	return res, err
-}
-
 func (g *loggingMiddleware) logCall(start time.Time, err error, method string, fields log.Fields) {
 	duration := fmt.Sprintf("%v", time.Since(start))
 	entry := g.logger.WithFields(fields).WithField("duration", duration).WithField("method", method)

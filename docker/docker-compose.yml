@@ -13,6 +13,12 @@ services:
     - POSTGRES_PASSWORD=1234
     - POSTGRES_DB=stock
 
+  stock-redis:
+    image: "redis:4.0.14"
+    command: "redis-server --protected-mode no --appendonly yes"
+    volumes:
+    - "redis-data:/data"
+
   stocktakingbackend:
     image: "psshpak/stocktakingbackend"
     container_name: "stocktakingbackend"
@@ -39,3 +45,4 @@ services:
 
 volumes:
   postgres-data:
+  redis-data:

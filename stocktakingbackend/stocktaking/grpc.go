@@ -223,16 +223,6 @@ func (g *grpcServer) SaveOwner(ctx context.Context, req *api.SaveOwnerRequest) (
 	return &api.SaveOwnerResponse{}, nil
 }
 
-func (g *grpcServer) Authorize(ctx context.Context, req *api.AuthorizeRequest) (*api.AuthorizeResponse, error) {
-	id, err := g.service.Authorize(req.Email)
-	if err != nil {
-		return nil, translateError(err)
-	}
-	return &api.AuthorizeResponse{
-		Id: id.String(),
-	}, nil
-}
-
 func parseOrGenerateID(id string) (stock.ID, error) {
 	if id == "" {
 		return stock.GenerateID(), nil

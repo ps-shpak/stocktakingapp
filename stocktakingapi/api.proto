@@ -66,18 +66,6 @@ service Backend {
         body: "*"
       };
     };
-
-    // Attempts to authorize user in this service
-    // Authorization uses only email - caller must validate email
-    //  before calling this method (e.g. sign in with Google).
-    // Errors:
-    //  - UnknownId - no such email registered in service
-    //  - AuthForbidden - email belongs to owner which cannot service itself
-    rpc Authorize(AuthorizeRequest) returns (AuthorizeResponse) {
-      option (google.api.http) = {
-        get: "/auth/token",
-      };
-    };
 }
 
 message ItemSpec {
@@ -189,12 +177,4 @@ message SaveOwnerRequest {
 }
 
 message SaveOwnerResponse {
-}
-
-message AuthorizeRequest {
-  string email = 1;
-}
-
-message AuthorizeResponse {
-  string id = 1; // user ID
 }
