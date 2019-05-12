@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:stocktakingmobile/domain/model/item.dart';
-import 'package:stocktakingmobile/ui/widget/spec_item.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:stocktakingmobile/domain/model/qr_code_Item.dart';
+import 'package:stocktakingmobile/ui/widget/spec_item.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+enum RequestState {
+  FirstWait,
+  Wait,
+  Idle,
+}
 
 class ItemPageState extends State<StatefulWidget> {
   ItemPageState(this.item) : super();
 
-  Item item;
+  QRCodeItem item;
+
+  RequestState _requestState = RequestState.FirstWait;
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
 
   final _iconInUse = "assets/ic_in_use.svg";
   final _iconUser = "assets/ic_user.svg";
@@ -18,46 +28,36 @@ class ItemPageState extends State<StatefulWidget> {
   double _iconSize = 28.0;
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _refreshIndicatorKey.currentState.show();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          _buildAppBar(),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => _buildBodyItem(index),
-              childCount: 3,
-            ),
-          )
-        ],
-      ),
+      body: _buildRefreshIndicator(),
       backgroundColor: Colors.white,
     );
   }
 
-  Widget _buildAppBar() {
-    return SliverAppBar(
-      elevation: 3,
-      expandedHeight: 200.0,
-      floating: false,
-      pinned: true,
-      flexibleSpace: FlexibleSpaceBar(
-        background: new Image.network(item.photo, fit: BoxFit.cover),
+  Widget _buildRefreshIndicator() {
+    return RefreshIndicator(
+      key: _refreshIndicatorKey,
+      child: ListView(
+        children: <Widget>[
+          _buildTitle(),
+          _buildSpec(),
+          _buildDescription(),
+        ],
       ),
-      backgroundColor: Colors.orangeAccent,
+      onRefresh: () async {
+        await Future.delayed(Duration(seconds: 4));
+      },
     );
-  }
-
-  Widget _buildBodyItem(int index) {
-    if (index == 0) {
-      return _buildTitle();
-    } else if (index == 1) {
-      return _buildSpec();
-    } else if (index == 2) {
-      return _buildDescription();
-    }
-
-    return null;
   }
 
   Widget _buildTitle() {
@@ -68,7 +68,7 @@ class ItemPageState extends State<StatefulWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            item.name,
+            "Name", //item.name,
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -77,7 +77,7 @@ class ItemPageState extends State<StatefulWidget> {
           Padding(
             padding: EdgeInsets.only(top: 4),
             child: Text(
-              item.type,
+              "Type", //item.type,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.normal,
@@ -129,7 +129,7 @@ class ItemPageState extends State<StatefulWidget> {
         height: _iconSize,
       ),
       text: Text(
-        item.host,
+        "Host", //item.host,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -147,7 +147,7 @@ class ItemPageState extends State<StatefulWidget> {
         height: _iconSize,
       ),
       text: Text(
-        item.location,
+        "Location", //item.location,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -173,7 +173,7 @@ class ItemPageState extends State<StatefulWidget> {
           Padding(
             padding: EdgeInsets.only(top: 6),
             child: Linkify(
-              text: item.description,
+              text: "Description", //item.description,
               style: TextStyle(fontSize: 16),
               onOpen: (link) => _launchLink,
             ),

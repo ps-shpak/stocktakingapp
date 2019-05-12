@@ -6,6 +6,5 @@ resources:
   - backend/stocktakingbackend-service.yaml
   - web/stocktakingweb-deployment.yaml
   - web/stocktakingweb-service.yaml
-  - db/postgres-data-persistentvolumeclaim.yaml
   - db/stock-db-service.yaml
   - db/stock-db-deployment.yaml

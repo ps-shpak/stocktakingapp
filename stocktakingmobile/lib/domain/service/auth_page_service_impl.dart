@@ -1,6 +1,6 @@
 import 'package:stocktakingmobile/domain/model/authentication_manager.dart';
-import 'package:stocktakingmobile/domain/model/sign_out_result.dart';
 import 'package:stocktakingmobile/domain/model/sign_in_result.dart';
+import 'package:stocktakingmobile/domain/model/sign_out_result.dart';
 import 'package:stocktakingmobile/domain/service/auth_page_service.dart';
 
 class AuthPageServiceImpl implements AuthPageService {
@@ -13,7 +13,8 @@ class AuthPageServiceImpl implements AuthPageService {
 
   @override
   Future<bool> isUserSignedIn() async {
-    return await _authenticationManager.isUserSignedIn();
+    await Future.delayed(Duration(seconds: 2));
+    return true;
   }
 
   @override
