@@ -1,5 +1,5 @@
 import createStyles from "@material-ui/core/styles/createStyles";
-import { EColors } from "../../../config";
+import { EColors } from "../../config";
 
 export const styles = createStyles({
    menu: {

@@ -1,25 +1,30 @@
+import withStyles from "@material-ui/core/styles/withStyles";
+import { styles } from "./styles";
 import * as React from "react";
 import { Component, ReactNode } from "react";
-import { MenuView } from "./view";
-import { autobind } from "core-decorators";
-import { observer } from "mobx-react";
 import { IMenuProps } from "./IMenuProps";
-import { SyntheticEvent } from "react";
+import { IMenuItem } from "./IMenuItem";
+import { List } from "@material-ui/core";
+import { MenuLine } from "../../components/menu-line/MenuLine";
 
-@observer
-@autobind
-export class Menu extends Component<IMenuProps> {
-    render(): ReactNode {
-        return (
-            <MenuView
-                menuList={this.props.data}
-                openOptions={this.props.onOpenOptions}
-                onClickMenuItem={this.onClick}
-            />
-        );
-    }
+export const Menu = withStyles(styles)(
+    class extends Component<IMenuProps> {
+        render(): ReactNode {
+            return (
+                <List className={this.props.classes.menu}>
+                    {this.props.menuList.map((item: IMenuItem, index: number) => {
+                        return (
+                            <MenuLine
+                                key={index}
+                                line={item}
+                                index={index}
+                                onOpen={this.props.onOpen}
+                            />
+                        );
+                    })}
+                </List>
+            );
+        }
 
-    private onClick(event: SyntheticEvent<HTMLDivElement>, rowIndex: number, subrowIndex: number): void {
-        this.props.onChangeActive(rowIndex, subrowIndex);
     }
-}
+);

@@ -23,11 +23,7 @@ export class WrapperWithSidebar extends Component<IWrapperWithSidebarProps> {
         };
         return (
             <Wrapper title={this.props.title}>
-                <Sidebar
-                    data={this.store.getMenuData()}
-                    onOpenOptions={this.onOpen}
-                    onChangeActive={this.onChangeActive}
-                />
+                <Sidebar />
                 <div style={style}>
                     {this.props.children}
                 </div>
@@ -35,12 +31,12 @@ export class WrapperWithSidebar extends Component<IWrapperWithSidebarProps> {
         );
     }
 
-    private onOpen(index: number): void {
+    onOpen(index: number): void {
         this.store.onOpenOptions(index);
         attempt(this.props.onOpenOptions!, index);
     }
 
-    private onChangeActive(rowIndex: number, subRowIndex: number): void {
+    onChangeActive(rowIndex: number, subRowIndex: number): void {
         this.store.onChangeActiveMenuItem(rowIndex, subRowIndex);
         attempt(this.props.onChangeActive!, rowIndex, subRowIndex);
     }

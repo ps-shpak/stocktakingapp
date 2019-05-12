@@ -4,7 +4,7 @@ import { autobind } from "core-decorators";
 import { observer } from "mobx-react";
 import { Dashboard } from "../../containers/dashboard";
 import { MainStore } from "./MainStore";
-import { WrapperWithSidebar } from "../../containers/wrapper-with-sidebar";
+import { Wrapper } from "../../containers/wrapper";
 
 @observer
 @autobind
@@ -13,12 +13,12 @@ export class Main extends Component {
 
     render(): ReactNode {
         return (
-            <WrapperWithSidebar title={"Инвентаризация"}>
+            <Wrapper title={"Инвентаризация"}>
                 <Dashboard
                     store={this.store.dashboardStore}
                     onCloseTree={this.store.onCloseTree}
                 />
-            </WrapperWithSidebar>
+            </Wrapper>
         );
     }
 }

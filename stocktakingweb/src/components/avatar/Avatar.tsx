@@ -6,7 +6,7 @@ import { IAvatarProps } from "./IAvatarProps";
 import { onImageLoadErrorFun } from "../../utils";
 import { isNil } from "lodash";
 import { Nullable } from "../../config";
-import * as cn from "classnames";
+import { Avatar as MaterialAvatar, Typography } from "@material-ui/core";
 
 const defaultAvatar = require("./img/default-avatar.jpeg");
 const onAvatarError = onImageLoadErrorFun(defaultAvatar);
@@ -15,15 +15,15 @@ export const Avatar = withStyles(styles)(
     class extends Component<IAvatarProps> {
         render(): ReactNode {
             return (
-                <div className={cn(this.props.classes.avatar, this.props.className)}>
-                    <img
-                        src={this.getAvatarLink(this.props.src)}
-                        alt={this.props.name}
-                        className={this.props.classes.avatarImage}
+                <div>
+                    <MaterialAvatar
                         onError={onAvatarError}
+                        src={this.getAvatarLink(this.props.src)}
+                        className={this.props.className}
                     />
-                    <span className={this.props.classes.name}>{this.props.name}</span>
+                    <Typography>{this.props.name}</Typography>
                 </div>
+
             );
         }
 

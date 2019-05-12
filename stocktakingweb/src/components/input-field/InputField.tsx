@@ -35,11 +35,14 @@ export class InputField extends Component<IInputFieldProps> {
                 value={this.field.getValue()}
                 onChange={this.onChange}
                 maxLength={this.props.maxLength || 255}
+                isError={this.field.getErrorState()}
+                isTextArea={this.props.isTextArea}
+                autoFocus={this.props.autoFocus || false}
             />
         );
     }
 
-    private onChange(event: ChangeEvent<HTMLInputElement>): void {
+    private onChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
         this.field.setValue(event.target.value);
         this.props.onChange(this.field.getId(), this.field.getValue());
     }
