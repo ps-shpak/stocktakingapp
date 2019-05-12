@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Component, ReactNode, Fragment } from "react";
 import { autobind } from "core-decorators";
-import { WrapperWithSidebar } from "../../containers/wrapper-with-sidebar";
 import { observer } from "mobx-react";
 import { List } from "../../components/list";
 import { UsersStore } from "./UsersStore";
@@ -9,6 +8,7 @@ import { UserLayout } from "../../containers/user-layout";
 import { AddUserForm } from "../../components/add-user-form";
 import { ConfirmPopup } from "../../components/confirm-popup/ConfirmPopup";
 import { InfoPopup } from "../../components/info-popup";
+import { Wrapper } from "../../containers/wrapper";
 
 @observer
 @autobind
@@ -18,7 +18,7 @@ export class Users extends Component {
     render(): ReactNode {
         return (
             <Fragment>
-                <WrapperWithSidebar title={"Пользователи"}>
+                <Wrapper title={"Пользователи"}>
                     <UserLayout onAddUser={this.showCreateUserPopup}>
                         <List
                             list={this.store.userList}
@@ -27,7 +27,7 @@ export class Users extends Component {
                             emptyListMessage={"В списке нет ни одного пользователя"}
                         />
                     </UserLayout>
-                </WrapperWithSidebar>
+                </Wrapper>
                 <AddUserForm
                     isVisible={this.store.isCreateUserPopupVisible}
                     onOpen={this.showCreateUserPopup}

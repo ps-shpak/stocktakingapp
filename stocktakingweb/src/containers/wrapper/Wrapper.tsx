@@ -4,6 +4,7 @@ import * as React from "react";
 import { Component, ReactNode } from "react";
 import { IWrapperProps } from "./IWrapperProps";
 import Helmet from "react-helmet";
+import { AppBar, Typography } from "@material-ui/core";
 
 export const Wrapper = withStyles(styles)(
     class extends Component<IWrapperProps> {
@@ -13,7 +14,17 @@ export const Wrapper = withStyles(styles)(
                     <Helmet>
                         <title>{this.props.title}</title>
                     </Helmet>
-                    {this.props.children}
+                    <AppBar
+                        position={"fixed"}
+                        className={this.props.classes.appBar}
+                    >
+                        <Typography variant="h6" color="inherit" noWrap={true}>
+                            {this.props.title}
+                        </Typography>
+                    </AppBar>
+                    <div className={this.props.classes.content}>
+                        {this.props.children}
+                    </div>
                 </div>
             );
         }
