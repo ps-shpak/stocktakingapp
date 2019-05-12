@@ -11,6 +11,9 @@ export interface IInpitFieldViewProps extends WithStyles<typeof styles> {
     value: string;
     maxLength?: number;
     className?: string;
+    autoFocus?: boolean;
+    isError?: boolean;
+    isTextArea?: boolean;
 
-    onChange(event: ChangeEvent<HTMLInputElement>): void;
+    onChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void;
 }

@@ -2,8 +2,8 @@ import * as React from "react";
 import { IPopupProps } from "./IPopupProps";
 import { autobind } from "core-decorators";
 import { observer } from "mobx-react";
-import { PopupView } from "./view";
 import { PopupStore } from "./PopupStore";
+import { PopupView } from "./view";
 
 @observer
 @autobind
@@ -19,22 +19,16 @@ export class Popup extends React.Component<IPopupProps> {
     }
 
     render(): React.ReactNode {
-        return this.renderPopup();
-    }
-
-    private renderPopup(): React.ReactNode {
-        if (this.store.isVisible) {
-            return (
-                <PopupView
-                    title={this.props.title}
-                    description={this.props.description}
-                    onClose={this.props.onClose}
-                >
-                    {this.props.children}
-                </PopupView>
-            );
-        } else {
-            return <></>;
-        }
+        return (
+            <PopupView
+                title={this.props.title}
+                isVisible={this.props.isVisible}
+                className={this.props.className}
+                onClose={this.props.onClose}
+                description={this.props.description}
+            >
+                {this.props.children}
+            </PopupView>
+        );
     }
 }

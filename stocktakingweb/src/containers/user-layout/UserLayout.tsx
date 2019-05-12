@@ -15,7 +15,6 @@ export const UserLayout = withStyles(styles)(
                             title={"Добавить пользователя"}
                             onClick={this.props.onAddUser}
                             isDisable={false}
-                            className={this.props.classes.button}
                         />
                     </div>
                     <div className={this.props.classes.content}>

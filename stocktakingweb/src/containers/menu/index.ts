@@ -1,2 +1,2 @@
-export { Menu } from "./Menu";
 export { IMenuItem } from "./IMenuItem";
+export { Menu } from "./Menu";

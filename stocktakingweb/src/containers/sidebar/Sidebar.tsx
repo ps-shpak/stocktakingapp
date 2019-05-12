@@ -3,25 +3,30 @@ import { styles } from "./styles";
 import * as React from "react";
 import { Component, ReactNode } from "react";
 import { ISidebarProps } from "./ISidebarProps";
-import { Logo } from "../../components/logo";
 import { Avatar } from "../../components/avatar";
+import { Divider } from "@material-ui/core";
+import { SidebarStore } from "./SidebarStore";
 import { Menu } from "../menu";
+import { observer } from "mobx-react";
 
 export const Sidebar = withStyles(styles)(
-    class extends Component<ISidebarProps> {
+    observer(
+        class extends Component<ISidebarProps> {
+            private readonly store = new SidebarStore();
 
-        render(): ReactNode {
-            return (
-                <div className={this.props.classes.sidebar}>
-                    <Logo className={this.props.classes.sidebarItem} />
-                    <Avatar name={"Maxim"} className={this.props.classes.sidebarItem} />
-                    <Menu
-                        data={this.props.data}
-                        onOpenOptions={this.props.onOpenOptions}
-                        onChangeActive={this.props.onChangeActive}
-                    />
-                </div>
-            );
+            componentDidMount(): void {
+                this.store.onMount();
+            }
+
+            render(): ReactNode {
+                return (
+                    <div className={this.props.classes.sidebar}>
+                        <Avatar name={"Maxim"} className={this.props.classes.sidebarItem} />
+                        <Divider className={this.props.classes.divider} />
+                        <Menu menuList={this.store.menuData} onOpen={this.store.onOpenSubMenu} />
+                    </div>
+                );
+            }
         }
-    }
+    )
 );
