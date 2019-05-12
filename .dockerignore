@@ -1,0 +1,22 @@
+# Files not used with docker build
+.idea/*
+.vscode/*
+apitests/*
+docker/*
+docs/*
+k8s/*
+stocktakingmobile/*
+.gitignore
+.sops.yaml
+Jenkinsfile
+LICENSE
+README.md
+Taskfile.yml
+
+# Frontend files
+stocktakingweb/node_modules/*
+stocktakingweb/build/*
+
+# Backend files
+stocktakingbackend/vendor/*
+stocktakingbackend/build/stocktakingbackend
