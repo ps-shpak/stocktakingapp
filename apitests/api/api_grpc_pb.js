@@ -49,6 +49,28 @@ function deserialize_stocktakingapi_AuthorizeResponse(buffer_arg) {
   return api_pb.AuthorizeResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_stocktakingapi_DeleteOwnerRequest(arg) {
+  if (!(arg instanceof api_pb.DeleteOwnerRequest)) {
+    throw new Error('Expected argument of type stocktakingapi.DeleteOwnerRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_stocktakingapi_DeleteOwnerRequest(buffer_arg) {
+  return api_pb.DeleteOwnerRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_stocktakingapi_DeleteOwnerResponse(arg) {
+  if (!(arg instanceof api_pb.DeleteOwnerResponse)) {
+    throw new Error('Expected argument of type stocktakingapi.DeleteOwnerResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_stocktakingapi_DeleteOwnerResponse(buffer_arg) {
+  return api_pb.DeleteOwnerResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_stocktakingapi_DisposeItemsRequest(arg) {
   if (!(arg instanceof api_pb.DisposeItemsRequest)) {
     throw new Error('Expected argument of type stocktakingapi.DisposeItemsRequest');
@@ -135,6 +157,28 @@ function serialize_stocktakingapi_LoadItemResponse(arg) {
 
 function deserialize_stocktakingapi_LoadItemResponse(buffer_arg) {
   return api_pb.LoadItemResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_stocktakingapi_LoadOwnerRequest(arg) {
+  if (!(arg instanceof api_pb.LoadOwnerRequest)) {
+    throw new Error('Expected argument of type stocktakingapi.LoadOwnerRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_stocktakingapi_LoadOwnerRequest(buffer_arg) {
+  return api_pb.LoadOwnerRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_stocktakingapi_LoadOwnerResponse(arg) {
+  if (!(arg instanceof api_pb.LoadOwnerResponse)) {
+    throw new Error('Expected argument of type stocktakingapi.LoadOwnerResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_stocktakingapi_LoadOwnerResponse(buffer_arg) {
+  return api_pb.LoadOwnerResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_stocktakingapi_SaveItemRequest(arg) {
@@ -291,7 +335,7 @@ var BackendService = exports.BackendService = {
     responseSerialize: serialize_stocktakingapi_AddOwnersResponse,
     responseDeserialize: deserialize_stocktakingapi_AddOwnersResponse,
   },
-  // Saves existing owner with given ID.
+  // Saves new or existing owner.
   saveOwner: {
     path: '/stocktakingapi.Backend/SaveOwner',
     requestStream: false,
@@ -302,6 +346,29 @@ var BackendService = exports.BackendService = {
     requestDeserialize: deserialize_stocktakingapi_SaveOwnerRequest,
     responseSerialize: serialize_stocktakingapi_SaveOwnerResponse,
     responseDeserialize: deserialize_stocktakingapi_SaveOwnerResponse,
+  },
+  loadOwner: {
+    path: '/stocktakingapi.Backend/LoadOwner',
+    requestStream: false,
+    responseStream: false,
+    requestType: api_pb.LoadOwnerRequest,
+    responseType: api_pb.LoadOwnerResponse,
+    requestSerialize: serialize_stocktakingapi_LoadOwnerRequest,
+    requestDeserialize: deserialize_stocktakingapi_LoadOwnerRequest,
+    responseSerialize: serialize_stocktakingapi_LoadOwnerResponse,
+    responseDeserialize: deserialize_stocktakingapi_LoadOwnerResponse,
+  },
+  // Deletes existing owner with given ID
+  deleteOwner: {
+    path: '/stocktakingapi.Backend/DeleteOwner',
+    requestStream: false,
+    responseStream: false,
+    requestType: api_pb.DeleteOwnerRequest,
+    responseType: api_pb.DeleteOwnerResponse,
+    requestSerialize: serialize_stocktakingapi_DeleteOwnerRequest,
+    requestDeserialize: deserialize_stocktakingapi_DeleteOwnerRequest,
+    responseSerialize: serialize_stocktakingapi_DeleteOwnerResponse,
+    responseDeserialize: deserialize_stocktakingapi_DeleteOwnerResponse,
   },
   // Attempts to authorize user in this service
   // Authorization uses only email - caller must validate email

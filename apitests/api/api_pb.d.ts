@@ -377,8 +377,8 @@ export namespace ListOwnersResponse {
 
 
     export class Result extends jspb.Message { 
-    getUserId(): string;
-    setUserId(value: string): void;
+    getId(): string;
+    setId(value: string): void;
 
     getName(): string;
     setName(value: string): void;
@@ -402,7 +402,7 @@ export namespace ListOwnersResponse {
 
     export namespace Result {
         export type AsObject = {
-        userId: string,
+        id: string,
         name: string,
         email: string,
         mayLogin: boolean,
@@ -541,6 +541,9 @@ export namespace SaveOwnerRequest {
 }
 
 export class SaveOwnerResponse extends jspb.Message { 
+    getId(): string;
+    setId(value: string): void;
+
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SaveOwnerResponse.AsObject;
@@ -553,6 +556,99 @@ export class SaveOwnerResponse extends jspb.Message {
 }
 
 export namespace SaveOwnerResponse {
+    export type AsObject = {
+        id: string,
+    }
+}
+
+export class LoadOwnerRequest extends jspb.Message { 
+    getId(): string;
+    setId(value: string): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): LoadOwnerRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: LoadOwnerRequest): LoadOwnerRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: LoadOwnerRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): LoadOwnerRequest;
+    static deserializeBinaryFromReader(message: LoadOwnerRequest, reader: jspb.BinaryReader): LoadOwnerRequest;
+}
+
+export namespace LoadOwnerRequest {
+    export type AsObject = {
+        id: string,
+    }
+}
+
+export class LoadOwnerResponse extends jspb.Message { 
+    getId(): string;
+    setId(value: string): void;
+
+    getName(): string;
+    setName(value: string): void;
+
+    getEmail(): string;
+    setEmail(value: string): void;
+
+    getMayLogin(): boolean;
+    setMayLogin(value: boolean): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): LoadOwnerResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: LoadOwnerResponse): LoadOwnerResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: LoadOwnerResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): LoadOwnerResponse;
+    static deserializeBinaryFromReader(message: LoadOwnerResponse, reader: jspb.BinaryReader): LoadOwnerResponse;
+}
+
+export namespace LoadOwnerResponse {
+    export type AsObject = {
+        id: string,
+        name: string,
+        email: string,
+        mayLogin: boolean,
+    }
+}
+
+export class DeleteOwnerRequest extends jspb.Message { 
+    getId(): string;
+    setId(value: string): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): DeleteOwnerRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: DeleteOwnerRequest): DeleteOwnerRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: DeleteOwnerRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): DeleteOwnerRequest;
+    static deserializeBinaryFromReader(message: DeleteOwnerRequest, reader: jspb.BinaryReader): DeleteOwnerRequest;
+}
+
+export namespace DeleteOwnerRequest {
+    export type AsObject = {
+        id: string,
+    }
+}
+
+export class DeleteOwnerResponse extends jspb.Message { 
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): DeleteOwnerResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: DeleteOwnerResponse): DeleteOwnerResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: DeleteOwnerResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): DeleteOwnerResponse;
+    static deserializeBinaryFromReader(message: DeleteOwnerResponse, reader: jspb.BinaryReader): DeleteOwnerResponse;
+}
+
+export namespace DeleteOwnerResponse {
     export type AsObject = {
     }
 }

@@ -134,20 +134,41 @@ export class BackendClient {
         });
     }
 
+    public async loadOwner(id: string): Promise<OwnerSpec> {
+        const url = new URL('/stocktaking/owner');
+        url.searchParams.set('id', id);
+
+        const response = await fetch(url.href);
+        const responseJSON = await response.json();
+        const owner = new OwnerSpec();
+        owner.id = responseJSON['id'];
+        owner.name = responseJSON['name'];
+        owner.email = responseJSON['email'];
+        owner.mayLogin = responseJSON['may_login'];
+
+        return owner;
+    }
+
+    public async deleteOwner(id: string): Promise<void> {
+        const url = new URL('/stocktaking/owner');
+        url.searchParams.set('id', id);
+        await fetch(url.href, {
+            method: "DELETE"
+        });
+    }
+
     public async listOwners(): Promise<OwnerSpec[]> {
         const response = await fetch('/stocktaking/owners');
         const owners: OwnerSpec[] = [];
         const responseJSON = await response.json();
-        console.log('listOwners responseJSON:', responseJSON);
         for (const obj of responseJSON['results']) {
             const owner = new OwnerSpec();
-            owner.id = obj['user_id'];
+            owner.id = obj['id'];
             owner.name = obj['name'];
             owner.email = obj['email'];
             owner.mayLogin = obj['may_login'];
             owners.push(owner);
         }
-        console.log('listOwners owners:', JSON.stringify(owners));
 
         return owners;
     }

@@ -33,6 +33,18 @@ class Client {
         return this.invoke(request, this.backend.listOwners)
     }
 
+    public saveOwner(request: pb.SaveOwnerRequest): Promise<pb.SaveOwnerResponse> {
+        return this.invoke(request, this.backend.saveOwner)
+    }
+
+    public loadOwner(request: pb.LoadOwnerRequest): Promise<pb.LoadOwnerResponse> {
+        return this.invoke(request, this.backend.loadOwner)
+    }
+
+    public deleteOwner(request: pb.DeleteOwnerRequest): Promise<pb.DeleteOwnerResponse> {
+        return this.invoke(request, this.backend.deleteOwner)
+    }
+
     private invoke<Req, Res>(req: Req, method: (req: Req, callback: (error: grpc.ServiceError | null, res: Res) => void) => grpc.ClientUnaryCall): Promise<Res> {
         return new Promise((resolve: Function, reject: Function) => {
             method.call(this.backend, req, (error: grpc.ServiceError | null, res: Res): void => {
@@ -72,7 +84,7 @@ describe("stocktaking backend", () => {
             let junior = null;
             for (let owner of owners)
             {
-                if (owner.getUserId() == ownerId)
+                if (owner.getId() == ownerId)
                 {
                     junior = owner;
                     break;
@@ -180,5 +192,33 @@ describe("stocktaking backend", () => {
         //     const resSpec = res.getSpec();
         //     assert.equal(resSpec && resSpec.getOwnerId(), ownerIdB);
         // }
+    }));
+
+    it("can save, load and delete owner", rollout(async (rollback: RollbackFunction) => {
+        const client = new Client();
+        let ownerId = "";
+        {
+            const req = new pb.SaveOwnerRequest();
+            req.setMayLogin(true);
+            req.setName("Peter Better");
+            req.setEmail("peter.better@example.com");
+            const res = await client.saveOwner(req);
+            ownerId = res.getId();
+            assert.notEqual(ownerId, "");
+        }
+        rollback(async () => {
+            const req = new pb.DeleteOwnerRequest();
+            req.setId(ownerId);
+            await client.deleteOwner(req);
+        })
+        {
+            const req = new pb.LoadOwnerRequest();
+            req.setId(ownerId);
+            const res = await client.loadOwner(req);
+            assert.equal(res.getId(), ownerId);
+            assert.equal(res.getEmail(), "peter.better@example.com");
+            assert.equal(res.getName(), "Peter Better");
+            assert.equal(res.getMayLogin(), true);
+        }
     }));
 });

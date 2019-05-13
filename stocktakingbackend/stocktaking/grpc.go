@@ -175,7 +175,7 @@ func (g *grpcServer) ListOwners(ctx context.Context, req *api.ListOwnersRequest)
 	var results []*api.ListOwnersResponse_Result
 	for _, owner := range owners {
 		result := &api.ListOwnersResponse_Result{
-			UserId:   owner.ID.String(),
+			Id:       owner.ID.String(),
 			Email:    owner.Email,
 			Name:     owner.Name,
 			MayLogin: owner.MayLogin,
@@ -220,7 +220,38 @@ func (g *grpcServer) SaveOwner(ctx context.Context, req *api.SaveOwnerRequest) (
 	if err != nil {
 		return nil, translateError(err)
 	}
-	return &api.SaveOwnerResponse{}, nil
+	return &api.SaveOwnerResponse{
+		Id: id.String(),
+	}, nil
+}
+
+func (g *grpcServer) LoadOwner(ctx context.Context, req *api.LoadOwnerRequest) (*api.LoadOwnerResponse, error) {
+	id, err := stock.IDFromString(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid owner id"+req.Id)
+	}
+	owner, err := g.service.LoadOwner(id)
+	if err != nil {
+		return nil, translateError(err)
+	}
+	return &api.LoadOwnerResponse{
+		Email:    owner.Email,
+		Id:       owner.ID.String(),
+		MayLogin: owner.MayLogin,
+		Name:     owner.Name,
+	}, nil
+}
+
+func (g *grpcServer) DeleteOwner(ctx context.Context, req *api.DeleteOwnerRequest) (*api.DeleteOwnerResponse, error) {
+	id, err := stock.IDFromString(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid owner id"+req.Id)
+	}
+	err = g.service.DeleteOwner(id)
+	if err != nil {
+		return nil, translateError(err)
+	}
+	return &api.DeleteOwnerResponse{}, nil
 }
 
 func (g *grpcServer) Authorize(ctx context.Context, req *api.AuthorizeRequest) (*api.AuthorizeResponse, error) {
