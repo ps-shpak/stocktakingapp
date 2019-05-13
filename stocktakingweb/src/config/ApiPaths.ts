@@ -2,5 +2,5 @@
 
 export const ApiPaths = {
     OWNERS: "/stocktaking/owners",
-    GET_OWNER: "/stocktaking/owner/:id"
+    OWNER: "/stocktaking/owner?id=:id"
 };
