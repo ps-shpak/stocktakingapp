@@ -15,6 +15,10 @@ import { Wrapper } from "../../containers/wrapper";
 export class Users extends Component {
     private readonly store = new UsersStore();
 
+    componentDidMount(): void {
+        this.store.getUsers();
+    }
+
     render(): ReactNode {
         return (
             <Fragment>
@@ -36,6 +40,7 @@ export class Users extends Component {
                     onChange={this.store.onChange}
                     onSubmit={this.store.onSubmit}
                     isFormValid={!this.store.isFormValid()}
+                    activeUser={this.store.activeUser}
                 />
                 <ConfirmPopup
                     isVisible={this.store.isConfirmCancelAddUser}

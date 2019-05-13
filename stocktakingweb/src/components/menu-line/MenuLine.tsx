@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Component, ReactNode } from "react";
+import { Component, ReactNode, createElement } from "react";
 import { IMenuLineProps } from "./IMenuLineProps";
 import { autobind } from "core-decorators";
-import { Collapse, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import { ExpandLess, ExpandMore, Group } from "@material-ui/icons";
+import { Collapse, ListItem, ListItemIcon, ListItemText, List } from "@material-ui/core";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { isEmpty, attempt } from "lodash";
 import { observer } from "mobx-react";
 import { IMenuItem } from "../../containers/menu";
@@ -19,19 +19,29 @@ export class MenuLine extends Component<IMenuLineProps> {
         const data = this.props.line;
         return (
             <>
-                <ListItem button={true} onClick={() => this.onClick(data.onClick)} selected={data.isActive}>
-                    <ListItemIcon>
-                        <Group />
-                    </ListItemIcon>
+                <ListItem
+                    button={true}
+                    onClick={() => this.onClick(data.onClick)}
+                    selected={data.isActive}
+                    divider={true}
+                >
+                    {data.icon &&
+                        <ListItemIcon>
+                            {createElement(data.icon, {})}
+                        </ListItemIcon>}
                     <ListItemText primary={data.title} />
                     {!isEmpty(data.options) && MenuLine.getArrowIcon(data.isActive)}
                 </ListItem>
                 {data.options &&
-                    <Collapse in={!!(data.isActive && data.options)}>
+                    <Collapse in={!!(data.isActive && data.options)} timeout={"auto"}>
                         <List>
                             {data.options.map((subItem: IMenuItem, subIndex: number) => {
                                 return (
-                                    <ListItem button={true} key={subIndex}>
+                                    <ListItem button={true} key={subIndex} style={{paddingLeft: 40}}>
+                                        {subItem.icon &&
+                                            <ListItemIcon>
+                                                {createElement(subItem.icon, {})}
+                                            </ListItemIcon>}
                                         <ListItemText inset={true} primary={subItem.title} />
                                     </ListItem>
                                 );

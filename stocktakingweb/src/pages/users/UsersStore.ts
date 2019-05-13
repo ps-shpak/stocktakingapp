@@ -1,43 +1,39 @@
 import { autobind } from "core-decorators";
 import { observable } from "mobx";
-import { IListItem } from "../../components/list/IListItem";
-import * as uuid from "uuid";
 import { FormStore } from "../../app/stores";
+import { IGetUserData } from "../../services";
+import { get } from "lodash";
+import * as uuid from "uuid";
 
 @autobind
 export class UsersStore extends FormStore {
-    @observable userList: IListItem[] = [
+    @observable userList: IGetUserData[] = [
         {
-            id: uuid.v4(),
-            title: "Ivanov Ivan",
-            email: "ivan@email.ru"
-        },
-        {
-            id: uuid.v4(),
-            title: "Ivanov Petr",
-            email: "petr@email.ru"
-        },
-        {
-            id: uuid.v4(),
-            title: "Ivanov Max",
-            email: "max@email.ru"
-        },
-        {
-            id: uuid.v4(),
-            title: "Ivanov Andrey",
-            email: "andrey@email.ru"
-        },
+            user_id: uuid.v4(),
+            name: "max",
+            email: "max@mail.com"
+        }
     ];
+    @observable activeUser: IGetUserData = {
+        user_id: "",
+        name: "",
+        email: ""
+    };
     @observable isCreateUserPopupVisible = false;
     @observable isConfirmCancelAddUser = false;
     @observable isInfoPopupVisible = false;
 
-    onEdit(index: number): void {
-        console.log("edit", index);
+    onEdit(id: string): void {
+        this.transport.getUser(id).then((response) => {
+            this.activeUser = response.data;
+            this.isCreateUserPopupVisible = true;
+        });
     }
 
-    onDelete(index: number): void {
-        console.log("delete", index);
+    onDelete(id: string): void {
+        this.transport.deleteUser(id).then(() => {
+            this.getUsers();
+        });
     }
 
     onShowCreateUserPopup(value: boolean): void {
@@ -49,9 +45,22 @@ export class UsersStore extends FormStore {
     }
 
     onSubmit(): void {
-        console.log(this.getFieldValues());
-        this.isCreateUserPopupVisible = false;
-        this.isInfoPopupVisible = true;
+        if (this.isFormValid()) {
+            const formData = this.getFieldValues();
+            const name = formData[0];
+            const email = formData[1];
+            this.transport.createUser({
+                owners: [{name, email}]
+            })
+                .then((response) => {
+                    this.isCreateUserPopupVisible = false;
+                    this.isInfoPopupVisible = true;
+                    this.isDataChanged  = false;
+                    this.getUsers();
+            })
+                .catch((err) => console.log(err));
+        }
+
     }
 
     onSubmitCancelCreateUser(): void {
@@ -67,5 +76,11 @@ export class UsersStore extends FormStore {
 
     onCloseInfoPopup(): void {
         this.isInfoPopupVisible = false;
+    }
+
+    getUsers(): void {
+        this.transport.getUserList().then((response) => {
+            this.userList = get(response.data, "results");
+        });
     }
 }
