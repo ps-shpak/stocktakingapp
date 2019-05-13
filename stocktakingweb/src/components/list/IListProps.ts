@@ -6,7 +6,7 @@ export interface IListProps extends WithStyles<typeof styles> {
     list: IGetUserData[];
     emptyListMessage: string;
 
-    onDeleteItem(index: number): void;
+    onDeleteItem(id: string): void;
 
-    onEditItem(index: number): void;
+    onEditItem(id: string): void;
 }

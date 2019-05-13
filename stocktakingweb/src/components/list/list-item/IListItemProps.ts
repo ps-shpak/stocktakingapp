@@ -8,5 +8,5 @@ export interface IListItemProps extends WithStyles<typeof styles> {
 
     onEditItem(id: string): void;
 
-    onDeleteItem(index: number): void;
+    onDeleteItem(id: string): void;
 }

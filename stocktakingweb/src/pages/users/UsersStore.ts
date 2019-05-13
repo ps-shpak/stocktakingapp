@@ -30,8 +30,10 @@ export class UsersStore extends FormStore {
         });
     }
 
-    onDelete(index: number): void {
-        console.log("delete", index);
+    onDelete(id: string): void {
+        this.transport.deleteUser(id).then(() => {
+            this.getUsers();
+        });
     }
 
     onShowCreateUserPopup(value: boolean): void {

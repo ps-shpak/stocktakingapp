@@ -26,8 +26,8 @@ export const ListItem = withStyles(styles)(
         }
 
         private readonly onDelete = (): void => {
-            const index = this.props.index;
-            this.props.onDeleteItem(index);
+            const id = this.props.data.user_id;
+            this.props.onDeleteItem(id);
         }
     }
 );
