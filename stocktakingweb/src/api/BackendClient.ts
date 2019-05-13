@@ -12,11 +12,15 @@ import {
     OwnerSpec,
 } from './models'
 
+interface UrlQuery {
+    [name: string]: string[];
+}
+
 export class BackendClient {
     private static _instance: BackendClient = new BackendClient();
 
     private constructor() {
-        if (BackendClient._instance){
+        if (BackendClient._instance) {
             throw new Error("instantiation failed: use BackendClient.getInstance() instead of new BackendClient().");
         }
     }
@@ -26,11 +30,11 @@ export class BackendClient {
     }
 
     public async listItems(kind: ItemKind, groupingMethod: ItemGroupingMethod): Promise<ItemGroupNode[]> {
-        const url = new URL('/stocktaking/items');
-        url.searchParams.set('kind', kind);
-        url.searchParams.set('grouping_method', groupingMethod);
-
-        const response = await fetch(url.href);
+        const url = this.encodeUrl('/stocktaking/items', {
+            "kind": [kind],
+            "grouping_method": [groupingMethod],
+        });
+        const response = await fetch(url);
         const groups: ItemGroupNode[] = [];
         const responseJSON = await response.json();
         for (const groupObj of responseJSON['results']) {
@@ -61,11 +65,10 @@ export class BackendClient {
     }
 
     public async disposeItems(ids: string[]): Promise<void> {
-        const url = new URL('/stocktaking/items');
-        for (const id of ids) {
-            url.searchParams.append("ids", id);
-        }
-        await fetch(url.href, {
+        const url = this.encodeUrl('/stocktaking/items', {
+            "ids": ids,
+        });
+        await fetch(url, {
             method: "DELETE",
         });
     }
@@ -86,10 +89,10 @@ export class BackendClient {
     }
 
     public async loadItem(id: string): Promise<LoadItemResponse> {
-        const url = new URL('/stocktaking/item');
-        url.searchParams.set('id', id);
-
-        const response = await fetch(url.href);
+        const url = this.encodeUrl('/stocktaking/items', {
+            "id": [id],
+        });
+        const response = await fetch(url);
         const responseJSON = await response.json();
         const result = new LoadItemResponse();
         result.displayName = responseJSON['display_name'];
@@ -135,10 +138,10 @@ export class BackendClient {
     }
 
     public async loadOwner(id: string): Promise<OwnerSpec> {
-        const url = new URL('/stocktaking/owner');
-        url.searchParams.set('id', id);
-
-        const response = await fetch(url.href);
+        const url = this.encodeUrl('/stocktaking/owner', {
+            "id": [id],
+        });
+        const response = await fetch(url);
         const responseJSON = await response.json();
         const owner = new OwnerSpec();
         owner.id = responseJSON['id'];
@@ -150,9 +153,10 @@ export class BackendClient {
     }
 
     public async deleteOwner(id: string): Promise<void> {
-        const url = new URL('/stocktaking/owner');
-        url.searchParams.set('id', id);
-        await fetch(url.href, {
+        const url = this.encodeUrl('/stocktaking/owner', {
+            "id": [id],
+        });
+        await fetch(url, {
             method: "DELETE"
         });
     }
@@ -171,14 +175,6 @@ export class BackendClient {
         }
 
         return owners;
-    }
-
-    public async authorize(email: string): Promise<string> {
-        const url = new URL('/auth/token');
-        url.searchParams.set('email', email);
-        const response = await fetch(url.href);
-        const responseJSON = await response.json();
-        return responseJSON['id'];
     }
 
     private serializeSpec(spec: ItemSpec): object {
@@ -201,5 +197,19 @@ export class BackendClient {
         spec.price = obj['price'];
         spec.description = obj['description'];
         return spec;
+    }
+
+    private encodeUrl(endpoint: string, query: UrlQuery) {
+        const params = [];
+        for (const name of Object.keys(query)) {
+            for (const value of query[name]) {
+                params.push(encodeURIComponent(name) + "=" + encodeURIComponent(value));
+            }
+        }
+        const paramsStr = params.join("&");
+        if (paramsStr.length > 0) {
+            return endpoint + "?" + paramsStr;
+        }
+        return endpoint;
     }
 }
