@@ -181,6 +181,28 @@
       }
     },
     "/owner": {
+      "get": {
+        "operationId": "LoadOwner",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiLoadOwnerResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      },
       "delete": {
         "summary": "Deletes existing owner with given ID",
         "operationId": "DeleteOwner",
@@ -232,23 +254,16 @@
     },
     "/owners": {
       "get": {
-        "operationId": "LoadOwner",
+        "summary": "Lists all available owners",
+        "operationId": "ListOwners",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/stocktakingapiLoadOwnerResponse"
+              "$ref": "#/definitions/stocktakingapiListOwnersResponse"
             }
           }
         },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
         "tags": [
           "Backend"
         ]
