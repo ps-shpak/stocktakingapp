@@ -33,6 +33,10 @@ func (m *MockRepository) SaveOwner(owner *stock.Owner) error {
 	return nil
 }
 
+func (m *MockRepository) DeleteOwner(id stock.ID) error {
+	return nil
+}
+
 func (m *MockRepository) reset() {
 	m.foundItems = []*stock.Item{}
 	m.foundOwners = []*stock.Owner{}

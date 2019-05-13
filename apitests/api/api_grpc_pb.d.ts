@@ -15,6 +15,8 @@ interface IBackendService extends grpc.ServiceDefinition<grpc.UntypedServiceImpl
     listOwners: IBackendService_IListOwners;
     addOwners: IBackendService_IAddOwners;
     saveOwner: IBackendService_ISaveOwner;
+    loadOwner: IBackendService_ILoadOwner;
+    deleteOwner: IBackendService_IDeleteOwner;
     authorize: IBackendService_IAuthorize;
 }
 
@@ -90,6 +92,24 @@ interface IBackendService_ISaveOwner extends grpc.MethodDefinition<api_pb.SaveOw
     responseSerialize: grpc.serialize<api_pb.SaveOwnerResponse>;
     responseDeserialize: grpc.deserialize<api_pb.SaveOwnerResponse>;
 }
+interface IBackendService_ILoadOwner extends grpc.MethodDefinition<api_pb.LoadOwnerRequest, api_pb.LoadOwnerResponse> {
+    path: string; // "/stocktakingapi.Backend/LoadOwner"
+    requestStream: boolean; // false
+    responseStream: boolean; // false
+    requestSerialize: grpc.serialize<api_pb.LoadOwnerRequest>;
+    requestDeserialize: grpc.deserialize<api_pb.LoadOwnerRequest>;
+    responseSerialize: grpc.serialize<api_pb.LoadOwnerResponse>;
+    responseDeserialize: grpc.deserialize<api_pb.LoadOwnerResponse>;
+}
+interface IBackendService_IDeleteOwner extends grpc.MethodDefinition<api_pb.DeleteOwnerRequest, api_pb.DeleteOwnerResponse> {
+    path: string; // "/stocktakingapi.Backend/DeleteOwner"
+    requestStream: boolean; // false
+    responseStream: boolean; // false
+    requestSerialize: grpc.serialize<api_pb.DeleteOwnerRequest>;
+    requestDeserialize: grpc.deserialize<api_pb.DeleteOwnerRequest>;
+    responseSerialize: grpc.serialize<api_pb.DeleteOwnerResponse>;
+    responseDeserialize: grpc.deserialize<api_pb.DeleteOwnerResponse>;
+}
 interface IBackendService_IAuthorize extends grpc.MethodDefinition<api_pb.AuthorizeRequest, api_pb.AuthorizeResponse> {
     path: string; // "/stocktakingapi.Backend/Authorize"
     requestStream: boolean; // false
@@ -111,6 +131,8 @@ export interface IBackendServer {
     listOwners: grpc.handleUnaryCall<api_pb.ListOwnersRequest, api_pb.ListOwnersResponse>;
     addOwners: grpc.handleUnaryCall<api_pb.AddOwnersRequest, api_pb.AddOwnersResponse>;
     saveOwner: grpc.handleUnaryCall<api_pb.SaveOwnerRequest, api_pb.SaveOwnerResponse>;
+    loadOwner: grpc.handleUnaryCall<api_pb.LoadOwnerRequest, api_pb.LoadOwnerResponse>;
+    deleteOwner: grpc.handleUnaryCall<api_pb.DeleteOwnerRequest, api_pb.DeleteOwnerResponse>;
     authorize: grpc.handleUnaryCall<api_pb.AuthorizeRequest, api_pb.AuthorizeResponse>;
 }
 
@@ -139,6 +161,12 @@ export interface IBackendClient {
     saveOwner(request: api_pb.SaveOwnerRequest, callback: (error: grpc.ServiceError | null, response: api_pb.SaveOwnerResponse) => void): grpc.ClientUnaryCall;
     saveOwner(request: api_pb.SaveOwnerRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.SaveOwnerResponse) => void): grpc.ClientUnaryCall;
     saveOwner(request: api_pb.SaveOwnerRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.SaveOwnerResponse) => void): grpc.ClientUnaryCall;
+    loadOwner(request: api_pb.LoadOwnerRequest, callback: (error: grpc.ServiceError | null, response: api_pb.LoadOwnerResponse) => void): grpc.ClientUnaryCall;
+    loadOwner(request: api_pb.LoadOwnerRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.LoadOwnerResponse) => void): grpc.ClientUnaryCall;
+    loadOwner(request: api_pb.LoadOwnerRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.LoadOwnerResponse) => void): grpc.ClientUnaryCall;
+    deleteOwner(request: api_pb.DeleteOwnerRequest, callback: (error: grpc.ServiceError | null, response: api_pb.DeleteOwnerResponse) => void): grpc.ClientUnaryCall;
+    deleteOwner(request: api_pb.DeleteOwnerRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.DeleteOwnerResponse) => void): grpc.ClientUnaryCall;
+    deleteOwner(request: api_pb.DeleteOwnerRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.DeleteOwnerResponse) => void): grpc.ClientUnaryCall;
     authorize(request: api_pb.AuthorizeRequest, callback: (error: grpc.ServiceError | null, response: api_pb.AuthorizeResponse) => void): grpc.ClientUnaryCall;
     authorize(request: api_pb.AuthorizeRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.AuthorizeResponse) => void): grpc.ClientUnaryCall;
     authorize(request: api_pb.AuthorizeRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.AuthorizeResponse) => void): grpc.ClientUnaryCall;
@@ -170,6 +198,12 @@ export class BackendClient extends grpc.Client implements IBackendClient {
     public saveOwner(request: api_pb.SaveOwnerRequest, callback: (error: grpc.ServiceError | null, response: api_pb.SaveOwnerResponse) => void): grpc.ClientUnaryCall;
     public saveOwner(request: api_pb.SaveOwnerRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.SaveOwnerResponse) => void): grpc.ClientUnaryCall;
     public saveOwner(request: api_pb.SaveOwnerRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.SaveOwnerResponse) => void): grpc.ClientUnaryCall;
+    public loadOwner(request: api_pb.LoadOwnerRequest, callback: (error: grpc.ServiceError | null, response: api_pb.LoadOwnerResponse) => void): grpc.ClientUnaryCall;
+    public loadOwner(request: api_pb.LoadOwnerRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.LoadOwnerResponse) => void): grpc.ClientUnaryCall;
+    public loadOwner(request: api_pb.LoadOwnerRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.LoadOwnerResponse) => void): grpc.ClientUnaryCall;
+    public deleteOwner(request: api_pb.DeleteOwnerRequest, callback: (error: grpc.ServiceError | null, response: api_pb.DeleteOwnerResponse) => void): grpc.ClientUnaryCall;
+    public deleteOwner(request: api_pb.DeleteOwnerRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.DeleteOwnerResponse) => void): grpc.ClientUnaryCall;
+    public deleteOwner(request: api_pb.DeleteOwnerRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.DeleteOwnerResponse) => void): grpc.ClientUnaryCall;
     public authorize(request: api_pb.AuthorizeRequest, callback: (error: grpc.ServiceError | null, response: api_pb.AuthorizeResponse) => void): grpc.ClientUnaryCall;
     public authorize(request: api_pb.AuthorizeRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.AuthorizeResponse) => void): grpc.ClientUnaryCall;
     public authorize(request: api_pb.AuthorizeRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.AuthorizeResponse) => void): grpc.ClientUnaryCall;

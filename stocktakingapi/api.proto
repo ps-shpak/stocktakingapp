@@ -59,13 +59,26 @@ service Backend {
       };
     };
 
-    // Saves existing owner with given ID.
+    // Saves new or existing owner.
     rpc SaveOwner(SaveOwnerRequest) returns (SaveOwnerResponse) {
       option (google.api.http) = {
         put: "/owner",
         body: "*"
       };
     };
+
+    rpc LoadOwner(LoadOwnerRequest) returns (LoadOwnerResponse) {
+      option (google.api.http) = {
+        get: "/owners",
+      };
+    }
+
+    // Deletes existing owner with given ID
+    rpc DeleteOwner(DeleteOwnerRequest) returns (DeleteOwnerResponse) {
+      option (google.api.http) = {
+        delete: "/owner",
+      };
+    }
 
     // Attempts to authorize user in this service
     // Authorization uses only email - caller must validate email
@@ -156,7 +169,7 @@ message ListOwnersRequest {
 
 message ListOwnersResponse {
   message Result {
-    string user_id = 1;
+    string id = 1;
     string name = 2; // full user name (e.g. Ivan Cukic)
     string email = 3;
     bool may_login = 4;  // true if user may login this service (note: everyone is admin)
@@ -189,6 +202,25 @@ message SaveOwnerRequest {
 }
 
 message SaveOwnerResponse {
+  string id = 1;
+}
+
+message LoadOwnerRequest {
+  string id = 1;
+}
+
+message LoadOwnerResponse {
+  string id = 1;
+  string name = 2; // full user name (e.g. Ivan Cukic)
+  string email = 3;
+  bool may_login = 4;  // true if user may login this service (note: everyone is admin)
+}
+
+message DeleteOwnerRequest {
+  string id = 1;
+}
+
+message DeleteOwnerResponse {
 }
 
 message AuthorizeRequest {

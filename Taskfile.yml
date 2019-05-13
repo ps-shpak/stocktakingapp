@@ -32,10 +32,16 @@ tasks:
     cmds:
       - make
 
+  build-api:
+    cmds:
+      - apitests/bin/generate-api-client
+      - stocktakingbackend/bin/generate-api-docs
+
   build:
     cmds:
       - task: build-frontend
       - task: build-backend
+      - task: build-api
 
   docker-build-frontend:
     cmds:

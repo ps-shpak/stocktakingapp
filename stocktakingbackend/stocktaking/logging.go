@@ -95,6 +95,24 @@ func (g *loggingMiddleware) SaveOwner(ctx context.Context, req *api.SaveOwnerReq
 	return res, err
 }
 
+func (g *loggingMiddleware) LoadOwner(ctx context.Context, req *api.LoadOwnerRequest) (*api.LoadOwnerResponse, error) {
+	start := time.Now()
+	res, err := g.impl.LoadOwner(ctx, req)
+	g.logCall(start, err, "LoadOwner", log.Fields{
+		"id": req.Id,
+	})
+	return res, err
+}
+
+func (g *loggingMiddleware) DeleteOwner(ctx context.Context, req *api.DeleteOwnerRequest) (*api.DeleteOwnerResponse, error) {
+	start := time.Now()
+	res, err := g.impl.DeleteOwner(ctx, req)
+	g.logCall(start, err, "DeleteOwner", log.Fields{
+		"id": req.Id,
+	})
+	return res, err
+}
+
 func (g *loggingMiddleware) Authorize(ctx context.Context, req *api.AuthorizeRequest) (*api.AuthorizeResponse, error) {
 	start := time.Now()
 	res, err := g.impl.Authorize(ctx, req)
