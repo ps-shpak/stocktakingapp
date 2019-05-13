@@ -3,16 +3,31 @@ import { observable } from "mobx";
 import { FormStore } from "../../app/stores";
 import { IGetUserData } from "../../services";
 import { get } from "lodash";
+import * as uuid from "uuid";
 
 @autobind
 export class UsersStore extends FormStore {
-    @observable userList: IGetUserData[] = [];
+    @observable userList: IGetUserData[] = [
+        {
+            user_id: uuid.v4(),
+            name: "max",
+            email: "max@mail.com"
+        }
+    ];
+    @observable activeUser: IGetUserData = {
+        user_id: "",
+        name: "",
+        email: ""
+    };
     @observable isCreateUserPopupVisible = false;
     @observable isConfirmCancelAddUser = false;
     @observable isInfoPopupVisible = false;
 
-    onEdit(index: number): void {
-        console.log("edit", index);
+    onEdit(id: string): void {
+        this.transport.getUser(id).then((response) => {
+            this.activeUser = response.data;
+            this.isCreateUserPopupVisible = true;
+        });
     }
 
     onDelete(index: number): void {
@@ -38,6 +53,7 @@ export class UsersStore extends FormStore {
                 .then((response) => {
                     this.isCreateUserPopupVisible = false;
                     this.isInfoPopupVisible = true;
+                    this.isDataChanged  = false;
                     this.getUsers();
             })
                 .catch((err) => console.log(err));

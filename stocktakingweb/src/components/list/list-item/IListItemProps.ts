@@ -6,7 +6,7 @@ export interface IListItemProps extends WithStyles<typeof styles> {
     data: IGetUserData;
     index: number;
 
-    onEditItem(index: number): void;
+    onEditItem(id: string): void;
 
     onDeleteItem(index: number): void;
 }

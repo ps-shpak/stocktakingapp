@@ -6,6 +6,7 @@ import { observer } from "mobx-react";
 import { DrawerWrapper } from "../drawer-wrapper";
 import { autobind } from "core-decorators";
 import { InputField } from "../input-field";
+import { IGetUserData } from "../../services";
 
 @observer
 @autobind
@@ -26,14 +27,27 @@ export class AddUserForm extends Component<IAddUserFormProps> {
                     placeholder={"Имя"}
                     onChange={this.props.onChange}
                     type={EFormTypes.TEXT}
+                    value={this.getUser().name}
                 />
                 <InputField
                     addField={this.props.addField}
                     placeholder={"E-mail"}
                     onChange={this.props.onChange}
                     type={EFormTypes.EMAIL}
+                    value={this.getUser().email}
                 />
             </DrawerWrapper>
         );
+    }
+
+    private getUser(): IGetUserData {
+        if (!this.props.activeUser) {
+            return {
+                user_id: "",
+                name: "",
+                email: ""
+            };
+        }
+        return this.props.activeUser;
     }
 }

@@ -17,4 +17,8 @@ export class Transport {
     async getUserList(): Promise<AxiosResponse<IGetUserData>> {
         return this.instance.get(ApiPaths.OWNERS);
     }
+
+    async getUser(id: string): Promise<AxiosResponse<IGetUserData>> {
+        return this.instance.get(ApiPaths.GET_OWNER.replace(":id", id));
+    }
 }

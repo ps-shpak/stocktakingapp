@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="94a8dd98-c500-4500-b4c6-a76ab244a52a" name="Default Changelist" comment="stocktakingweb: добавил создание пользователя">
-      <change afterPath="$PROJECT_DIR$/stocktakingweb/src/services/ResponseInterfaces.ts" afterDir="false" />
+    <list default="true" id="94a8dd98-c500-4500-b4c6-a76ab244a52a" name="Default Changelist" comment="stocktakingweb: добавил получение всех пользователей">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/AddUserForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/AddUserForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/IAddUserFormProps.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/IAddUserFormProps.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stocktakingweb/src/components/list/list-item/IListItemProps.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stocktakingweb/src/components/list/list-item/IListItemProps.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stocktakingweb/src/components/list/list-item/ListItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/stocktakingweb/src/components/list/list-item/ListItem.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stocktakingweb/src/config/ApiPaths.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stocktakingweb/src/config/ApiPaths.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stocktakingweb/src/pages/users/Users.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/stocktakingweb/src/pages/users/Users.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stocktakingweb/src/pages/users/UsersStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stocktakingweb/src/pages/users/UsersStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stocktakingweb/src/services/ResponseInterfaces.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stocktakingweb/src/services/ResponseInterfaces.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stocktakingweb/src/services/Transport.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stocktakingweb/src/services/Transport.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stocktakingweb/src/services/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stocktakingweb/src/services/index.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/stocktakingweb/node_modules/" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -27,8 +31,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/stocktakingweb/src/pages/users/Users.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="39" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
+            <state relative-caret-position="306">
+              <caret line="34" column="21" lean-forward="true" selection-start-line="34" selection-start-column="21" selection-end-line="34" selection-end-column="21" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -39,43 +43,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/stocktakingweb/src/pages/users/UsersStore.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="56" column="38" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Taskfile.yml">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/AddUserForm.tsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="28" column="18" selection-start-line="28" selection-start-column="18" selection-end-line="28" selection-end-column="18" />
+            <state relative-caret-position="442">
+              <caret line="26" selection-start-line="26" selection-end-line="26" />
               <folding>
-                <element signature="e#0#31#0" expanded="true" />
+                <element signature="e#0#43#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/stocktakingweb/src/config/ApiPaths.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/stocktakingweb/src/services/Transport.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="50" selection-start-line="17" selection-start-column="50" selection-end-line="17" selection-end-column="50" />
+            <state relative-caret-position="357">
+              <caret line="21" column="71" selection-start-line="21" selection-start-column="71" selection-end-line="21" selection-end-column="71" />
               <folding>
                 <element signature="e#0#60#0" expanded="true" />
               </folding>
@@ -84,19 +65,76 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/stocktakingweb/src/services/ResponseInterfaces.ts">
+        <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/list/list-item/ListItem.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
+            <state relative-caret-position="289">
+              <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/stocktakingweb/src/services/index.ts">
+        <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/list/list-item/IListItemProps.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+            <state relative-caret-position="136">
+              <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+              <folding>
+                <element signature="e#0#47#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/list/List.tsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="17" column="35" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="35" />
+              <folding>
+                <element signature="e#0#61#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/stocktakingweb/src/config/ApiPaths.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="38" selection-start-line="4" selection-start-column="38" selection-end-line="4" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/AddUserForm.tsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="612">
+              <caret line="36" column="47" selection-start-line="36" selection-start-column="47" selection-end-line="36" selection-end-column="47" />
+              <folding>
+                <element signature="e#0#31#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/IAddUserFormProps.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/stocktakingweb/src/services/ResponseInterfaces.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -116,6 +154,7 @@
       <find>'</find>
       <find>this.store.onChange</find>
       <find>looking for beginning of value</find>
+      <find>PWD</find>
     </findStrings>
     <replaceStrings>
       <replace>&quot;</replace>
@@ -134,17 +173,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/stocktakingweb/src/components/confirm-popup/ConfirmPopup.tsx" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/components/drawer-wrapper/DrawerWrapper.tsx" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/components/drawer-wrapper/styles.ts" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/components/info-popup/IInfoPopupProps.ts" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/components/info-popup/index.ts" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/components/info-popup/InfoPopup.tsx" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/components/info-popup/styles.ts" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/components/popup/Popup.tsx" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/components/popup/IPopupProps.ts" />
-        <option value="$PROJECT_DIR$/stocktakingweb/.gitignore" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/components/button/Button.tsx" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/containers/user-layout/UserLayout.tsx" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/containers/user-layout/styles.ts" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/components/avatar/Avatar.tsx" />
@@ -153,7 +181,6 @@
         <option value="$PROJECT_DIR$/stocktakingweb/src/containers/wrapper-with-sidebar/WrapperWithSidebar.tsx" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/app/App.tsx" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/pages/main/Main.tsx" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/pages/users/Users.tsx" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/containers/wrapper/Wrapper.tsx" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/containers/wrapper/styles.ts" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/containers/menu/IMenuProps.ts" />
@@ -172,18 +199,30 @@
         <option value="$PROJECT_DIR$/apitests/api/api_grpc_pb.d.ts" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/containers/menu/IMenuItem.ts" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/components/menu-line/MenuLine.tsx" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/containers/sidebar/SidebarStore.ts" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/config/index.ts" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/app/stores/Store.ts" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/app/stores/FormStore.ts" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/AddUserForm.tsx" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/services/RequestInterfaces.ts" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/config/ApiPaths.ts" />
         <option value="$PROJECT_DIR$/Taskfile.yml" />
-        <option value="$PROJECT_DIR$/docker/docker-compose.override.yml" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/pages/users/UsersStore.ts" />
-        <option value="$PROJECT_DIR$/stocktakingweb/src/services/ResponseInterfaces.ts" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/services/index.ts" />
+        <option value="$PROJECT_DIR$/docker/docker-compose.override.example.yml" />
+        <option value="$PROJECT_DIR$/docker/docker-compose.override.yml" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/containers/sidebar/SidebarStore.ts" />
+        <option value="$PROJECT_DIR$/docker/docker-compose.yml" />
+        <option value="$PROJECT_DIR$/stocktakingweb/package.json" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/services/ResponseInterfaces.ts" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/components/table/Table.ts" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/components/table/index.ts" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/components/table/styles.ts" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/components/table/ITableProps.ts" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/components/table/Table.tsx" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/components/list/list-item/IListItemProps.ts" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/components/list/list-item/ListItem.tsx" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/pages/users/Users.tsx" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/IAddUserFormProps.ts" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/AddUserForm.tsx" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/pages/users/UsersStore.ts" />
+        <option value="$PROJECT_DIR$/stocktakingweb/src/config/ApiPaths.ts" />
         <option value="$PROJECT_DIR$/stocktakingweb/src/services/Transport.ts" />
       </list>
     </option>
@@ -202,7 +241,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -213,6 +251,11 @@
             <path>
               <item name="stocktakingapp" type="b2602c69:ProjectViewProjectNode" />
               <item name="stocktakingapp" type="462c0819:PsiDirectoryNode" />
+              <item name="docker" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="stocktakingapp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="stocktakingapp" type="462c0819:PsiDirectoryNode" />
               <item name="stocktakingweb" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -226,12 +269,13 @@
               <item name="stocktakingapp" type="462c0819:PsiDirectoryNode" />
               <item name="stocktakingweb" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -249,16 +293,16 @@
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/stocktakingweb/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/stocktakingweb/src/containers/menu" />
+      <recent name="$PROJECT_DIR$/stocktakingweb/src/components/list" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/docker" />
       <recent name="$PROJECT_DIR$/stocktakingweb/src/components/popup/view/img" />
       <recent name="$PROJECT_DIR$/stocktakingweb/src/components/input-field/view" />
       <recent name="$PROJECT_DIR$/stocktakingweb/src/components/input-field" />
       <recent name="$PROJECT_DIR$/stocktakingweb/src/config" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/stocktakingweb/src/containers/menu" />
-      <recent name="$PROJECT_DIR$/stocktakingweb/src/components/list" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -457,7 +501,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="84951000" />
+    <option name="totallyTimeSpent" value="94188000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
@@ -586,97 +630,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="stocktakingweb: добавил appbar" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/avatar/Avatar.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="32" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/containers/wrapper/IWrapperProps.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="3" column="17" selection-start-line="3" selection-start-column="17" selection-end-line="3" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/app/App.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="16" selection-start-line="1" selection-start-column="16" selection-end-line="1" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/containers/wrapper-with-sidebar/WrapperWithSidebarStore.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="737">
-          <caret line="94" column="5" lean-forward="true" selection-start-line="92" selection-start-column="4" selection-end-line="94" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/containers/wrapper-with-sidebar/WrapperWithSidebar.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="30" column="10" lean-forward="true" selection-start-line="30" selection-start-column="10" selection-end-line="30" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/containers/wrapper/styles.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/containers/menu/styles.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/containers/wrapper/Wrapper.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="35" lean-forward="true" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/containers/menu/IMenuProps.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="24" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/containers/menu/MenuStore.ts" />
-    <entry file="file://$PROJECT_DIR$/node_modules/@material-ui/icons/Menu.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="6" selection-start-line="18" selection-start-column="6" selection-end-line="18" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/containers/menu/view/index.ts" />
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/containers/menu/index.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/menu-line/styles.ts" />
     <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/menu-line/index.ts">
       <provider selected="true" editor-type-id="text-editor" />
@@ -804,19 +757,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/containers/sidebar/SidebarStore.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/package.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/stocktakingweb/src/api/BackendClient.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1847">
@@ -835,8 +775,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/stocktakingweb/src/app/stores/Store.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
+        <state relative-caret-position="170">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
           <folding>
             <element signature="e#0#43#0" expanded="true" />
           </folding>
@@ -856,14 +796,6 @@
     <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/input-field/index.ts">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/docker/docker-compose.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-204" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/nginx/listen.ssl.conf">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/stocktakingweb/bin/docker-entrypoint">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -871,64 +803,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/nginx/listen.no-ssl.conf">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/stocktakingweb/src/services/RequestInterfaces.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="7" selection-start-column="7" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/config/ApiPaths.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/pages/users/Users.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="39" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Taskfile.yml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docker/docker-compose.override.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="12" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/pages/users/UsersStore.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="56" column="38" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/AddUserForm.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="18" selection-start-line="28" selection-start-column="18" selection-end-line="28" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/services/ResponseInterfaces.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -939,13 +817,189 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/services/Transport.ts">
+    <entry file="file://$PROJECT_DIR$/docker/docker-compose.override.example.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="60" selection-start-line="19" selection-start-column="2" selection-end-line="20" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docker/docker-compose.override.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="11" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/list/IListProps.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Taskfile.yml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docker/docker-compose.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="368">
+          <caret line="29" column="17" lean-forward="true" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/nginx/nginx.template.conf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-661" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/nginx/listen.ssl.conf">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/nginx/listen.no-ssl.conf">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="550">
+          <caret line="41" column="14" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/containers/sidebar/SidebarStore.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="29" selection-start-line="13" selection-start-column="29" selection-end-line="13" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingbackend/stock/owner.go">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/services/ResponseInterfaces.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/table/Table.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/table/index.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/table/styles.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/table/ITableProps.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="19" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/table/Table.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="39" lean-forward="true" selection-start-line="8" selection-start-column="39" selection-end-line="8" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/list/List.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
-          <caret line="17" column="50" selection-start-line="17" selection-start-column="50" selection-end-line="17" selection-end-column="50" />
+          <caret line="17" column="35" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/list/list-item/IListItemProps.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/list/list-item/ListItem.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/pages/users/Users.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="34" column="21" lean-forward="true" selection-start-line="34" selection-start-column="21" selection-end-line="34" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/IAddUserFormProps.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/components/add-user-form/AddUserForm.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="36" column="47" selection-start-line="36" selection-start-column="47" selection-end-line="36" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/pages/users/UsersStore.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/services/Transport.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="71" selection-start-line="21" selection-start-column="71" selection-end-line="21" selection-end-column="71" />
           <folding>
             <element signature="e#0#60#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stocktakingweb/src/config/ApiPaths.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="38" selection-start-line="4" selection-start-column="38" selection-end-line="4" selection-end-column="38" />
         </state>
       </provider>
     </entry>
