@@ -185,13 +185,13 @@ describe("stocktaking backend", () => {
             req.setOwnerId(ownerIdB);
             await client.transferItems(req);
         }
-        // {
-        //     const req = new pb.LoadItemRequest();
-        //     req.setId(itemId);
-        //     const res = await client.loadItem(req);
-        //     const resSpec = res.getSpec();
-        //     assert.equal(resSpec && resSpec.getOwnerId(), ownerIdB);
-        // }
+        {
+            const req = new pb.LoadItemRequest();
+            req.setId(itemId);
+            const res = await client.loadItem(req);
+            const resSpec = res.getSpec();
+            assert.equal(resSpec && resSpec.getOwnerId(), ownerIdB);
+        }
     }));
 
     it("can save, load and delete owner", rollout(async (rollback: RollbackFunction) => {
@@ -206,11 +206,6 @@ describe("stocktaking backend", () => {
             ownerId = res.getId();
             assert.notEqual(ownerId, "");
         }
-        rollback(async () => {
-            const req = new pb.DeleteOwnerRequest();
-            req.setId(ownerId);
-            await client.deleteOwner(req);
-        })
         {
             const req = new pb.LoadOwnerRequest();
             req.setId(ownerId);
@@ -219,6 +214,23 @@ describe("stocktaking backend", () => {
             assert.equal(res.getEmail(), "peter.better@example.com");
             assert.equal(res.getName(), "Peter Better");
             assert.equal(res.getMayLogin(), true);
+        }
+        {
+            const req = new pb.DeleteOwnerRequest();
+            req.setId(ownerId);
+            await client.deleteOwner(req);
+        }
+        try
+        {
+            const req = new pb.LoadOwnerRequest();
+            req.setId(ownerId);
+            await client.loadOwner(req);
+            // API call should throw, so next line is unreachable.
+            assert(false);
+        }
+        catch (err)
+        {
+            assert.equal(err.code, grpc.status.NOT_FOUND);
         }
     }));
 });
