@@ -1,0 +1,36 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+title Диаграмма компонентов
+
+
+Container(Web, "Stocktaking Web", "TypeScript, NGINX+, React", "Предоставление функционала для пользователя через веб браузер")
+Container(Mobile, "Stocktaking Mobile", "Dart, Flutter", "Предоставление функционала для пользователя через мобильное приложение")
+Container(Database, "Database", "PostgreSQL", "База данных")  
+
+Container_Boundary(Backend, "Backend") {
+    Component(Labeling, "Labeling", "GO", "Генерация наклейки для распечатки")
+    Component(Postgres, "Postgres", "GO", "Взаимодействие с базой данных")
+    Component(Stock, "Stock", "GO", "Информация о предмете")
+    Component(Stocktaking, "Stocktaking", "GO", "Взаимодействие с предметами")
+    Component(StocktakingAPI, "Stocktaking API", "GO", "API для взаимодействие с системой")
+    Component(Errors, "Errors", "GO", "Обработка ошибок")
+
+    Rel_D(Stocktaking, Stock, "Запрос информации о предмете")
+    Rel(StocktakingAPI, Stocktaking, "Взаимодействие с системой")
+    Rel_L(Stocktaking, Errors, "Ошибка")
+
+    Rel(Labeling, Stock, "Запрос информации о предмете")
+    Rel_L(Labeling, Errors, "Ошибка")
+
+    Rel_D(Stocktaking, Postgres, "Взаимодействие с базой данных")
+    Rel_L(Postgres, Errors, "Ошибка")
+
+    Rel_L(Stock, Errors, "Ошибка")
+}
+
+Rel_R(Mobile, Web, "Запрос", "Rest API")
+Rel(Web, StocktakingAPI, "Работа с API", "Rest API")
+Rel(Postgres, Database, "Работа с базой данных", "PostgreSQL")
+
+@enduml

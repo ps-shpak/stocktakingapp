@@ -1,11 +1,27 @@
 @startuml
-rectangle "Приложение stocktakingapp" as mobileapp #lightgreen
-rectangle "Сервис stocktakingbackend" as backend #pink
-rectangle "Сервис stocktakingweb" as webpanel #lightgreen
-rectangle "Хранилище PostgreSQL" as backenddb #lightblue
-rectangle "Хранилище Redis" as redis #lightblue
-mobileapp --> backend
-webpanel --> backend
-backend --> backenddb
-webpanel --> redis
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Container.puml
+
+title Диаграмма контекста
+
+'Person(leader, "Руководитель")
+Person(office_manager, "Офис-менеджер")
+Person(supply_manager, "Завхоз")
+Person(project_manager_in_the_company, "Менеджер проекта в компании")
+
+System_Boundary(Stocktaking, "Stocktaking") {
+    Container(Web, "Stocktaking Web", "TypeScript, NGINX+, React", "Предоставление функционала для пользователя через веб браузер")
+    Container(Mobile, "Stocktaking Mobile", "Dart, Flutter", "Предоставление функционала для пользователя через мобильное приложение")
+    Container(Backend, "Backend", "Go", "Бизнес-логика системы")
+    Container(Database, "Database", "PostgreSQL", "База данных")    
+
+    Rel_R(Mobile, Web, "Запрос", "Rest API")
+    Rel(Web, Backend, "Взаимодействие с Backend", "Rest API")
+    Rel_R(Backend, Database, "Запрос хранящихся значений", "Postgres SQL")
+}
+
+'Rel(leader, Mobile, "Руководит")
+Rel(office_manager, Web, "Ставит на баланс предметы, печатает qr коды")
+Rel(supply_manager, Mobile, "Проверка наличия предмета, определение ответственного за предмет")
+Rel(project_manager_in_the_company, Mobile, "Оборудование рабочего места для нового разработчика")
+
 @enduml
