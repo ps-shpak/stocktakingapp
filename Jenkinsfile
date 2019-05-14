@@ -5,15 +5,10 @@ pipeline {
         }
     }
     stages {
-        stage('build') {
+            stage('build') {
                 steps {
-                    task docker-build
+                    echo 'Tese message 2321343344554567563443544535354543'
                 }
             }
-            stage('up') {
-                steps {
-                    task up
-                }
-            }  
     }
 }
