@@ -23,6 +23,7 @@ export const InputFieldView = withStyles(styles)(
                     disabled={this.props.isReadonly}
                     variant={EInputFieldVariants.OUTLINED}
                     onChange={this.props.onChange}
+                    defaultValue={this.props.value}
                 />
             );
         }

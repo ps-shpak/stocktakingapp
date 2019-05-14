@@ -1,7 +1,3 @@
-node {
-    cmds = readYaml file: 'Taskfile.yml'
-}
-
 pipeline {
     agent { 
         docker { 
@@ -10,12 +6,12 @@ pipeline {
     }
     stage('build') {
         steps {
-            ${cmds.build}
+            task docker-build
         }
     } 
-    stage('docker-build') {
+    stage('up') {
         steps {
-            ${cmds.docker-build}
+            task up
         }
     }  
 }
