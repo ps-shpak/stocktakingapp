@@ -22,6 +22,6 @@ System_Boundary(Stocktaking, "Stocktaking") {
 'Rel(leader, Mobile, "Руководит")
 Rel(office_manager, Web, "Ставит на баланс предметы, печатает qr коды")
 Rel(supply_manager, Mobile, "Проверка наличия предмета, определение ответственного за предмет")
-Rel(project_manager_in_the_company, Mobile, "Оборудование рабочего места для нового разработчика")
+Rel(project_manager_in_the_company, Web, "Оборудование рабочего места для нового разработчика")
 
 @enduml
