@@ -4,14 +4,16 @@ pipeline {
             image 'node:6.3'
         }
     }
-    stage('build') {
-        steps {
-            task docker-build
-        }
-    } 
-    stage('up') {
-        steps {
-            task up
-        }
-    }  
+    stages {
+        stage('build') {
+                steps {
+                    task docker-build
+                }
+            }
+            stage('up') {
+                steps {
+                    task up
+                }
+            }  
+    }
 }
