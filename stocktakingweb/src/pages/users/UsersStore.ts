@@ -9,13 +9,13 @@ import * as uuid from "uuid";
 export class UsersStore extends FormStore {
     @observable userList: IGetUserData[] = [
         {
-            user_id: uuid.v4(),
+            id: uuid.v4(),
             name: "max",
             email: "max@mail.com"
         }
     ];
     @observable activeUser: IGetUserData = {
-        user_id: "",
+        id: "",
         name: "",
         email: ""
     };
@@ -82,5 +82,13 @@ export class UsersStore extends FormStore {
         this.transport.getUserList().then((response) => {
             this.userList = get(response.data, "results");
         });
+    }
+
+    clearActiveUser(): void {
+        this.activeUser = {
+            id: "",
+            name: "",
+            email: ""
+        };
     }
 }

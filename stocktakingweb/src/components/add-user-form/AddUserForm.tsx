@@ -43,7 +43,7 @@ export class AddUserForm extends Component<IAddUserFormProps> {
     private getUser(): IGetUserData {
         if (!this.props.activeUser) {
             return {
-                user_id: "",
+                id: "",
                 name: "",
                 email: ""
             };

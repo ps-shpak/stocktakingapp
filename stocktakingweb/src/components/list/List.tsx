@@ -13,18 +13,18 @@ export const List = withStyles(styles)(
             const props = this.props;
             return (
                 <div className={this.props.classes.list}>
-                    {props.list.map((item: IGetUserData, index: number) => {
-                        return (
-                            <ListItem
-                                key={item.user_id}
-                                data={item}
-                                index={index}
-                                onEditItem={props.onEditItem}
-                                onDeleteItem={props.onDeleteItem}
-                            />
-                        );
-                    })}
-                    {isEmpty(props.list) && <div className={this.props.classes.empty}>{props.emptyListMessage}</div>}
+                    {isEmpty(props.list) ? <div className={this.props.classes.empty}>{props.emptyListMessage}</div> :
+                        props.list.map((item: IGetUserData, index: number) => {
+                            return (
+                                <ListItem
+                                    key={item.id}
+                                    data={item}
+                                    index={index}
+                                    onEditItem={props.onEditItem}
+                                    onDeleteItem={props.onDeleteItem}
+                                />
+                            );
+                        })}
                 </div>
             );
         }

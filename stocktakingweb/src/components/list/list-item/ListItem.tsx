@@ -21,12 +21,12 @@ export const ListItem = withStyles(styles)(
         }
 
         private readonly onEdit = (): void => {
-            const id = this.props.data.user_id;
+            const id = this.props.data.id;
             this.props.onEditItem(id);
         }
 
         private readonly onDelete = (): void => {
-            const id = this.props.data.user_id;
+            const id = this.props.data.id;
             this.props.onDeleteItem(id);
         }
     }
