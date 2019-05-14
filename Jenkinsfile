@@ -7,7 +7,12 @@ pipeline {
     stages {
             stage('build') {
                 steps {
-                    echo 'Tese message 2321343344554567563443544535354543'
+                    task docker-build
+                }
+            }
+            stage('up') {
+                steps {
+                    task up
                 }
             }
     }
