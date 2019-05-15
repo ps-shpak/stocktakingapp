@@ -19,10 +19,14 @@ export class Transport {
     }
 
     async getUser(id: string): Promise<AxiosResponse<IGetUserData>> {
-        return this.instance.get(ApiPaths.OWNER.replace(":id", id));
+        return this.instance.get(ApiPaths.OWNER_ID.replace(":id", id));
     }
 
     async deleteUser(id: string): Promise<AxiosResponse<void>> {
-        return this.instance.delete(ApiPaths.OWNER.replace(":id", id));
+        return this.instance.delete(ApiPaths.OWNER_ID.replace(":id", id));
+    }
+
+    async changeUser(data: IGetUserData): Promise<AxiosResponse<void>> {
+        return this.instance.put(ApiPaths.OWNER, data);
     }
 }

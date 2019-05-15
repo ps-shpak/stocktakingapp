@@ -23,6 +23,10 @@ export class InputField extends Component<IInputFieldProps> {
 
     componentDidMount(): void {
         this.props.addField(this.field);
+        if (!this.props.value) {
+            return;
+        }
+        this.field.setValue(this.props.value);
     }
 
     render(): ReactNode {
