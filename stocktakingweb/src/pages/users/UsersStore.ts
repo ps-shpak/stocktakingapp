@@ -20,8 +20,6 @@ export class UsersStore extends FormStore {
         email: ""
     };
     @observable isCreateUserPopupVisible = false;
-    @observable isConfirmCancelAddUser = false;
-    @observable isInfoPopupVisible = false;
     @observable isCreating = false;
     @observable buttonText = "";
 
@@ -29,7 +27,7 @@ export class UsersStore extends FormStore {
         this.transport.getUser(id).then((response) => {
             this.activeUser = response.data;
             this.isCreating = false;
-            this.isCreateUserPopupVisible = true;
+            this.onShowCreateUserPopup(true);
             this.buttonText = "Сохранить";
         });
     }
@@ -40,18 +38,16 @@ export class UsersStore extends FormStore {
         this.buttonText = "Создать";
     }
 
-    onHideAddUserForm(): void {
-        if (this.isDataChanged) {
-            this.isConfirmCancelAddUser = this.isDataChanged;
-            return;
-        }
-        this.isCreateUserPopupVisible = false;
+    onDelete(id: string): void {
+        this.activeUser.id = id;
     }
 
-    onDelete(id: string): void {
-        this.transport.deleteUser(id).then(() => {
-            this.getUsers();
-        });
+    confirmPopup(): void {
+        if (this.isCreating) {
+            this.onSubmitCancelCreateUser();
+        } else {
+            this.onSubmitDeleteUser();
+        }
     }
 
     onShowCreateUserPopup(value: boolean): void {
@@ -74,8 +70,8 @@ export class UsersStore extends FormStore {
             this.transport.createUser({
                 owners: [{name, email}]
             })
-                .then((response) => {
-                    this.isCreateUserPopupVisible = false;
+                .then(() => {
+                    this.onShowCreateUserPopup(false);
                     this.isInfoPopupVisible = true;
                     this.isDataChanged  = false;
                     this.getUsers();
@@ -85,15 +81,8 @@ export class UsersStore extends FormStore {
 
     }
 
-    onSubmitCancelCreateUser(): void {
-        this.isConfirmCancelAddUser = false;
-        this.onShowCreateUserPopup(false);
-        this.isDataChanged = false;
-    }
-
     onCancelCreateUser(): void {
-        this.isConfirmCancelAddUser = false;
-        this.onShowCreateUserPopup(true);
+        this.onShowCreateUserPopup(false);
     }
 
     onCloseInfoPopup(): void {
@@ -106,7 +95,19 @@ export class UsersStore extends FormStore {
         });
     }
 
-    clearActiveUser(): void {
+    onSubmitDeleteUser(): void {
+        this.transport.deleteUser(this.activeUser.id).then(() => {
+            this.getUsers();
+        });
+    }
+
+    onSubmitCancelCreateUser(): void {
+        this.isConfirmPopupVisible = false;
+        this.onShowCreateUserPopup(false);
+        this.isDataChanged = false;
+    }
+
+    private clearActiveUser(): void {
         this.activeUser = {
             id: "",
             name: "",
