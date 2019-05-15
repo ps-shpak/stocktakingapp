@@ -22,12 +22,30 @@ export class UsersStore extends FormStore {
     @observable isCreateUserPopupVisible = false;
     @observable isConfirmCancelAddUser = false;
     @observable isInfoPopupVisible = false;
+    @observable isCreating = false;
+    @observable buttonText = "";
 
     onEdit(id: string): void {
         this.transport.getUser(id).then((response) => {
             this.activeUser = response.data;
+            this.isCreating = false;
             this.isCreateUserPopupVisible = true;
+            this.buttonText = "Сохранить";
         });
+    }
+
+    onAddUser(): void {
+        this.isCreating = true;
+        this.onShowCreateUserPopup(true);
+        this.buttonText = "Создать";
+    }
+
+    onHideAddUserForm(): void {
+        if (this.isDataChanged) {
+            this.isConfirmCancelAddUser = this.isDataChanged;
+            return;
+        }
+        this.isCreateUserPopupVisible = false;
     }
 
     onDelete(id: string): void {
@@ -41,6 +59,10 @@ export class UsersStore extends FormStore {
         if (!this.isCreateUserPopupVisible) {
             this.resetFields();
             this.isDataChanged = false;
+        } else {
+            if (this.isCreating) {
+                this.clearActiveUser();
+            }
         }
     }
 

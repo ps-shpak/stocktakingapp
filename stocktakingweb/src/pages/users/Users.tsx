@@ -23,7 +23,7 @@ export class Users extends Component {
         return (
             <Fragment>
                 <Wrapper title={"Пользователи"}>
-                    <UserLayout onAddUser={this.showCreateUserPopup}>
+                    <UserLayout onAddUser={this.store.onAddUser}>
                         <List
                             list={this.store.userList}
                             onDeleteItem={this.store.onDelete}
@@ -34,13 +34,14 @@ export class Users extends Component {
                 </Wrapper>
                 <AddUserForm
                     isVisible={this.store.isCreateUserPopupVisible}
-                    onOpen={this.showCreateUserPopup}
-                    onClose={this.hideCreateUserPopup}
+                    onOpen={this.store.onAddUser}
+                    onClose={this.store.onHideAddUserForm}
                     addField={this.store.addField}
                     onChange={this.store.onChange}
                     onSubmit={this.store.onSubmit}
                     isFormValid={!this.store.isFormValid()}
                     activeUser={this.store.activeUser}
+                    buttonText={this.store.buttonText}
                 />
                 <ConfirmPopup
                     isVisible={this.store.isConfirmCancelAddUser}
@@ -56,17 +57,5 @@ export class Users extends Component {
                 />
             </Fragment>
         );
-    }
-
-    private showCreateUserPopup(): void {
-        this.store.onShowCreateUserPopup(true);
-    }
-
-    private hideCreateUserPopup(): void {
-        if (this.store.isDataChanged) {
-            this.store.isConfirmCancelAddUser = this.store.isDataChanged;
-            return;
-        }
-        this.store.onShowCreateUserPopup(false);
     }
 }

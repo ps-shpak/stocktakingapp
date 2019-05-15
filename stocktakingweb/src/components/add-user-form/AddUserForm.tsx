@@ -18,7 +18,7 @@ export class AddUserForm extends Component<IAddUserFormProps> {
                 title={"Добавить пользователя"}
                 onClose={this.props.onClose}
                 onOpen={this.props.onOpen}
-                buttonTitle={"Создать"}
+                buttonTitle={this.props.buttonText}
                 isButtonDisable={this.props.isFormValid}
                 onSubmit={this.props.onSubmit}
             >

@@ -5,6 +5,7 @@ export interface IAddUserFormProps extends IFieldProps {
     isVisible: boolean;
     isFormValid: boolean;
     activeUser?: IGetUserData;
+    buttonText: string;
 
     onOpen(): void;
 
