@@ -15,6 +15,6 @@ var (
 	ErrUserMayNotLogin   = errors.New("user login forbidden")
 )
 
-type Service interface {
+type Gateway interface {
 	CheckAccess(claim AccessClaim, token string) (bool, error)
 }

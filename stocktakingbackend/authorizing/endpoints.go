@@ -1,6 +1,3 @@
-// +build false
-// Temporary excluded from build
-
 package authorizing
 
 import (
@@ -14,18 +11,22 @@ type signInRequest struct {
 }
 
 type signInResponse struct {
-	token string
+	needConfirmation bool
+	confirmationURL  string
+	token            string
 }
 
 func makeSignInEndpoint(service Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(*signInRequest)
-		token, err := service.SignIn(req.oauthCode)
+		result, err := service.SignIn(req.oauthCode)
 		if err != nil {
 			return nil, err
 		}
 		return &signInResponse{
-			token: token,
+			needConfirmation: result.NeedConfirm,
+			confirmationURL:  result.ConfirmationURL,
+			token:            result.Token,
 		}, nil
 	}
 }

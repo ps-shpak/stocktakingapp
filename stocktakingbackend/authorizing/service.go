@@ -8,7 +8,7 @@ import (
 )
 
 type UserInfo struct {
-	Email string
+	AccountEmail string
 }
 
 type OAuth2Gateway interface {
@@ -17,6 +17,9 @@ type OAuth2Gateway interface {
 
 	// Returns user info using provider-specific API and given OAuth2 token.
 	GetUserInfo(token string) (*UserInfo, error)
+
+	// Builds confirmation URL used when auth callback called without auth code
+	BuildConfirmationURL() string
 }
 
 type Repository interface {
@@ -28,9 +31,15 @@ type StockGateway interface {
 	FindOwnerByEmail(email string) (*stock.Owner, error)
 }
 
+type SignInResult struct {
+	NeedConfirm     bool
+	Token           string
+	ConfirmationURL string
+}
+
 type Service interface {
-	security.Service
-	SignIn(oauthCode string) (string, error)
+	security.Gateway
+	SignIn(oauthCode string) (*SignInResult, error)
 }
 
 type service struct {
@@ -67,24 +76,36 @@ func (s *service) CheckAccess(claim security.AccessClaim, token string) (bool, e
 	}
 }
 
-func (s *service) SignIn(oauthCode string) (string, error) {
+func (s *service) SignIn(oauthCode string) (*SignInResult, error) {
+	if oauthCode == "" {
+		return &SignInResult{
+			NeedConfirm:     true,
+			ConfirmationURL: s.oAuth2Gateway.BuildConfirmationURL(),
+		}, nil
+	}
 	token, err := s.oAuth2Gateway.Authentificate(oauthCode)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	userInfo, err := s.oAuth2Gateway.GetUserInfo(token)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	owner, err := s.stockGateway.FindOwnerByEmail(userInfo.Email)
+	owner, err := s.stockGateway.FindOwnerByEmail(userInfo.AccountEmail)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	if owner == nil {
-		return "", errors.WithStack(security.ErrUserNotRegistered)
+		return nil, errors.WithStack(security.ErrUserNotRegistered)
 	}
 	if !owner.MayLogin {
-		return "", errors.WithStack(security.ErrUserMayNotLogin)
+		return nil, errors.WithStack(security.ErrUserMayNotLogin)
 	}
-	return token, nil
+	return &SignInResult{
+		Token: token,
+	}, nil
+}
+
+func (s *service) BuildConfirmationURL() string {
+	return s.oAuth2Gateway.BuildConfirmationURL()
 }

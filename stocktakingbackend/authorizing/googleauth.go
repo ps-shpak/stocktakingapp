@@ -30,22 +30,12 @@ type GoogleCredentials struct {
 }
 
 // See also https://developers.google.com/identity/protocols/OAuth2WebServer
-type GoogleOAuth2Gateway interface {
-	OAuth2Gateway
-
-	// Parses auth code from external request to auth callback (a.k.a. redirect URI)
-	ParseOAuthCode(req *http.Request) string
-
-	// Builds confirmation URL which reports "scope" to googleapis
-	BuildConfirmationURL() string
-}
-
 type googleOAuth2Gateway struct {
 	creds  *GoogleCredentials
 	client *http.Client
 }
 
-func NewGoogleOAuth2Gateway(creds *GoogleCredentials) GoogleOAuth2Gateway {
+func NewGoogleOAuth2Gateway(creds *GoogleCredentials) OAuth2Gateway {
 	g := &googleOAuth2Gateway{
 		creds: creds,
 		client: &http.Client{
@@ -96,12 +86,8 @@ func (g *googleOAuth2Gateway) GetUserInfo(token string) (*UserInfo, error) {
 	}
 
 	return &UserInfo{
-		Email: accountEmail,
+		AccountEmail: accountEmail,
 	}, nil
-}
-
-func (g *googleOAuth2Gateway) ParseOAuthCode(req *http.Request) string {
-	return req.URL.Query().Get("code")
 }
 
 func (g *googleOAuth2Gateway) BuildConfirmationURL() string {
