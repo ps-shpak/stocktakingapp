@@ -14,10 +14,9 @@ type authRepository struct {
 	client *goredis.Client
 }
 
-func NewAuthRepository(redisAddress, password string) (authorizing.Repository, error) {
+func NewAuthRepository(redisAddress string) (authorizing.Repository, error) {
 	client := goredis.NewClient(&goredis.Options{
-		Addr:     redisAddress,
-		Password: password,
+		Addr: redisAddress,
 	})
 	_, err := client.Ping().Result()
 	if err != nil {

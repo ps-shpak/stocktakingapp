@@ -11,9 +11,9 @@ type signInRequest struct {
 }
 
 type signInResponse struct {
-	needConfirmation bool
-	confirmationURL  string
-	token            string
+	needLogin bool
+	loginURL  string
+	token     string
 }
 
 func makeSignInEndpoint(service Service) endpoint.Endpoint {
@@ -24,9 +24,9 @@ func makeSignInEndpoint(service Service) endpoint.Endpoint {
 			return nil, err
 		}
 		return &signInResponse{
-			needConfirmation: result.NeedConfirm,
-			confirmationURL:  result.ConfirmationURL,
-			token:            result.Token,
+			needLogin: result.NeedLogin,
+			loginURL:  result.LoginURL,
+			token:     result.Token,
 		}, nil
 	}
 }

@@ -25,13 +25,16 @@ services:
     ports:
     - "8081:8081"
     environment:
+    - STOCK_ADMIN_EMAIL=me@example.com
     - STOCK_DB_HOST=stock-db
     - STOCK_DB_USERNAME=stock
     - STOCK_DB_PASSWORD=1234
     - STOCK_DB_NAME=stock
     - STOCK_DOMAIN=localhost
+    - STOCK_REDIS_HOST=stock-redis:6379
     depends_on:
     - stock-db
+    - stock-redis
 
   stocktakingweb:
     image: "psshpak/stocktakingweb"

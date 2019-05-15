@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"net/http"
 	"os"
@@ -14,9 +15,12 @@ import (
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 
+	"stocktakingbackend/authorizing"
 	"stocktakingbackend/labeling"
 	"stocktakingbackend/postgres"
+	"stocktakingbackend/redis"
 	"stocktakingbackend/server"
+	"stocktakingbackend/stock"
 	"stocktakingbackend/stocktaking"
 	"stocktakingbackend/stocktakingapi"
 )
@@ -36,29 +40,56 @@ func main() {
 		Level: log.InfoLevel,
 	}
 
+	googleCreds, err := getGoogleCredentials()
+	if err != nil {
+		logger.WithError(err).Fatal("failed to start")
+	}
+	var oauth2Gateway authorizing.OAuth2Gateway
+	if googleCreds != nil {
+		oauth2Gateway = authorizing.NewGoogleOAuth2Gateway(googleCreds)
+	} else {
+		var email string
+		email, err = lookupEnvString("STOCK_ADMIN_EMAIL")
+		if err != nil {
+			logger.WithError(err).Fatal("failed to start")
+		}
+		oauth2Gateway = authorizing.NewStubOAuth2Gateway(email)
+	}
+
+	// Create gateway without stocktaking service - it will be created later
+	stockGateway := &stockGateway{}
+
+	redisAddr := getEnvString("STOCK_REDIS_HOST", "localhost")
+	authorizingRepository, err := redis.NewAuthRepository(redisAddr)
+	if err != nil {
+		logger.WithError(err).Fatal("failed to connect redis")
+	}
+	authorizingService := authorizing.NewService(oauth2Gateway, stockGateway, authorizingRepository)
+	authorizingHandler := authorizing.MakeHTTPHandler(authorizingService, authorizing.NewLoggingEncoder(authorizing.EncodeError, logger))
+
 	db, err := postgres.NewClient(getDSN())
 	if err != nil {
 		logger.WithError(err).Fatal("failed database setup")
 	}
 	defer db.Close()
-
-	urlBuilder, err := newURLBuilder()
-	if err != nil {
-		logger.WithError(err).Fatal("failed to start")
-	}
-
 	stockRepository := postgres.NewStockRepository(db)
 	stocktakingService := stocktaking.NewService(stockRepository)
 	stocktakingGRPCServer := stocktaking.NewGRPCServer(stocktakingService)
 	stocktakingGRPCServer = stocktaking.NewLoggingMiddleware(stocktakingGRPCServer, logger)
 
+	// Connect back stocktaking Service with authorizing Service
+	stockGateway.service = stocktakingService
+
+	urlBuilder, err := newURLBuilder()
+	if err != nil {
+		logger.WithError(err).Fatal("failed to start")
+	}
 	labelingService := labeling.NewService(stocktakingService, urlBuilder)
 	pageGenerator, err := labeling.NewPageGenerator()
 	if err != nil {
 		logger.WithError(err).Fatal("failed to start")
 	}
-	encodeError := labeling.NewLoggingEncoder(labeling.EncodeError, logger)
-	labelingHandler := labeling.MakeHTTPHandler(labelingService, pageGenerator, encodeError)
+	labelingHandler := labeling.MakeHTTPHandler(labelingService, pageGenerator, labeling.NewLoggingEncoder(labeling.EncodeError, logger))
 
 	serverHub := server.NewHub()
 
@@ -92,6 +123,7 @@ func main() {
 		router := mux.NewRouter()
 		router.PathPrefix("/stocktaking/").Handler(http.StripPrefix("/stocktaking", grpcGatewayMux))
 		router.PathPrefix("/labeling/").Handler(labelingHandler)
+		router.PathPrefix("/authorizing/").Handler(authorizingHandler)
 
 		httpServer = &http.Server{
 			Handler: router,
@@ -113,10 +145,36 @@ func main() {
 	}
 }
 
+type stockGateway struct {
+	service stocktaking.Service
+}
+
+func (g *stockGateway) FindOwnerByEmail(email string) (*stock.Owner, error) {
+	return g.service.FindOwnerByEmail(email)
+}
+
+func getGoogleCredentials() (*authorizing.GoogleCredentials, error) {
+	siteDomain, err := lookupEnvString("STOCK_DOMAIN")
+	if err != nil {
+		return nil, err
+	}
+	clientID := getEnvString("STOCK_GOOGLE_CLIENT_ID", "")
+	clientSecret := getEnvString("STOCK_GOOGLE_CLIENT_SECRET", "")
+	if clientID == "" || clientSecret == "" {
+		// No google app credentials - it's OK for local development
+		return nil, nil
+	}
+	return &authorizing.GoogleCredentials{
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
+		RedirectURI:  fmt.Sprintf("%s/authorizing/token", siteDomain),
+	}, nil
+}
+
 func newURLBuilder() (labeling.URLBuilder, error) {
-	siteDomain, ok := os.LookupEnv("STOCK_DOMAIN")
-	if !ok || siteDomain == "" {
-		return nil, errors.New("environment variable STOCK_DOMAIN not set")
+	siteDomain, err := lookupEnvString("STOCK_DOMAIN")
+	if err != nil {
+		return nil, err
 	}
 	return labeling.NewURLBuilder(siteDomain), nil
 }
@@ -144,4 +202,20 @@ func getDSN() postgres.DSN {
 		Password: password,
 		Database: database,
 	}
+}
+
+func getEnvString(name, fallback string) string {
+	value, ok := os.LookupEnv(name)
+	if !ok || value == "" {
+		return fallback
+	}
+	return value
+}
+
+func lookupEnvString(name string) (string, error) {
+	value, ok := os.LookupEnv(name)
+	if !ok || value == "" {
+		return "", errors.Errorf("environment variable %s not set", name)
+	}
+	return value, nil
 }

@@ -18,8 +18,11 @@ type OAuth2Gateway interface {
 	// Returns user info using provider-specific API and given OAuth2 token.
 	GetUserInfo(token string) (*UserInfo, error)
 
-	// Builds confirmation URL used when auth callback called without auth code
-	BuildConfirmationURL() string
+	// Checks if given authentification code is not acceptable (so user must login).
+	NeedLogin(oauthCode string) bool
+
+	// Builds provider-specific login URL.
+	BuildLoginURL() string
 }
 
 type Repository interface {
@@ -32,9 +35,9 @@ type StockGateway interface {
 }
 
 type SignInResult struct {
-	NeedConfirm     bool
-	Token           string
-	ConfirmationURL string
+	NeedLogin bool
+	Token     string
+	LoginURL  string
 }
 
 type Service interface {
@@ -77,10 +80,10 @@ func (s *service) CheckAccess(claim security.AccessClaim, token string) (bool, e
 }
 
 func (s *service) SignIn(oauthCode string) (*SignInResult, error) {
-	if oauthCode == "" {
+	if s.oAuth2Gateway.NeedLogin(oauthCode) {
 		return &SignInResult{
-			NeedConfirm:     true,
-			ConfirmationURL: s.oAuth2Gateway.BuildConfirmationURL(),
+			NeedLogin: true,
+			LoginURL:  s.oAuth2Gateway.BuildLoginURL(),
 		}, nil
 	}
 	token, err := s.oAuth2Gateway.Authentificate(oauthCode)
@@ -106,6 +109,6 @@ func (s *service) SignIn(oauthCode string) (*SignInResult, error) {
 	}, nil
 }
 
-func (s *service) BuildConfirmationURL() string {
-	return s.oAuth2Gateway.BuildConfirmationURL()
+func (s *service) BuildLoginURL() string {
+	return s.oAuth2Gateway.BuildLoginURL()
 }

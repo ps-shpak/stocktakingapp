@@ -58,9 +58,9 @@ func decodeSignInRequest(_ context.Context, r *http.Request) (interface{}, error
 
 func encodeSignInResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
 	res := response.(*signInResponse)
-	if res.needConfirmation {
+	if res.needLogin {
 		req := buildRequest(ctx)
-		http.Redirect(w, req, res.confirmationURL, http.StatusMovedPermanently)
+		http.Redirect(w, req, res.loginURL, http.StatusMovedPermanently)
 	} else {
 		cookieHeader := fmt.Sprintf("%s=%s; Max-Age=%d", TokenCookie, res.token, TokenCookieMaxAge)
 		w.Header().Set("Set-Cookie", cookieHeader)

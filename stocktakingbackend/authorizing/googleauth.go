@@ -17,7 +17,7 @@ const (
 	GoogleAccountsDomain   = "https://accounts.google.com"
 	GoogleGetToken         = GoogleAPIDomain + "/oauth2/v4/token"
 	GoogleEndpointPeopleMe = GoogleAPIDomain + "/plus/v1/people/me"
-	GoogleConfirmationURL  = GoogleAccountsDomain + "/o/oauth2/v2/auth"
+	GoogleLoginURL         = GoogleAccountsDomain + "/o/oauth2/v2/auth"
 
 	// GooglePlusMeScope - scope for GoogleEndpointPeopleMe API method
 	GooglePlusMeScope = "https://www.googleapis.com/auth/plus.me"
@@ -90,14 +90,18 @@ func (g *googleOAuth2Gateway) GetUserInfo(token string) (*UserInfo, error) {
 	}, nil
 }
 
-func (g *googleOAuth2Gateway) BuildConfirmationURL() string {
+func (g *googleOAuth2Gateway) NeedLogin(oauthCode string) bool {
+	return oauthCode == ""
+}
+
+func (g *googleOAuth2Gateway) BuildLoginURL() string {
 	values := url.Values{
 		"response_type": []string{"code"},
 		"client_id":     []string{g.creds.ClientID},
 		"redirect_uri":  []string{g.creds.RedirectURI},
 		"scope":         []string{GooglePlusMeScope},
 	}
-	return fmt.Sprintf("%s?%s", GoogleConfirmationURL, values.Encode())
+	return fmt.Sprintf("%s?%s", GoogleLoginURL, values.Encode())
 }
 
 func (g *googleOAuth2Gateway) readResponseBytes(res *http.Response, err error) ([]byte, error) {

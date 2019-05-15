@@ -12,8 +12,6 @@ linters-settings:
     check-shadowing: true
   goimports:
     local-prefixes: "stocktakingbackend"
-  gocyclo:
-    min-complexity: 10
   gocritic:
     enabled-tags:
       - experimental
