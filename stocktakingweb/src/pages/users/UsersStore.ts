@@ -22,6 +22,7 @@ export class UsersStore extends FormStore {
     @observable isCreateUserPopupVisible = false;
     @observable isCreating = false;
     @observable buttonText = "";
+    @observable infoPopupText = "";
 
     onEdit(id: string): void {
         this.transport.getUser(id).then((response) => {
@@ -42,14 +43,6 @@ export class UsersStore extends FormStore {
         this.activeUser.id = id;
     }
 
-    confirmPopup(): void {
-        if (this.isCreating) {
-            this.onSubmitCancelCreateUser();
-        } else {
-            this.onSubmitDeleteUser();
-        }
-    }
-
     onShowCreateUserPopup(value: boolean): void {
         this.isCreateUserPopupVisible = value;
         if (!this.isCreateUserPopupVisible) {
@@ -60,25 +53,6 @@ export class UsersStore extends FormStore {
                 this.clearActiveUser();
             }
         }
-    }
-
-    onSubmit(): void {
-        if (this.isFormValid()) {
-            const formData = this.getFieldValues();
-            const name = formData[0];
-            const email = formData[1];
-            this.transport.createUser({
-                owners: [{name, email}]
-            })
-                .then(() => {
-                    this.onShowCreateUserPopup(false);
-                    this.isInfoPopupVisible = true;
-                    this.isDataChanged  = false;
-                    this.getUsers();
-            })
-                .catch((err) => console.log(err));
-        }
-
     }
 
     onCancelCreateUser(): void {
@@ -97,6 +71,8 @@ export class UsersStore extends FormStore {
 
     onSubmitDeleteUser(): void {
         this.transport.deleteUser(this.activeUser.id).then(() => {
+            this.isInfoPopupVisible = true;
+            this.infoPopupText = "Пользователь успешно удален!";
             this.getUsers();
         });
     }
@@ -105,6 +81,49 @@ export class UsersStore extends FormStore {
         this.isConfirmPopupVisible = false;
         this.onShowCreateUserPopup(false);
         this.isDataChanged = false;
+    }
+
+    onSubmitForm(): void {
+        if (this.isCreating) {
+            this.onSubmit();
+        } else {
+            this.changeUser();
+        }
+    }
+
+    private onSubmit(): void {
+        if (this.isFormValid()) {
+            const formData = this.getFieldValues();
+            const name = formData[0];
+            const email = formData[1];
+            this.transport.createUser({
+                owners: [{name, email}]
+            })
+                .then(() => {
+                    this.onShowCreateUserPopup(false);
+                    this.isInfoPopupVisible = true;
+                    this.infoPopupText = "Пользователь успешно создан!";
+                    this.isDataChanged  = false;
+                    this.getUsers();
+                })
+                .catch((err) => console.log(err));
+        }
+
+    }
+
+    private changeUser(): void {
+        if (this.isFormValid()) {
+            const formData = this.getFieldValues();
+            this.activeUser.name = formData[0];
+            this.activeUser.email = formData[1];
+            this.transport.changeUser(this.activeUser).then(() => {
+                this.onShowCreateUserPopup(false);
+                this.isInfoPopupVisible = true;
+                this.infoPopupText = "Данные успешно изменены!";
+                this.isDataChanged  = false;
+                this.getUsers();
+            });
+        }
     }
 
     private clearActiveUser(): void {

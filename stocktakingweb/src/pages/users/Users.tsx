@@ -40,7 +40,7 @@ export class Users extends Component {
                     onClose={this.onHideAddUserForm}
                     addField={this.store.addField}
                     onChange={this.store.onChange}
-                    onSubmit={this.store.onSubmit}
+                    onSubmit={this.store.onSubmitForm}
                     isFormValid={!this.store.isFormValid()}
                     activeUser={this.store.activeUser}
                     buttonText={this.store.buttonText}
@@ -59,7 +59,7 @@ export class Users extends Component {
                 />
                 <InfoPopup
                     isVisible={this.store.isInfoPopupVisible}
-                    title={"Пользователь удачно создан"}
+                    title={this.store.infoPopupText}
                     onClose={this.store.onCloseInfoPopup}
                 />
             </Fragment>
