@@ -9,7 +9,10 @@ export const styles = createStyles({
        flexDirection: "column",
        alignItems: "center",
        boxSizing: "border-box",
-       borderRight: "1px solid rgba(0, 0, 0, 0.12)"
+       borderRight: "1px solid rgba(0, 0, 0, 0.12)",
+       position: "fixed",
+       left: 0,
+       top: 0
    },
     sidebarItem: {
        marginBottom: 10

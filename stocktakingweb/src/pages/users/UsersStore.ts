@@ -3,17 +3,10 @@ import { observable } from "mobx";
 import { FormStore } from "../../app/stores";
 import { IGetUserData } from "../../services";
 import { get } from "lodash";
-import * as uuid from "uuid";
 
 @autobind
 export class UsersStore extends FormStore {
-    @observable userList: IGetUserData[] = [
-        {
-            id: uuid.v4(),
-            name: "max",
-            email: "max@mail.com"
-        }
-    ];
+    @observable userList: IGetUserData[] = [];
     @observable activeUser: IGetUserData = {
         id: "",
         name: "",
