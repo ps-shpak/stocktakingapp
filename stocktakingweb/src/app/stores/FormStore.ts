@@ -52,6 +52,15 @@ export class FormStore extends Store {
         this.fields.length = 0;
     }
 
+    onOpenForm(): void {
+        this.isFormVisible = true;
+    }
+
+    onCloseForm(): void {
+        this.isFormVisible = false;
+        this.resetFields();
+    }
+
     private isTextValid(value: string): boolean {
         return value !== "";
     }

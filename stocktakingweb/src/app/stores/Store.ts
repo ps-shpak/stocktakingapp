@@ -6,6 +6,7 @@ import { observable } from "mobx";
 export class Store {
     @observable isConfirmPopupVisible = false;
     @observable isInfoPopupVisible = false;
+    @observable isFormVisible = false;
     private readonly _transport = new Transport();
 
     get transport(): Transport {
