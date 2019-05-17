@@ -181,8 +181,53 @@
       }
     },
     "/owner": {
+      "get": {
+        "operationId": "LoadOwner",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiLoadOwnerResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes existing owner with given ID",
+        "operationId": "DeleteOwner",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/stocktakingapiDeleteOwnerResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      },
       "put": {
-        "summary": "Saves existing owner with given ID.",
+        "summary": "Saves new or existing owner.",
         "operationId": "SaveOwner",
         "responses": {
           "200": {
@@ -254,7 +299,7 @@
     "ListOwnersResponseResult": {
       "type": "object",
       "properties": {
-        "user_id": {
+        "id": {
           "type": "string"
         },
         "name": {
@@ -317,6 +362,9 @@
           "type": "string"
         }
       }
+    },
+    "stocktakingapiDeleteOwnerResponse": {
+      "type": "object"
     },
     "stocktakingapiDisposeItemsResponse": {
       "type": "object"
@@ -420,6 +468,24 @@
         }
       }
     },
+    "stocktakingapiLoadOwnerResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "may_login": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      }
+    },
     "stocktakingapiSaveItemRequest": {
       "type": "object",
       "properties": {
@@ -458,7 +524,12 @@
       }
     },
     "stocktakingapiSaveOwnerResponse": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
     },
     "stocktakingapiTransferItemsRequest": {
       "type": "object",

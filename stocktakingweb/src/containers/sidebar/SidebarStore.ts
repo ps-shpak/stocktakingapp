@@ -4,6 +4,7 @@ import { IMenuItem } from "../menu";
 import { EPaths } from "../../config";
 import { AppContext } from "../../context";
 import { findIndex } from "lodash";
+import { Group, Category, Person, ListAlt, EventSeat } from "@material-ui/icons";
 
 @autobind
 export class SidebarStore {
@@ -14,14 +15,17 @@ export class SidebarStore {
             isActive: false,
             onClick: () => SidebarStore.goToPage(EPaths.PROPERTY),
             path: EPaths.PROPERTY,
+            icon: EventSeat,
             options: [
                 {
                     title: "по категориям",
-                    isActive: false
+                    isActive: false,
+                    icon: Category
                 },
                 {
                     title: "по сотрудникам",
-                    isActive: false
+                    isActive: false,
+                    icon: Person
                 }
             ]
         },
@@ -30,14 +34,17 @@ export class SidebarStore {
             isActive: false,
             onClick: () => SidebarStore.goToPage(EPaths.LICENSE),
             path: EPaths.LICENSE,
+            icon: ListAlt,
             options: [
                 {
                     title: "по категориям",
                     isActive: false,
+                    icon: Category
                 },
                 {
                     title: "по сотрудникам",
-                    isActive: false
+                    isActive: false,
+                    icon: Person
                 }
             ]
         },
@@ -45,7 +52,8 @@ export class SidebarStore {
             title: "Пользователи",
             isActive: false,
             onClick: () => SidebarStore.goToPage(EPaths.USERS),
-            path: EPaths.USERS
+            path: EPaths.USERS,
+            icon: Group
         }
     ];
 

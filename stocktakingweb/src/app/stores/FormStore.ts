@@ -3,6 +3,7 @@ import { observable } from "mobx";
 import { Field } from "../../components/field";
 import { EFormTypes, RegexpConfig } from "../../config";
 import { head } from "lodash";
+import { Store } from "./Store";
 
 interface IFieldsArray {
     field: Field;
@@ -10,7 +11,7 @@ interface IFieldsArray {
 }
 
 @autobind
-export class FormStore {
+export class FormStore extends Store {
     @observable isDataChanged = false;
     @observable private readonly fields: IFieldsArray[] = [];
 

@@ -1,12 +1,12 @@
 import { WithStyles } from "@material-ui/core";
 import { styles } from "./styles";
-import { IListItem } from "../IListItem";
+import { IGetUserData } from "../../../services";
 
 export interface IListItemProps extends WithStyles<typeof styles> {
-    data: IListItem;
+    data: IGetUserData;
     index: number;
 
-    onEditItem(index: number): void;
+    onEditItem(id: string): void;
 
-    onDeleteItem(index: number): void;
+    onDeleteItem(id: string): void;
 }

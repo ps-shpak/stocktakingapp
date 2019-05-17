@@ -43,6 +43,8 @@ type Service interface {
 	AddOwner(spec stock.OwnerSpec) (stock.ID, error)
 	SaveOwner(id stock.ID, spec stock.OwnerSpec, mayLogin bool) error
 	FindOwnerByEmail(email string) (*stock.Owner, error)
+	LoadOwner(id stock.ID) (*stock.Owner, error)
+	DeleteOwner(id stock.ID) error
 }
 
 // FindOwnersSpec - requirements used to select owners list
@@ -67,6 +69,7 @@ type Repository interface {
 
 	FindOwners(spec FindOwnersSpec) ([]*stock.Owner, error)
 	SaveOwner(owner *stock.Owner) error
+	DeleteOwner(id stock.ID) error
 }
 
 type service struct {
@@ -216,6 +219,24 @@ func (s *service) AddOwner(spec stock.OwnerSpec) (stock.ID, error) {
 func (s *service) SaveOwner(id stock.ID, spec stock.OwnerSpec, mayLogin bool) error {
 	owner := stock.BuildOwner(id, spec, mayLogin)
 	return s.repo.SaveOwner(owner)
+}
+
+func (s *service) LoadOwner(id stock.ID) (*stock.Owner, error) {
+	owners, err := s.repo.FindOwners(FindOwnersSpec{
+		Limit:    1,
+		OwnerIDs: []stock.ID{id},
+	})
+	if err != nil {
+		return nil, err
+	}
+	if len(owners) == 0 {
+		return nil, stock.ErrUnknownOwnerID
+	}
+	return owners[0], nil
+}
+
+func (s *service) DeleteOwner(id stock.ID) error {
+	return s.repo.DeleteOwner(id)
 }
 
 func (s *service) FindOwnerByEmail(email string) (*stock.Owner, error) {

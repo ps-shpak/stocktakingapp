@@ -187,3 +187,8 @@ func (sr *stockRepository) SaveOwner(owner *stock.Owner) error {
 	)
 	return errors.Wrap(err, "sql query failed for owner "+owner.ID.String())
 }
+
+func (sr *stockRepository) DeleteOwner(id stock.ID) error {
+	_, err := sr.db.Query(`DELETE FROM "owner" WHERE id=$1`, id.String())
+	return errors.Wrap(err, "sql query failed for owner "+id.String())
+}
