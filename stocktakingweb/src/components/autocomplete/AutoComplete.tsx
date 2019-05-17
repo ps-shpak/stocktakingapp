@@ -35,7 +35,8 @@ export class AutoComplete extends Component<IAutoCompleteProps> {
                 getItemValue={this.getItemValue}
                 onSelect={this.onSelect}
                 renderMenu={this.renderMenu}
-                sortItems={(a, b, _) => a.name.localeCompare(b.name)}
+                sortItems={this.sortStates}
+                shouldItemRender={this.matchStateToTerm}
             />
         );
     }
@@ -85,5 +86,22 @@ export class AutoComplete extends Component<IAutoCompleteProps> {
 
     private onSelect(value: string, item: IGetUserData): void {
         this.store.value = value;
+        this.props.onSelect(item);
+    }
+
+    private matchStateToTerm(item: IGetUserData, value: string): boolean {
+        return item.name.toLowerCase().indexOf(value.toLowerCase()) !== -1;
+    }
+
+    private sortStates(a: IGetUserData, b: IGetUserData, value: string): number {
+        const aLower = a.name.toLowerCase();
+        const bLower = b.name.toLowerCase();
+        const valueLower = value.toLowerCase();
+        const queryPosA = aLower.indexOf(valueLower);
+        const queryPosB = bLower.indexOf(valueLower);
+        if (queryPosA !== queryPosB) {
+            return queryPosA - queryPosB;
+        }
+        return aLower < bLower ? -1 : 1;
     }
 }
