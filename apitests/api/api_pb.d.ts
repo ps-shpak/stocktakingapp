@@ -653,48 +653,6 @@ export namespace DeleteOwnerResponse {
     }
 }
 
-export class AuthorizeRequest extends jspb.Message { 
-    getEmail(): string;
-    setEmail(value: string): void;
-
-
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): AuthorizeRequest.AsObject;
-    static toObject(includeInstance: boolean, msg: AuthorizeRequest): AuthorizeRequest.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: AuthorizeRequest, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): AuthorizeRequest;
-    static deserializeBinaryFromReader(message: AuthorizeRequest, reader: jspb.BinaryReader): AuthorizeRequest;
-}
-
-export namespace AuthorizeRequest {
-    export type AsObject = {
-        email: string,
-    }
-}
-
-export class AuthorizeResponse extends jspb.Message { 
-    getId(): string;
-    setId(value: string): void;
-
-
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): AuthorizeResponse.AsObject;
-    static toObject(includeInstance: boolean, msg: AuthorizeResponse): AuthorizeResponse.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: AuthorizeResponse, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): AuthorizeResponse;
-    static deserializeBinaryFromReader(message: AuthorizeResponse, reader: jspb.BinaryReader): AuthorizeResponse;
-}
-
-export namespace AuthorizeResponse {
-    export type AsObject = {
-        id: string,
-    }
-}
-
 export enum ItemGroupingMethod {
     BYCATEGORY = 0,
     BYOWNER = 1,

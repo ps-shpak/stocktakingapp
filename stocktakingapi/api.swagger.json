@@ -15,31 +15,6 @@
     "application/json"
   ],
   "paths": {
-    "/auth/token": {
-      "get": {
-        "summary": "Attempts to authorize user in this service\nAuthorization uses only email - caller must validate email\n before calling this method (e.g. sign in with Google).\nErrors:\n - UnknownId - no such email registered in service\n - AuthForbidden - email belongs to owner which cannot service itself",
-        "operationId": "Authorize",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/stocktakingapiAuthorizeResponse"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Backend"
-        ]
-      }
-    },
     "/item": {
       "get": {
         "summary": "Returns full information for item with given ID",
@@ -348,14 +323,6 @@
       }
     },
     "stocktakingapiAddOwnersResponseOwner": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        }
-      }
-    },
-    "stocktakingapiAuthorizeResponse": {
       "type": "object",
       "properties": {
         "id": {

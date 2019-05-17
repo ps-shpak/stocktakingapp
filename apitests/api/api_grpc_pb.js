@@ -27,28 +27,6 @@ function deserialize_stocktakingapi_AddOwnersResponse(buffer_arg) {
   return api_pb.AddOwnersResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_stocktakingapi_AuthorizeRequest(arg) {
-  if (!(arg instanceof api_pb.AuthorizeRequest)) {
-    throw new Error('Expected argument of type stocktakingapi.AuthorizeRequest');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_stocktakingapi_AuthorizeRequest(buffer_arg) {
-  return api_pb.AuthorizeRequest.deserializeBinary(new Uint8Array(buffer_arg));
-}
-
-function serialize_stocktakingapi_AuthorizeResponse(arg) {
-  if (!(arg instanceof api_pb.AuthorizeResponse)) {
-    throw new Error('Expected argument of type stocktakingapi.AuthorizeResponse');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_stocktakingapi_AuthorizeResponse(buffer_arg) {
-  return api_pb.AuthorizeResponse.deserializeBinary(new Uint8Array(buffer_arg));
-}
-
 function serialize_stocktakingapi_DeleteOwnerRequest(arg) {
   if (!(arg instanceof api_pb.DeleteOwnerRequest)) {
     throw new Error('Expected argument of type stocktakingapi.DeleteOwnerRequest');
@@ -369,23 +347,6 @@ var BackendService = exports.BackendService = {
     requestDeserialize: deserialize_stocktakingapi_DeleteOwnerRequest,
     responseSerialize: serialize_stocktakingapi_DeleteOwnerResponse,
     responseDeserialize: deserialize_stocktakingapi_DeleteOwnerResponse,
-  },
-  // Attempts to authorize user in this service
-  // Authorization uses only email - caller must validate email
-  //  before calling this method (e.g. sign in with Google).
-  // Errors:
-  //  - UnknownId - no such email registered in service
-  //  - AuthForbidden - email belongs to owner which cannot service itself
-  authorize: {
-    path: '/stocktakingapi.Backend/Authorize',
-    requestStream: false,
-    responseStream: false,
-    requestType: api_pb.AuthorizeRequest,
-    responseType: api_pb.AuthorizeResponse,
-    requestSerialize: serialize_stocktakingapi_AuthorizeRequest,
-    requestDeserialize: deserialize_stocktakingapi_AuthorizeRequest,
-    responseSerialize: serialize_stocktakingapi_AuthorizeResponse,
-    responseDeserialize: deserialize_stocktakingapi_AuthorizeResponse,
   },
 };
 
