@@ -15,6 +15,7 @@ services:
 
   stock-redis:
     image: "redis:4.0.14"
+    container_name: "stock-redis"
     command: "redis-server --protected-mode no --appendonly yes"
     volumes:
     - "redis-data:/data"

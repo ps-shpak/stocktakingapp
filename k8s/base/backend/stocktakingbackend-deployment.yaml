@@ -22,6 +22,16 @@ spec:
             secretKeyRef:
               name: stocktaking-secret
               key: STOCK_DB_PASSWORD
+        - name: STOCK_GOOGLE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: stocktaking-secret
+              key: STOCK_GOOGLE_CLIENT_ID
+        - name: STOCK_GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: stocktaking-secret
+              key: STOCK_GOOGLE_CLIENT_SECRET
         - name: STOCK_DB_USERNAME
           value: stock
         - name: STOCK_DOMAIN

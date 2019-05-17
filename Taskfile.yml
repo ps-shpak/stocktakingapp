@@ -4,8 +4,12 @@ tasks:
   up:
     dir: docker
     cmds:
-      - docker-compose pull
       - docker-compose up -d
+
+  pull:
+    dir: docker
+    cmds:
+      - docker-compose pull
 
   down:
     dir: docker

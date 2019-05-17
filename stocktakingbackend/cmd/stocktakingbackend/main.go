@@ -64,7 +64,7 @@ func main() {
 	if err != nil {
 		logger.WithError(err).Fatal("failed to connect redis")
 	}
-	authorizingService := authorizing.NewService(oauth2Gateway, stockGateway, authorizingRepository)
+	authorizingService := authorizing.NewLoggingMiddleware(authorizing.NewService(oauth2Gateway, stockGateway, authorizingRepository), logger)
 	authorizingHandler := authorizing.MakeHTTPHandler(authorizingService, authorizing.NewLoggingEncoder(authorizing.EncodeError, logger))
 
 	db, err := postgres.NewClient(getDSN())
@@ -84,7 +84,7 @@ func main() {
 	if err != nil {
 		logger.WithError(err).Fatal("failed to start")
 	}
-	labelingService := labeling.NewService(stocktakingService, urlBuilder)
+	labelingService := labeling.NewLoggingMiddleware(labeling.NewService(stocktakingService, urlBuilder), logger)
 	pageGenerator, err := labeling.NewPageGenerator()
 	if err != nil {
 		logger.WithError(err).Fatal("failed to start")
