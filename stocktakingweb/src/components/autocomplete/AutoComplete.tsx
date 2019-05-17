@@ -3,11 +3,10 @@ import { ChangeEvent, Component, ReactNode } from "react";
 import { autobind } from "core-decorators";
 import { observer } from "mobx-react";
 import { IAutoCompleteProps } from "./IAutoCompleteProps";
-import { EInputFieldVariants } from "../input-field";
 import { AutoCompleteStore } from "./AutoCompleteStore";
 import { IGetUserData } from "../../services";
 import * as Autocomplete from "react-autocomplete";
-import { ListItem, Paper, TextField } from "@material-ui/core";
+import { ListItem, Paper } from "@material-ui/core";
 import * as uuid from "uuid";
 import { Scrollbar } from "../scrollbar";
 
@@ -29,7 +28,6 @@ export class AutoComplete extends Component<IAutoCompleteProps> {
             <Autocomplete
                 value={this.store.value}
                 items={this.store.list}
-                // renderInput={this.renderInputField}
                 onChange={this.onChangeAutoComplete}
                 renderItem={this.renderItem}
                 getItemValue={this.getItemValue}
@@ -37,25 +35,31 @@ export class AutoComplete extends Component<IAutoCompleteProps> {
                 renderMenu={this.renderMenu}
                 sortItems={this.sortStates}
                 shouldItemRender={this.matchStateToTerm}
-            />
-        );
-    }
-
-    renderInputField(): ReactNode {
-        return (
-            <TextField
-                label={this.props.placeholder}
-                fullWidth={true}
-                variant={EInputFieldVariants.OUTLINED}
-                onChange={this.onChange}
-                defaultValue={this.store.value}
+                wrapperStyle={{
+                    display: "flex",
+                    flexDirection: "column",
+                    marginBottom: 20,
+                    position: "relative"
+                }}
+                inputProps={{
+                    style: {
+                        "width": "fillAvailable",
+                        "padding": "18.5px 14px",
+                        "border": "1px solid rgba(0, 0, 0, 0.23)",
+                        "borderRadius": 4,
+                        "&::placeholder": {
+                            fontSize: "1rem"
+                        }
+                    },
+                    placeholder: "Ответственный"
+                }}
             />
         );
     }
 
     renderMenu(items: ReactNode[], value: string): ReactNode {
         return (
-                <Paper>
+                <Paper style={{position: "absolute", top: 54, background: "#fff", zIndex: 5, width: "100%"}}>
                     <Scrollbar>
                         {items}
                     </Scrollbar>
