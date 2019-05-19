@@ -4,7 +4,7 @@ import { IAddProductFormProps } from "./IAddProductFormProps";
 import { autobind } from "core-decorators";
 import { observer } from "mobx-react";
 import { DrawerWrapper } from "../drawer-wrapper";
-import { EFormTypes } from "../../config";
+import { EFormTypes, RegexpConfig } from "../../config";
 import { InputField } from "../input-field";
 import { AutoComplete } from "../autocomplete";
 
@@ -32,12 +32,17 @@ export class AddProductForm extends Component<IAddProductFormProps> {
                     placeholder={"Ответственный"}
                     list={this.props.userList}
                     onSelect={this.props.onSelectUser}
+                    addField={this.props.addField}
+                    onChange={this.props.onChange}
+                    value={""}
+                    type={EFormTypes.OWNER}
                 />
                 <InputField
                     addField={this.props.addField}
                     placeholder={"Цена в рублях"}
                     onChange={this.props.onChange}
                     type={EFormTypes.TEXT}
+                    mask={RegexpConfig.ONLY_NUMBER}
                 />
                 <InputField
                     addField={this.props.addField}

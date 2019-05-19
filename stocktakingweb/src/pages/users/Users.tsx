@@ -4,7 +4,7 @@ import { autobind } from "core-decorators";
 import { observer } from "mobx-react";
 import { List } from "../../components/list";
 import { UsersStore } from "./UsersStore";
-import { UserLayout } from "../../containers/user-layout";
+import { Layout } from "../../containers/layout";
 import { AddUserForm } from "../../components/add-user-form";
 import { ConfirmPopup } from "../../components/confirm-popup/ConfirmPopup";
 import { InfoPopup } from "../../components/info-popup";
@@ -25,14 +25,18 @@ export class Users extends Component {
         return (
             <Fragment>
                 <Wrapper title={"Пользователи"}>
-                    <UserLayout onAddUser={this.store.onAddUser}>
+                    <Layout
+                        onClick={this.store.onAddUser}
+                        isPreloaderVisible={this.store.isPreloaderVisible}
+                        buttonTitle={"Добавить пользователя"}
+                    >
                         <List
                             list={this.store.userList}
                             onDeleteItem={this.onDelete}
                             onEditItem={this.store.onEdit}
                             emptyListMessage={"В списке нет ни одного пользователя"}
                         />
-                    </UserLayout>
+                    </Layout>
                 </Wrapper>
                 <AddUserForm
                     isVisible={this.store.isCreateUserPopupVisible}

@@ -24,6 +24,10 @@ export const InputFieldView = withStyles(styles)(
                     variant={EInputFieldVariants.OUTLINED}
                     onChange={this.props.onChange}
                     defaultValue={this.props.value}
+                    onFocus={this.props.onFocus}
+                    inputProps={{
+                        onKeyDown: this.props.onKeyDown
+                    }}
                 />
             );
         }

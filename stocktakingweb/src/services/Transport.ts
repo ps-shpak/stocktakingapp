@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { ICreateUser } from "./RequestInterfaces";
-import { ApiPaths } from "../config";
-import { IGetUserData } from "./ResponseInterfaces";
+import { ICreateProductData, ICreateUser } from "./RequestInterfaces";
+import { ApiPaths, TItemGroupinMethod, TItemKind } from "../config";
+import { IGetItems, IGetUserData } from "./ResponseInterfaces";
 
 export class Transport {
     private readonly instance: AxiosInstance;
@@ -28,5 +28,18 @@ export class Transport {
 
     async changeUser(data: IGetUserData): Promise<AxiosResponse<void>> {
         return this.instance.put(ApiPaths.OWNER, data);
+    }
+
+    async getItems(groupingMethod: TItemGroupinMethod, kind: TItemKind): Promise<AxiosResponse<IGetItems>> {
+        return this.instance.get(ApiPaths.ITEMS, {
+            params: {
+                grouping_method: groupingMethod,
+                kind
+            }
+        });
+    }
+
+    async createProduct(data: ICreateProductData): Promise<AxiosResponse<void>> {
+        return this.instance.put(ApiPaths.ITEM, data);
     }
 }

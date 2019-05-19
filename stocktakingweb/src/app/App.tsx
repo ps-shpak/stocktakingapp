@@ -4,14 +4,14 @@ import { AppContext } from "../context";
 import { EPaths } from "../config";
 import { Main } from "../pages/main";
 import DevTools from "mobx-react-devtools";
-import { Users } from "../pages/users";
 import { Licences } from "../pages/licences";
 import { Property } from "../pages/property";
 import "./App.css";
 import { Sidebar } from "../containers/sidebar";
+import { Users } from "../pages/users";
 
 export class App extends React.Component {
-  render() {
+ render() {
     return (
         <Router history={AppContext.getHistory()}>
             <div className={"App"}>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ChangeEvent, Component, ReactNode } from "react";
+import { ChangeEvent, Component, ReactNode, HTMLProps } from "react";
 import { autobind } from "core-decorators";
 import { observer } from "mobx-react";
 import { IAutoCompleteProps } from "./IAutoCompleteProps";
@@ -9,13 +9,26 @@ import * as Autocomplete from "react-autocomplete";
 import { ListItem, Paper } from "@material-ui/core";
 import * as uuid from "uuid";
 import { Scrollbar } from "../scrollbar";
+import { AutoCompleteInput } from "./input";
+import { Field, IInputField } from "../field";
+import { EFormTypes } from "../../config";
 
 @observer
 @autobind
 export class AutoComplete extends Component<IAutoCompleteProps> {
+    protected readonly initField: IInputField = {
+        id: uuid.v4(),
+        type: this.props.type || EFormTypes.TEXT,
+        value: this.props.value || "",
+        placeholder: this.props.placeholder,
+        isValid: false,
+        isError: false
+    };
+    private readonly field = new Field(this.initField);
     private readonly store = new AutoCompleteStore();
 
     componentDidMount(): void {
+        this.props.addField(this.field);
         this.store.list = this.props.list;
     }
 
@@ -28,6 +41,7 @@ export class AutoComplete extends Component<IAutoCompleteProps> {
             <Autocomplete
                 value={this.store.value}
                 items={this.store.list}
+                renderInput={this.renderInput}
                 onChange={this.onChangeAutoComplete}
                 renderItem={this.renderItem}
                 getItemValue={this.getItemValue}
@@ -43,17 +57,21 @@ export class AutoComplete extends Component<IAutoCompleteProps> {
                 }}
                 inputProps={{
                     style: {
-                        "width": "fillAvailable",
-                        "padding": "18.5px 14px",
-                        "border": "1px solid rgba(0, 0, 0, 0.23)",
-                        "borderRadius": 4,
-                        "&::placeholder": {
-                            fontSize: "1rem"
-                        }
+                        width: "fillAvailable",
+                        padding: "18.5px 14px",
+                        border: "1px solid rgba(0, 0, 0, 0.23)",
+                        borderRadius: 4,
                     },
-                    placeholder: "Ответственный"
+                    placeholder: "Ответственный",
+                    value: this.field.getValue()
                 }}
             />
+        );
+    }
+
+    renderInput(props: HTMLProps<HTMLInputElement>): ReactNode {
+        return (
+            <AutoCompleteInput props={props}  placeholder={"Ответственный"}/>
         );
     }
 
@@ -79,18 +97,19 @@ export class AutoComplete extends Component<IAutoCompleteProps> {
     private renderItem(item: IGetUserData, isHighlighted: boolean): ReactNode {
         return (
             <ListItem button={true} selected={isHighlighted} key={uuid.v4()}>
-                {item.name}
+                {item.name} ({item.email})
             </ListItem>
         );
     }
 
     private getItemValue(item: IGetUserData): string {
-        return item.name;
+        return `${item.name} (${item.email})`;
     }
 
     private onSelect(value: string, item: IGetUserData): void {
         this.store.value = value;
         this.props.onSelect(item);
+        this.props.onChange(this.field.getId(), item.id);
     }
 
     private matchStateToTerm(item: IGetUserData, value: string): boolean {

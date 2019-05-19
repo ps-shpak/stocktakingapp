@@ -35,6 +35,12 @@ export class FormStore extends Store {
         this.isDataChanged = true;
     }
 
+    onFocus(): void {
+        this.fields.map((item: IFieldsArray) => {
+            item.field.setValidState(this.getValidationFunction(item.field.getValue(), item.field.getType()));
+        });
+    }
+
     getFieldById(id: string): Field {
         const fields = this.fields.filter((data: IFieldsArray) => {
             return data.field.getId() === id;
@@ -74,6 +80,7 @@ export class FormStore extends Store {
         const validators = {
             text: this.isTextValid(value),
             email: this.isEmailValid(value),
+            owner: this.isTextValid(value)
         };
         return validators[type];
     }

@@ -4,5 +4,6 @@ export enum EFormTypes {
     NAME = "name",
     LASTNAME = "lastname",
     PROPERTY = "property",
-    LICENSE = "license"
+    LICENSE = "license",
+    OWNER = "owner"
 }

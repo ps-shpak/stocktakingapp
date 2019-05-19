@@ -10,6 +10,9 @@ export interface IInputFieldProps extends IFieldProps {
     maxLength?: number;
     isTextArea?: boolean;
     autoFocus?: boolean;
+    mask?: RegExp;
 
     onBlur?(): void;
+
+    onFocus?(): void;
 }

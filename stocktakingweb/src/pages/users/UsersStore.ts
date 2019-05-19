@@ -18,7 +18,9 @@ export class UsersStore extends FormStore {
     @observable infoPopupText = "";
 
     onEdit(id: string): void {
+        this.setVisibilityPreloader(true);
         this.transport.getUser(id).then((response) => {
+            this.setVisibilityPreloader(false);
             this.activeUser = response.data;
             this.isCreating = false;
             this.onShowCreateUserPopup(true);
@@ -57,13 +59,17 @@ export class UsersStore extends FormStore {
     }
 
     getUsers(): void {
+        this.setVisibilityPreloader(true);
         this.transport.getUserList().then((response) => {
             this.userList = get(response.data, "results");
+            this.setVisibilityPreloader(false);
         });
     }
 
     onSubmitDeleteUser(): void {
+        this.setVisibilityPreloader(true);
         this.transport.deleteUser(this.activeUser.id).then(() => {
+            this.setVisibilityPreloader(false);
             this.isInfoPopupVisible = true;
             this.infoPopupText = "Пользователь успешно удален!";
             this.getUsers();
@@ -89,10 +95,12 @@ export class UsersStore extends FormStore {
             const formData = this.getFieldValues();
             const name = formData[0];
             const email = formData[1];
+            this.setVisibilityPreloader(true);
             this.transport.createUser({
                 owners: [{name, email}]
             })
                 .then(() => {
+                    this.setVisibilityPreloader(false);
                     this.onShowCreateUserPopup(false);
                     this.isInfoPopupVisible = true;
                     this.infoPopupText = "Пользователь успешно создан!";
@@ -109,8 +117,10 @@ export class UsersStore extends FormStore {
             const formData = this.getFieldValues();
             this.activeUser.name = formData[0];
             this.activeUser.email = formData[1];
+            this.setVisibilityPreloader(true);
             this.transport.changeUser(this.activeUser).then(() => {
                 this.onShowCreateUserPopup(false);
+                this.setVisibilityPreloader(false);
                 this.isInfoPopupVisible = true;
                 this.infoPopupText = "Данные успешно изменены!";
                 this.isDataChanged  = false;

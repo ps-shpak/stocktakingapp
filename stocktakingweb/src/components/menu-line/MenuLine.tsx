@@ -23,7 +23,6 @@ export class MenuLine extends Component<IMenuLineProps> {
                     button={true}
                     onClick={() => this.onClick(data.onClick)}
                     selected={data.isActive}
-                    divider={true}
                 >
                     {data.icon &&
                         <ListItemIcon>

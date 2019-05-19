@@ -28,6 +28,7 @@ export class AddUserForm extends Component<IAddUserFormProps> {
                     onChange={this.props.onChange}
                     type={EFormTypes.TEXT}
                     value={this.getUser().name}
+                    onFocus={this.props.onFocus}
                 />
                 <InputField
                     addField={this.props.addField}
@@ -35,6 +36,7 @@ export class AddUserForm extends Component<IAddUserFormProps> {
                     onChange={this.props.onChange}
                     type={EFormTypes.EMAIL}
                     value={this.getUser().email}
+                    onFocus={this.props.onFocus}
                 />
             </DrawerWrapper>
         );

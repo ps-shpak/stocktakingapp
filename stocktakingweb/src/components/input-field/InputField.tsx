@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ChangeEvent, Component, ReactNode } from "react";
+import { ChangeEvent, Component, ReactNode, KeyboardEvent } from "react";
 import { autobind } from "core-decorators";
 import { observer } from "mobx-react";
 import { IInputFieldProps } from "./IInputFieldProps";
@@ -42,8 +42,23 @@ export class InputField extends Component<IInputFieldProps> {
                 isError={this.field.getErrorState()}
                 isTextArea={this.props.isTextArea}
                 autoFocus={this.props.autoFocus || false}
+                onFocus={this.props.onFocus}
+                onKeyDown={this.onKeyDown}
             />
         );
+    }
+
+    private onKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
+        if (!this.props.mask) {
+            return;
+        }
+        const symbol = event.key;
+        if (symbol.match("Backspace")) {
+            return;
+        }
+        if (symbol.match(this.props.mask)) {
+            event.preventDefault();
+        }
     }
 
     private onChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {

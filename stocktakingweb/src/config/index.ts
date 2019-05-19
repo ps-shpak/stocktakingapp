@@ -4,3 +4,4 @@ export * from "./Genrics";
 export { EFormTypes } from "./EFormTypes";
 export { RegexpConfig } from "./RegexpConfig";
 export { ApiPaths } from "./ApiPaths";
+export * from "./TTypes";

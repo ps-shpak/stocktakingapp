@@ -3,9 +3,10 @@ import { Component, ReactNode } from "react";
 import { autobind } from "core-decorators";
 import { Wrapper } from "../../containers/wrapper";
 import { PropertyStore } from "./PropertyStore";
-import { UserLayout } from "../../containers/user-layout";
+import { Layout } from "../../containers/layout";
 import { observer } from "mobx-react";
 import { AddProductForm } from "../../components/add-product-form/AddProductForm";
+import { InfoPopup } from "../../components/info-popup";
 
 @observer
 @autobind
@@ -13,16 +14,20 @@ export class Property extends Component {
     private readonly store = new PropertyStore();
 
     componentDidMount(): void {
-        this.store.getUsers();
+        this.store.onMount();
     }
 
     render(): ReactNode {
         return (
             <>
                 <Wrapper title={"Имущество"}>
-                    <UserLayout onAddUser={this.store.onOpenForm}>
+                    <Layout
+                        onClick={this.store.onOpenForm}
+                        isPreloaderVisible={this.store.isPreloaderVisible}
+                        buttonTitle={"Добавить предмет"}
+                    >
                         123
-                    </UserLayout>
+                    </Layout>
                 </Wrapper>
                 <AddProductForm
                     isVisible={this.store.isFormVisible}
@@ -35,6 +40,11 @@ export class Property extends Component {
                     buttonTitle={"Создать"}
                     onSelectUser={this.store.onSelectUser}
                     onSubmit={this.store.onSubmit}
+                />
+                <InfoPopup
+                    isVisible={this.store.isInfoPopupVisible}
+                    title={"Продукт удачно добавлен!"}
+                    onClose={() => this.store.setVisibilityInfoPopup(false)}
                 />
             </>
         );

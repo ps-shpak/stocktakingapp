@@ -1,7 +1,7 @@
 import { styles } from "./styles";
 import { WithStyles } from "@material-ui/core/styles/withStyles";
 import { EFormTypes } from "../../../config";
-import { ChangeEvent } from "react";
+import { ChangeEvent, KeyboardEvent } from "react";
 
 export interface IInpitFieldViewProps extends WithStyles<typeof styles> {
     type: EFormTypes;
@@ -16,4 +16,8 @@ export interface IInpitFieldViewProps extends WithStyles<typeof styles> {
     isTextArea?: boolean;
 
     onChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void;
+
+    onFocus?(): void;
+
+    onKeyDown?(event: KeyboardEvent<HTMLInputElement>): void;
 }
