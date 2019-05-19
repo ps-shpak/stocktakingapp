@@ -1,9 +1,9 @@
 import { autobind } from "core-decorators";
-import { observable } from "mobx";
+import { action, observable } from "mobx";
 import { ITreeItem } from "../../components/tree";
 import { AddProductStore } from "../../components/add-product-popup";
-import { findIndex, range } from "lodash";
-import * as uuid from "uuid";
+import { findIndex } from "lodash";
+import { BackendClient, ItemKind, ItemGroupingMethod } from "src/api";
 
 @autobind
 export class DashboardStore {
@@ -12,12 +12,14 @@ export class DashboardStore {
 
     addProductStore: AddProductStore = new AddProductStore();
 
-    onMount(): void {
-        this.generateDemoData();
+    @action async reloadItems(kind: ItemKind, groupingMethod: ItemGroupingMethod): Promise<void> {
+        const treeData = await this.loadItemTreeData(kind, groupingMethod);
+        this.treeData = treeData;
+        console.log("this.treeData", JSON.stringify(this.treeData, undefined, 2));
     }
 
-    onChangeActive(id: string): void {
-        const activeIndex = this.getCurrentIndex(id);
+    @action onChangeActive(id: string): void {
+        const activeIndex = this.getItemIndexById(id);
         if (activeIndex === -1) {
             return;
         }
@@ -28,53 +30,43 @@ export class DashboardStore {
         }
         this.treeData[activeIndex].isActive = !this.treeData[activeIndex].isActive;
         active.children.map((childId: string) => {
-            const currentIndex = this.getCurrentIndex(childId);
+            const currentIndex = this.getItemIndexById(childId);
             this.treeData[currentIndex].isActive = this.treeData[activeIndex].isActive;
         });
     }
 
-    showAddProductPopup(): void {
+    @action showAddProductPopup(): void {
         this.addProductStore.isPopupVisible = true;
     }
 
-    private generateDemoData(): void {
-        const tableId = uuid.v4();
-        const chairId = uuid.v4();
-        const tableChildren = [uuid.v4(), uuid.v4(), uuid.v4(), uuid.v4()];
-        const chairChildren = [uuid.v4(), uuid.v4(), uuid.v4(), uuid.v4()];
-        this.treeData = [
-            {
-                id: tableId,
+    private async loadItemTreeData(kind: ItemKind, groupingMethod: ItemGroupingMethod): Promise<ITreeItem[]> {
+        const resGroups = await BackendClient.getInstance().listItems(kind, groupingMethod);
+        const treeData: ITreeItem[] = [];
+        for (const resGroup of resGroups) {
+            const childrenIds: string[] = [];
+            for (const resItem of resGroup.items) {
+                childrenIds.push(resItem.id);
+            }
+            treeData.push({
+                id: resGroup.name,
+                title: resGroup.name,
                 isActive: false,
-                title: "Стол",
-                children: tableChildren
-            },
-            {
-                id: chairId,
-                isActive: false,
-                title: "Стул",
-                children: chairChildren
-            },
-        ];
-        range(tableChildren.length).map((_, index: number) => {
-            const table: ITreeItem = {
-               id: tableChildren[index],
-               isActive: false,
-               title: `Стол #${index + 1}`,
-               parent: tableId
-            };
-            const chair: ITreeItem = {
-                id: chairChildren[index],
-                isActive: false,
-                title: `Стул #${index + 1}`,
-                parent: chairId,
-            };
-            this.treeData.push(table);
-            this.treeData.push(chair);
-        });
+                children: childrenIds,
+            });
+            for (const resItem of resGroup.items) {
+                const itemTitle = `${resItem.displayName} (${resItem.ownerName})`;
+                treeData.push({
+                    id: resItem.id,
+                    title: itemTitle,
+                    isActive: false,
+                    parent: resGroup.name,
+                });
+            }
+        }
+        return treeData;
     }
 
-    private getCurrentIndex(id: string): number {
-        return findIndex(this.treeData, (line) => line.id === id);
+    private getItemIndexById(id: string): number {
+        return findIndex(this.treeData, (item: ITreeItem) => item.id === id);
     }
 }

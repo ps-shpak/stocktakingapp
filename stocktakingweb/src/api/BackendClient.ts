@@ -10,11 +10,11 @@ import {
     SaveItemResponse,
     AddOwnersRequestOwner,
     OwnerSpec,
-} from './models'
+} from './models';
 
-interface UrlQuery {
-    [name: string]: string[];
-}
+import {
+    encodeUrlWithQuery,
+} from '../utils';
 
 export class BackendClient {
     private static _instance: BackendClient = new BackendClient();
@@ -30,7 +30,7 @@ export class BackendClient {
     }
 
     public async listItems(kind: ItemKind, groupingMethod: ItemGroupingMethod): Promise<ItemGroupNode[]> {
-        const url = this.encodeUrl('/stocktaking/items', {
+        const url = encodeUrlWithQuery('/stocktaking/items', {
             "kind": [kind],
             "grouping_method": [groupingMethod],
         });
@@ -65,7 +65,7 @@ export class BackendClient {
     }
 
     public async disposeItems(ids: string[]): Promise<void> {
-        const url = this.encodeUrl('/stocktaking/items', {
+        const url = encodeUrlWithQuery('/stocktaking/items', {
             "ids": ids,
         });
         await fetch(url, {
@@ -89,7 +89,7 @@ export class BackendClient {
     }
 
     public async loadItem(id: string): Promise<LoadItemResponse> {
-        const url = this.encodeUrl('/stocktaking/items', {
+        const url = encodeUrlWithQuery('/stocktaking/items', {
             "id": [id],
         });
         const response = await fetch(url);
@@ -138,7 +138,7 @@ export class BackendClient {
     }
 
     public async loadOwner(id: string): Promise<OwnerSpec> {
-        const url = this.encodeUrl('/stocktaking/owner', {
+        const url = encodeUrlWithQuery('/stocktaking/owner', {
             "id": [id],
         });
         const response = await fetch(url);
@@ -153,7 +153,7 @@ export class BackendClient {
     }
 
     public async deleteOwner(id: string): Promise<void> {
-        const url = this.encodeUrl('/stocktaking/owner', {
+        const url = encodeUrlWithQuery('/stocktaking/owner', {
             "id": [id],
         });
         await fetch(url, {
@@ -197,19 +197,5 @@ export class BackendClient {
         spec.price = obj['price'];
         spec.description = obj['description'];
         return spec;
-    }
-
-    private encodeUrl(endpoint: string, query: UrlQuery) {
-        const params = [];
-        for (const name of Object.keys(query)) {
-            for (const value of query[name]) {
-                params.push(encodeURIComponent(name) + "=" + encodeURIComponent(value));
-            }
-        }
-        const paramsStr = params.join("&");
-        if (paramsStr.length > 0) {
-            return endpoint + "?" + paramsStr;
-        }
-        return endpoint;
     }
 }

@@ -1,1 +1,0 @@
-export { Licences } from "./Licences";

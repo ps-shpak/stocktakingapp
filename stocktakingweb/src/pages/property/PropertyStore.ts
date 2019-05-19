@@ -5,34 +5,48 @@ import { BackendClient, ItemKind, ItemGroupingMethod, ItemGroupNode } from "../.
 import { DashboardStore } from "../../containers/dashboard/DashboardStore";
 import { toJS } from "mobx";
 
+enum MenuId {
+    EQUIPMENT_BY_CATEGORY = "equipment_by_category",
+    EQUIPMENT_BY_OWNER = "equipment_by_owner",
+    LICENSES_BY_CATEGORY = "licenses_by_category",
+    LICENSES_BY_OWNER = "licenses_by_owner",
+    USERS = "users",
+}
+
 @autobind
-export class MainStore {
+export class PropertyStore {
     readonly dashboardStore = new DashboardStore();
 
     @observable menuData: IMenuItem[] = [
         {
+            id: MenuId.EQUIPMENT_BY_CATEGORY,
             title: "Имущество",
             isActive: true,
             options: [
                 {
+                    id: MenuId.EQUIPMENT_BY_CATEGORY,
                     title: "по категориям",
                     isActive: false
                 },
                 {
+                    id: MenuId.EQUIPMENT_BY_OWNER,
                     title: "по сотрудникам",
                     isActive: false
                 }
             ]
         },
         {
+            id: MenuId.LICENSES_BY_CATEGORY,
             title: "Лицензии",
             isActive: true,
             options: [
                 {
+                    id: MenuId.LICENSES_BY_OWNER,
                     title: "по категориям",
                     isActive: false,
                 },
                 {
+                    id: MenuId.LICENSES_BY_OWNER,
                     title: "по сотрудникам",
                     isActive: false
                 }
