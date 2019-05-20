@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+SCRIPT_DIR=$(dirname $(readlink -f $0))
+PROJECT_DIR=$(dirname $SCRIPT_DIR)
+
+pushd "$PROJECT_DIR"
+docker-compose down
+docker-compose up --build --abort-on-container-exit --exit-code-from=stocktakingapitests
+popd

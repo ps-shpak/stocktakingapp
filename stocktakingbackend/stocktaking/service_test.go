@@ -9,10 +9,10 @@ import (
 )
 
 type MockRepository struct {
-	foundItems     []*stock.Item
-	foundOwners    []*stock.Owner
-	lastSavedItems []*stock.Item
-	lastSavedOwner *stock.Owner
+	foundItems      []*stock.Item
+	foundOwners     []*stock.Owner
+	lastSavedItems  []*stock.Item
+	lastSavedOwners []*stock.Owner
 }
 
 func (m MockRepository) FindItems(spec FindItemsSpec) ([]*stock.Item, error) {
@@ -28,8 +28,8 @@ func (m MockRepository) FindOwners(spec FindOwnersSpec) ([]*stock.Owner, error) 
 	return m.foundOwners, nil
 }
 
-func (m *MockRepository) SaveOwner(owner *stock.Owner) error {
-	m.lastSavedOwner = owner
+func (m *MockRepository) SaveOwners(owners []*stock.Owner) error {
+	m.lastSavedOwners = owners
 	return nil
 }
 

@@ -188,16 +188,19 @@ func (g *grpcServer) ListOwners(ctx context.Context, req *api.ListOwnersRequest)
 }
 
 func (g *grpcServer) AddOwners(ctx context.Context, req *api.AddOwnersRequest) (*api.AddOwnersResponse, error) {
-	var results []*api.AddOwnersResponse_Owner
+	specs := make([]stock.OwnerSpec, 0, len(req.Owners))
 	for _, owner := range req.Owners {
-		spec := stock.OwnerSpec{
+		specs = append(specs, stock.OwnerSpec{
 			Email: owner.Email,
 			Name:  owner.Name,
-		}
-		id, err := g.service.AddOwner(spec)
-		if err != nil {
-			return nil, translateError(err)
-		}
+		})
+	}
+	ids, err := g.service.AddOwners(specs)
+	if err != nil {
+		return nil, translateError(err)
+	}
+	results := make([]*api.AddOwnersResponse_Owner, 0, len(ids))
+	for _, id := range ids {
 		results = append(results, &api.AddOwnersResponse_Owner{
 			Id: id.String(),
 		})
@@ -279,6 +282,8 @@ func translateError(err error) error {
 		return status.Error(codes.NotFound, err.Error())
 	case stock.ErrAuthForbidden:
 		return status.Error(codes.PermissionDenied, err.Error())
+	case stock.ErrEmailBusy:
+		return status.Error(codes.AlreadyExists, err.Error())
 	}
 	return err
 }

@@ -5,7 +5,9 @@ import (
 
 	"database/sql"
 
+	"github.com/avast/retry-go"
 	migrate "github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	bindata "github.com/golang-migrate/migrate/v4/source/go_bindata"
 	"github.com/pkg/errors"
@@ -52,10 +54,19 @@ func NewClient(dsn DSN) (db *sql.DB, err error) {
 }
 
 func applyMigrations(db *sql.DB) error {
-	dbDriver, err := postgres.WithInstance(db, &postgres.Config{})
+	var dbDriver database.Driver
+	err := retry.Do(func() error {
+		var err error
+		dbDriver, err = postgres.WithInstance(db, &postgres.Config{})
+		if err != nil {
+			return errors.Wrap(err, "failed to adapt database for migrations")
+		}
+		return nil
+	})
 	if err != nil {
-		return errors.Wrap(err, "failed to adapt database for migrations")
+		return err
 	}
+
 	assets := bindata.Resource(data.AssetNames(), data.Asset)
 	assetsDriver, err := bindata.WithInstance(assets)
 	if err != nil {

@@ -1,5 +1,7 @@
 package postgres
 
+import "database/sql"
+
 const (
 	// ItemKindEquipment - used to distinguish physical items, e.g. furniture
 	ItemKindEquipment = "equipment"
@@ -15,8 +17,8 @@ type ItemData struct {
 	Place       string
 	Price       float64
 	Description string
+	OwnerID     sql.NullString
 	Disposed    bool
-	Owner       OwnerData
 }
 
 // OwnerData - models owner in database
