@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  stocktakingapitests:
+    build:
+      context: "."
+    container_name: "stocktakingapitests"
+    volumes:
+    - "postgres-test-data:/var/lib/postgresql/data"
+    environment:
+      - BACKEND_HOST=stocktakingbackend-tests:8081
+    depends_on:
+    - stocktakingbackend-tests
+
+  stock-db-tests:
+    image: "postgres:11-alpine"
+    container_name: "stock-db-tests"
+    environment:
+    - POSTGRES_USER=stock
+    - POSTGRES_PASSWORD=1234
+    - POSTGRES_DB=stock
+
+  stocktakingbackend-tests:
+    image: "psshpak/stocktakingbackend"
+    container_name: "stocktakingbackend-tests"
+    environment:
+    - STOCK_DB_HOST=stock-db-tests
+    - STOCK_DB_USERNAME=stock
+    - STOCK_DB_PASSWORD=1234
+    - STOCK_DB_NAME=stock
+    - STOCK_DOMAIN=localhost
+    depends_on:
+    - stock-db-tests
+
+volumes:
+  postgres-test-data:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs

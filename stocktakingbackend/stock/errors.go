@@ -12,3 +12,6 @@ var ErrUnknownOwnerID = errors.New("unknown owner id")
 
 // ErrAuthForbidden - user cannot authorize this service
 var ErrAuthForbidden = errors.New("authorization forbidden for this user")
+
+// ErrEmailBusy - there is user with such email
+var ErrEmailBusy = errors.New("email already busy")
