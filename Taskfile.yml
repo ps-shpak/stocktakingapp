@@ -75,9 +75,8 @@ tasks:
 
   # Runs backend API tests, assumes that docker-compose containers are running now
   apitests:
-    dir: apitests
     cmds:
-      - mocha --require ts-node/register test/*.ts
+      - apitests/bin/run-tests
 
   run-web:
     dir: stocktakingweb

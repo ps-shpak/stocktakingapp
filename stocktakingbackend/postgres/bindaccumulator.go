@@ -18,6 +18,14 @@ func (ba *bindAccumulator) bind(value interface{}) string {
 	return fmt.Sprintf("$%d", len(ba.values))
 }
 
+func (ba *bindAccumulator) bindStrings(strs []string) []string {
+	var bindings []string
+	for _, str := range strs {
+		bindings = append(bindings, ba.bind(str))
+	}
+	return bindings
+}
+
 func (ba *bindAccumulator) bindIDs(ids []stock.ID) []string {
 	var bindings []string
 	for _, id := range ids {

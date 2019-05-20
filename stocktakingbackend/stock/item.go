@@ -69,12 +69,18 @@ func (i *Item) Spec() ItemSpec {
 
 // OwnerID - returns ID of the item owner
 func (i *Item) OwnerID() ID {
-	return i.owner.ID
+	if i.owner != nil {
+		return i.owner.ID
+	}
+	return NilID
 }
 
-// OwnerName - returns
+// OwnerName - returns owner name
 func (i *Item) OwnerName() string {
-	return i.owner.Name
+	if i.owner != nil {
+		return i.owner.Name
+	}
+	return ""
 }
 
 // DisplayName - prints display name of the item

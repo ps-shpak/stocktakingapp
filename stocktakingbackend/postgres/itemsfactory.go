@@ -10,16 +10,20 @@ type itemsFactory struct {
 	owners map[string]*stock.Owner
 }
 
-func newItemsFactory() *itemsFactory {
-	return &itemsFactory{
-		owners: make(map[string]*stock.Owner),
+func newItemsFactory(owners []*stock.Owner) *itemsFactory {
+	f := &itemsFactory{
+		owners: make(map[string]*stock.Owner, len(owners)),
 	}
+	for _, owner := range owners {
+		f.owners[owner.ID.String()] = owner
+	}
+	return f
 }
 
 func (f *itemsFactory) buildItem(data ItemData) (*stock.Item, error) {
-	owner, err := f.cacheOwner(data.Owner)
-	if err != nil {
-		return nil, err
+	var owner *stock.Owner
+	if data.OwnerID.Valid {
+		owner = f.owners[data.OwnerID.String]
 	}
 
 	itemID, err := stock.IDFromString(data.ID)
@@ -42,29 +46,4 @@ func (f *itemsFactory) buildItem(data ItemData) (*stock.Item, error) {
 	}
 
 	return stock.BuildItem(itemID, spec, owner, data.Disposed), nil
-}
-
-func (f *itemsFactory) cacheOwner(data OwnerData) (*stock.Owner, error) {
-	owner, ok := f.owners[data.ID]
-	if !ok {
-		var err error
-		owner, err = f.buildOwner(data)
-		if err != nil {
-			return nil, err
-		}
-		f.owners[data.ID] = owner
-	}
-	return owner, nil
-}
-
-func (f *itemsFactory) buildOwner(data OwnerData) (*stock.Owner, error) {
-	ownerID, err := stock.IDFromString(data.ID)
-	if err != nil {
-		return nil, errors.Wrapf(err, "invalid owner ID: %s", data.ID)
-	}
-	spec := stock.OwnerSpec{
-		Name:  data.Name,
-		Email: data.Email,
-	}
-	return stock.BuildOwner(ownerID, spec, data.MayLogin), nil
 }
