@@ -5,12 +5,15 @@ import { autobind } from "core-decorators";
 import { IDashboardProps } from "./IDashboardProps";
 import { DashboardView } from "./view";
 import { AddProductPopup } from "../../components/add-product-popup";
+import { EParams, EItemKind, EGroupingMethod } from "../../config";
+import { ItemKind, ItemGroupingMethod } from "src/api";
 
 @observer
 @autobind
 export class Dashboard extends Component<IDashboardProps> {
     componentDidMount(): void {
-        this.props.store.onMount();
+        const params = new URLSearchParams(this.props.location.search);
+        this.props.store.reloadItems(this.parseItemKind(params), this.parseItemGroupingMethod(params));
     }
 
     render(): ReactNode {
@@ -32,5 +35,27 @@ export class Dashboard extends Component<IDashboardProps> {
                 store={this.props.store.addProductStore}
             />
         );
+    }
+
+    private parseItemKind(params: URLSearchParams): ItemKind {
+        switch (params.get(EParams.ITEM_KIND) as EItemKind) {
+            case EItemKind.EQUIPMENT:
+                return ItemKind.Equipment;
+            case EItemKind.LICENSE:
+                return ItemKind.License;
+            default:
+                return ItemKind.Equipment;
+        }
+    }
+
+    private parseItemGroupingMethod(params: URLSearchParams): ItemGroupingMethod {
+        switch (params.get(EParams.ITEM_GROUPING) as EGroupingMethod) {
+            case EGroupingMethod.BY_CATEGORY:
+                return ItemGroupingMethod.ByCategory;
+            case EGroupingMethod.BY_OWNER:
+                return ItemGroupingMethod.ByOwner;
+            default:
+                return ItemGroupingMethod.ByCategory;
+        }
     }
 }
