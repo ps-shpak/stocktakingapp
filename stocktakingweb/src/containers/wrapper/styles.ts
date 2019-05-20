@@ -4,7 +4,8 @@ export const styles = createStyles({
     wrapper: {
        width: "calc(100% - 300px)",
        display: "flex",
-       position: "relative"
+       position: "relative",
+        left: 300
     },
     appBar: {
         marginLeft: 300,

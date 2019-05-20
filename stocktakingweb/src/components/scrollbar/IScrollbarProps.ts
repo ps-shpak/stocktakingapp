@@ -1,4 +1,4 @@
 export interface IScrollbarProps {
-    minHeight?: number;
-    maxHeight?: number;
+    minHeight?: number | string;
+    maxHeight?: number | string;
 }

@@ -16,6 +16,8 @@ export const styles = createStyles({
         display: "flex",
         alignItems: "center",
         paddingBottom: 0,
+        width: "100%",
+        boxSizing: "border-box"
     },
     titleInner: {
         position: "relative",

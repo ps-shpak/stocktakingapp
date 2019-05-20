@@ -5,6 +5,7 @@ import { Component, ReactNode } from "react";
 import { IWrapperProps } from "./IWrapperProps";
 import Helmet from "react-helmet";
 import { AppBar, Typography } from "@material-ui/core";
+import { Scrollbar } from "../../components/scrollbar";
 
 export const Wrapper = withStyles(styles)(
     class extends Component<IWrapperProps> {
@@ -23,7 +24,9 @@ export const Wrapper = withStyles(styles)(
                         </Typography>
                     </AppBar>
                     <div className={this.props.classes.content}>
-                        {this.props.children}
+                        <Scrollbar maxHeight={"100%"}>
+                            {this.props.children}
+                        </Scrollbar>
                     </div>
                 </div>
             );

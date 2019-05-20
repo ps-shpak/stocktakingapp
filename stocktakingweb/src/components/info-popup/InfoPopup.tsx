@@ -5,6 +5,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { IInfoPopupProps } from "./IInfoPopupProps";
 import { Popup } from "../popup";
 import { Button, EButtonColors, EButtonSize, EButtonVariant } from "../button";
+import { attempt } from "lodash";
 
 export const InfoPopup = withStyles(styles)(
     class extends Component<IInfoPopupProps> {
@@ -20,7 +21,7 @@ export const InfoPopup = withStyles(styles)(
                         <Button
                             title={"OK"}
                             isDisable={false}
-                            onClick={this.props.onClose}
+                            onClick={this.onClose}
                             isFullWidth={false}
                             size={EButtonSize.LARGE}
                             variant={EButtonVariant.OUTLINED}
@@ -29,6 +30,10 @@ export const InfoPopup = withStyles(styles)(
                     </div>
                 </Popup>
             );
+        }
+
+        private readonly onClose = (): void => {
+            attempt(this.props.onClose!);
         }
     }
 );
