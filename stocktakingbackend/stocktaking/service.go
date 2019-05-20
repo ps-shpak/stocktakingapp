@@ -2,8 +2,11 @@ package stocktaking
 
 import (
 	"sort"
+	"strings"
 
 	"stocktakingbackend/stock"
+
+	"github.com/pkg/errors"
 )
 
 // GroupingMethod - method used to make parent nodes in item tree
@@ -40,7 +43,7 @@ type Service interface {
 	TransferItems(ids []stock.ID, ownerID stock.ID) error
 
 	ListOwners() ([]*stock.Owner, error)
-	AddOwner(spec stock.OwnerSpec) (stock.ID, error)
+	AddOwners(specs []stock.OwnerSpec) ([]stock.ID, error)
 	SaveOwner(id stock.ID, spec stock.OwnerSpec, mayLogin bool) error
 	LoadOwner(id stock.ID) (*stock.Owner, error)
 	DeleteOwner(id stock.ID) error
@@ -49,9 +52,9 @@ type Service interface {
 
 // FindOwnersSpec - requirements used to select owners list
 type FindOwnersSpec struct {
-	Limit      uint       // 0 means "no limit"
-	OwnerIDs   []stock.ID // empty means "find all"
-	OwnerEmail string     // empty means "find any"
+	Limit       uint       // 0 means "no limit"
+	OwnerIDs    []stock.ID // empty means "find all"
+	OwnerEmails []string   // empty means "find all"
 }
 
 // FindItemsSpec - requirements used to select items list
@@ -68,7 +71,7 @@ type Repository interface {
 	SaveItems(items []*stock.Item) error
 
 	FindOwners(spec FindOwnersSpec) ([]*stock.Owner, error)
-	SaveOwner(owner *stock.Owner) error
+	SaveOwners(owner []*stock.Owner) error
 	DeleteOwner(id stock.ID) error
 }
 
@@ -193,32 +196,32 @@ func (s *service) ListOwners() ([]*stock.Owner, error) {
 	return s.repo.FindOwners(FindOwnersSpec{})
 }
 
-func (s *service) AddOwner(spec stock.OwnerSpec) (stock.ID, error) {
-	owners, err := s.repo.FindOwners(FindOwnersSpec{
-		Limit:      1,
-		OwnerEmail: spec.Email,
-	})
+func (s *service) AddOwners(specs []stock.OwnerSpec) ([]stock.ID, error) {
+	err := s.checkNoEmailDuplicates(specs)
 	if err != nil {
-		return stock.NilID, err
+		return nil, err
 	}
-	var owner *stock.Owner
-	if len(owners) == 0 {
-		owner = stock.CreateOwner(spec)
-	} else {
-		// Re-use owner, only update name
-		owner = owners[0]
-		owner.Name = spec.Name
-	}
-	err = s.repo.SaveOwner(owner)
+	err = s.checkNoEmailBusy(specs)
 	if err != nil {
-		return stock.NilID, err
+		return nil, err
 	}
-	return owner.ID, nil
+	owners := make([]*stock.Owner, 0, len(specs))
+	ids := make([]stock.ID, 0, len(specs))
+	for _, spec := range specs {
+		owner := stock.CreateOwner(spec)
+		owners = append(owners, owner)
+		ids = append(ids, owner.ID)
+	}
+	err = s.repo.SaveOwners(owners)
+	if err != nil {
+		return nil, err
+	}
+	return ids, nil
 }
 
 func (s *service) SaveOwner(id stock.ID, spec stock.OwnerSpec, mayLogin bool) error {
 	owner := stock.BuildOwner(id, spec, mayLogin)
-	return s.repo.SaveOwner(owner)
+	return s.repo.SaveOwners([]*stock.Owner{owner})
 }
 
 func (s *service) LoadOwner(id stock.ID) (*stock.Owner, error) {
@@ -230,7 +233,7 @@ func (s *service) LoadOwner(id stock.ID) (*stock.Owner, error) {
 		return nil, err
 	}
 	if len(owners) == 0 {
-		return nil, stock.ErrUnknownOwnerID
+		return nil, errors.Wrap(stock.ErrUnknownOwnerID, id.String())
 	}
 	return owners[0], nil
 }
@@ -241,8 +244,8 @@ func (s *service) DeleteOwner(id stock.ID) error {
 
 func (s *service) Authorize(email string) (stock.ID, error) {
 	owners, err := s.repo.FindOwners(FindOwnersSpec{
-		Limit:      1,
-		OwnerEmail: email,
+		Limit:       1,
+		OwnerEmails: []string{email},
 	})
 	if err != nil {
 		return stock.NilID, err
@@ -276,9 +279,41 @@ func (s *service) findOwnerWithID(ownerID stock.ID) (*stock.Owner, error) {
 		return nil, err
 	}
 	if len(owners) == 0 {
-		return nil, stock.ErrUnknownOwnerID
+		return nil, errors.Wrap(stock.ErrUnknownOwnerID, ownerID.String())
 	}
 	return owners[0], err
+}
+
+func (s *service) checkNoEmailDuplicates(specs []stock.OwnerSpec) error {
+	usedEmails := map[string]bool{}
+	for _, spec := range specs {
+		if usedEmails[spec.Email] {
+			return errors.Wrap(stock.ErrEmailBusy, spec.Email)
+		}
+		usedEmails[spec.Email] = true
+	}
+	return nil
+}
+
+func (s *service) checkNoEmailBusy(specs []stock.OwnerSpec) error {
+	emails := make([]string, 0, len(specs))
+	for _, spec := range specs {
+		emails = append(emails, spec.Email)
+	}
+	owners, err := s.repo.FindOwners(FindOwnersSpec{
+		OwnerEmails: emails,
+	})
+	if err != nil {
+		return err
+	}
+	if len(owners) != 0 {
+		usedEmails := make([]string, 0, len(owners))
+		for _, owner := range owners {
+			usedEmails = append(usedEmails, owner.Email)
+		}
+		return errors.Wrap(stock.ErrEmailBusy, strings.Join(usedEmails, ","))
+	}
+	return nil
 }
 
 func insertSortItemViews(data []ItemView, el ItemView) []ItemView {

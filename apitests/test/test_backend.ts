@@ -29,6 +29,10 @@ class Client {
         return this.invoke(request, this.backend.transferItems);
     }
 
+    public disposeItems(request: pb.DisposeItemsRequest): Promise<pb.DisposeItemsResponse> {
+        return this.invoke(request, this.backend.disposeItems);
+    }
+
     public listOwners(request: pb.ListOwnersRequest): Promise<pb.ListOwnersResponse> {
         return this.invoke(request, this.backend.listOwners)
     }
@@ -77,7 +81,11 @@ describe("stocktaking backend", () => {
             ownerId = owners[0].getId();
             assert.notEqual(ownerId, '');
         }
-
+        rollback(async () => {
+            const req = new pb.DeleteOwnerRequest();
+            req.setId(ownerId);
+            await client.deleteOwner(req);
+        });
         {
             const res = await client.listOwners(new pb.ListOwnersRequest());
             const owners = res.getResultsList();
@@ -111,7 +119,11 @@ describe("stocktaking backend", () => {
             assert.equal(owners.length, 1);
             ownerId = owners[0].getId();
         }
-
+        rollback(async () => {
+            const req = new pb.DeleteOwnerRequest();
+            req.setId(ownerId);
+            await client.deleteOwner(req);
+        });
         const spec = new pb.ItemSpec();
         {
             spec.setKind("equipment");
@@ -128,7 +140,11 @@ describe("stocktaking backend", () => {
             const res = await client.saveItem(req);
             assert.equal(res.getId(), itemId);
         }
-
+        rollback(async () => {
+            const req = new pb.DisposeItemsRequest();
+            req.setIdsList([itemId]);
+            await client.disposeItems(req);
+        });
         {
             const req = new pb.LoadItemRequest();
             req.setId(itemId);
@@ -167,11 +183,18 @@ describe("stocktaking backend", () => {
             ownerIdB = owners[1].getId();
             assert.notEqual(ownerIdA, ownerIdB);
         }
+        rollback(async () => {
+            const req = new pb.DeleteOwnerRequest();
+            req.setId(ownerIdA);
+            await client.deleteOwner(req);
+            req.setId(ownerIdB);
+            await client.deleteOwner(req);
+        });
         const spec = new pb.ItemSpec();
         {
             spec.setKind("equipment");
             spec.setOwnerId(ownerIdA);
-    
+
             const req = new pb.SaveItemRequest();
             req.setId(itemId);
             req.setSpec(spec);
@@ -179,6 +202,11 @@ describe("stocktaking backend", () => {
             const res = await client.saveItem(req);
             assert.equal(res.getId(), itemId);
         }
+        rollback(async () => {
+            const req = new pb.DisposeItemsRequest();
+            req.setIdsList([itemId]);
+            await client.disposeItems(req);
+        });
         {
             const req = new pb.TransferItemsRequest();
             req.setIdsList([itemId]);
@@ -206,6 +234,11 @@ describe("stocktaking backend", () => {
             ownerId = res.getId();
             assert.notEqual(ownerId, "");
         }
+        rollback(async () => {
+            const req = new pb.DeleteOwnerRequest();
+            req.setId(ownerId);
+            await client.deleteOwner(req);
+        });
         {
             const req = new pb.LoadOwnerRequest();
             req.setId(ownerId);
@@ -231,6 +264,80 @@ describe("stocktaking backend", () => {
         catch (err)
         {
             assert.equal(err.code, grpc.status.NOT_FOUND);
+        }
+    }));
+
+    it("cannot add owners with same email", rollout(async (rollback: RollbackFunction) => {
+        const client = new Client();
+
+        try {
+            const req = new pb.AddOwnersRequest();
+            {
+                const owner = new pb.AddOwnersRequest.Owner();
+                owner.setName("Peter Better");
+                owner.setEmail("peter.better@example.com");
+                req.addOwners(owner);
+            }
+            {
+                const owner = new pb.AddOwnersRequest.Owner();
+                owner.setName("Wolf Golf");
+                owner.setEmail("peter.better@example.com");
+                req.addOwners(owner);
+            }
+            await client.addOwners(req);
+            assert(false); // unreachable.
+        }
+        catch (err) {
+            assert.equal(err.code, grpc.status.ALREADY_EXISTS);
+        }
+    }));
+
+    it("can load disposed item", rollout(async (rollback: RollbackFunction) => {
+        const client = new Client();
+        let ownerId = '';
+        {
+            const req = new pb.AddOwnersRequest();
+            {
+                const owner = new pb.AddOwnersRequest.Owner();
+                owner.setName("Peter Better");
+                owner.setEmail("peter.better@example.com");
+                req.addOwners(owner);
+            }
+            const res = await client.addOwners(req);
+            const owners = res.getOwnersList();
+            ownerId = owners[0].getId();
+        }
+        let itemId = '';
+        const spec = new pb.ItemSpec();
+        spec.setKind("equipment");
+        spec.setOwnerId(ownerId);
+        spec.setCategory("Table")
+        spec.setPlace("Palace #2");
+        spec.setDescription("Just a small table")
+        {
+            const req = new pb.SaveItemRequest();
+            req.setSpec(spec);
+            const res = await client.saveItem(req);
+            itemId = res.getId();
+        }
+        {
+            const req = new pb.DisposeItemsRequest();
+            req.setIdsList([itemId]);
+            await client.disposeItems(req);
+        }
+        {
+            const req = new pb.LoadItemRequest();
+            req.setId(itemId);
+            const item = await client.loadItem(req);
+            const reqSpec = item.getSpec();
+            assert.isNotNull(reqSpec);
+            assert.equal(spec.getKind(), reqSpec && reqSpec.getKind());
+            assert.equal(spec.getCategory(), reqSpec && reqSpec.getCategory());
+            assert.equal(spec.getDescription(), reqSpec && reqSpec.getDescription());
+            assert.equal(spec.getPlace(), reqSpec && reqSpec.getPlace());
+
+            // Owner dropped after dispose
+            assert.notEqual(ownerId, reqSpec && reqSpec.getOwnerId());
         }
     }));
 });
