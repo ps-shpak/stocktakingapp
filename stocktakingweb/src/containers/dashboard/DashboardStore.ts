@@ -14,7 +14,12 @@ export class DashboardStore {
 
     @action async reloadItems(kind: ItemKind, groupingMethod: ItemGroupingMethod): Promise<void> {
         const treeData = await this.loadItemTreeData(kind, groupingMethod);
-        this.treeData = treeData;
+
+        // NOTE: copy items instead of assignment to avoid clearing observables. {
+        this.treeData.length = 0;
+        for (const item of treeData) {
+            this.treeData.push(item);
+        }
         console.log("this.treeData", JSON.stringify(this.treeData, undefined, 2));
     }
 

@@ -24,7 +24,7 @@ export const TreeView = withStyles(styles)(
         componentDidMount() {
             autorun(() => {
                 this.setState({
-                    waitingData: (this.props.data.length === 0)
+                    waitingData: (this.props.data.length === 0),
                 });
             });
         }
@@ -32,7 +32,6 @@ export const TreeView = withStyles(styles)(
         render(): ReactNode {
             return (
                 <>
-                    <div className={this.props.classes.overlay} onClick={this.props.onCloseTree} />
                     <div className={this.props.classes.tree}>
                         <Scrollbar>
                             {this.getList()}
