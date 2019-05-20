@@ -4,6 +4,8 @@ import { Field } from "../../components/field";
 import { EFormTypes, RegexpConfig } from "../../config";
 import { head } from "lodash";
 import { Store } from "./Store";
+import { FieldErrors, IServerError } from "../../errors";
+import { AxiosError, AxiosResponse } from "axios";
 
 interface IFieldsArray {
     field: Field;
@@ -48,6 +50,13 @@ export class FormStore extends Store {
         return head(fields)!.field;
     }
 
+    getFieldByType(type: EFormTypes): Field {
+        const fields = this.fields.filter((data: IFieldsArray) => {
+            return data.field.getType() === type;
+        });
+        return head(fields)!.field;
+    }
+
     isFormValid(): boolean {
         return this.fields.every((data) => {
             return data.field.getValidState();
@@ -65,6 +74,25 @@ export class FormStore extends Store {
     onCloseForm(): void {
         this.isFormVisible = false;
         this.resetFields();
+    }
+
+    protected setServerError(error: IServerError): void {
+        const typeField = FieldErrors.getTypeByCode(error.code);
+        const field = this.getFieldByType(typeField);
+        if (!field) {
+            return;
+        }
+        field.setErrorState(true);
+        field.setValidState(false);
+        field.setPlaceholder(error.error);
+    }
+
+    protected getServerError(error: AxiosError): IServerError | undefined {
+        const response = error.response as AxiosResponse<IServerError>;
+        if (!response) {
+            return undefined;
+        }
+        return response.data;
     }
 
     private isTextValid(value: string): boolean {

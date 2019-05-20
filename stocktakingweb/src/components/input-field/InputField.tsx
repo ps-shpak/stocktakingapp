@@ -23,6 +23,8 @@ export class InputField extends Component<IInputFieldProps> {
 
     componentDidMount(): void {
         this.props.addField(this.field);
+        console.log(this.props.type);
+        console.log(this.field.getType());
         if (!this.props.value) {
             return;
         }

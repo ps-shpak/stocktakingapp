@@ -3,6 +3,7 @@ import { observable } from "mobx";
 import { FormStore } from "../../app/stores";
 import { IGetUserData } from "../../services";
 import { get } from "lodash";
+import { AxiosError } from "axios";
 
 @autobind
 export class UsersStore extends FormStore {
@@ -107,9 +108,18 @@ export class UsersStore extends FormStore {
                     this.isDataChanged  = false;
                     this.getUsers();
                 })
-                .catch((err) => console.log(err));
+                .catch(this.onErrorCreateUser);
         }
 
+    }
+
+    private onErrorCreateUser(error: AxiosError): void {
+        const err = this.getServerError(error);
+        if (!err) {
+            return;
+        }
+        this.setVisibilityPreloader(false);
+        this.setServerError(err);
     }
 
     private changeUser(): void {
